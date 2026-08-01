@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link class="favicon" rel="icon" href="https://i.ibb.co/383LyqC/Resized-1000043089-removebg-preview-removebg-preview-1.png">
+    <link class="favicon" rel="icon" href="https://i.ibb.co/XxqLF7V5/20260621-111527.png">
     <meta name="theme-color" content="#53add2">
     <meta name="naver-site-verification" content="e4095acde3cfd3c0b24c03e17dda32865159b5fe">
     <meta name="google-site-verification" content="VjVMOy82XiTaSV_cYaeKorhuuNIRPd8ZW1-9AYFxFvI" />
@@ -898,9 +898,6 @@
                                 </button>
                                 <input type="range" class="volume-slider" id="custom-volume-bar" min="0" max="1" step="0.05" value="1" oninput="adjustVolume(this.value)">
                             </div>
-                            <button class="ctrl-btn" id="pip-toggle-btn" onclick="togglePip()" title="PIP(화면 속 화면)">
-                                <svg viewBox="0 0 24 24"><path d="M19 7H5c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4v-2H5V9h14v6h-4v2h4c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 6h6v4h-6v-4z"/></svg>
-                            </button>
                             <button class="ctrl-btn" onclick="toggleFullscreen()" title="전체화면">
                                 <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                             </button>
@@ -1058,6 +1055,78 @@
 <div id="cloud-info-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('cloud-info-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">구름이 뭔가요?</div><div style="font-size:12px; color:#444; line-height:1.6; text-align:left;">구름 자막이란 시청자들이 동영상 위에 남긴 자막이 구름처럼 화면 위를 떠다니며 실시간으로 나타나는 냥이플만의 자막 기능입니다.<br><br>재생 화면 아래의 자막 달기(☁) 버튼을 켠 뒤 화면을 클릭하면 원하는 위치에 나만의 구름 자막을 남길 수 있고, 다른 시청자가 남긴 구름 자막도 함께 볼 수 있습니다.<br><br>로그인하면 실시간 구름 자막 목록에서 지금까지 표시된 자막 내용을 직접 확인할 수 있습니다.</div><div style="text-align:center; font-size:12px; color:#53add2; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="closeModal('cloud-info-modal')">확인</div></div></div></div>
 
 <div id="toast-container"></div>
+
+<!-- [신규] 온라인 공유 기능 - Supabase 연동 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+    const SUPABASE_URL = 'https://ttaqmmdkhwyrfeogfcdc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0YXFtbWRraHd5cmZlb2dmY2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MTg1NjgsImV4cCI6MjEwMTA5NDU2OH0.-0SESyvZ99o1zNKfKBPAibIzUhY10MvBmpa5hw9mcwA';
+    let supabaseClient = null;
+    try {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch(e) {
+        console.error('Supabase 초기화 실패:', e);
+    }
+
+    async function fbLoadAllVideos() {
+        if(!supabaseClient) return null;
+        try {
+            const { data, error } = await supabaseClient.from('videos').select('*');
+            if(error) throw error;
+            return data || [];
+        } catch(e) {
+            console.error('Supabase 동영상 목록 불러오기 실패:', e);
+            return null;
+        }
+    }
+
+    async function fbSaveVideo(videoObj) {
+        if(!supabaseClient) return;
+        try {
+            const { error } = await supabaseClient.from('videos').upsert(videoObj, { onConflict: 'id' });
+            if(error) throw error;
+        } catch(e) {
+            console.error('Supabase 동영상 저장 실패:', e);
+        }
+    }
+
+    async function fbUpdateVideoComments(videoId, comments) {
+        if(!supabaseClient) return;
+        try {
+            const { error } = await supabaseClient.from('videos').update({ comments: comments }).eq('id', String(videoId));
+            if(error) throw error;
+        } catch(e) {
+            console.error('Supabase 댓글 저장 실패:', e);
+        }
+    }
+
+    async function fbDeleteVideo(videoId) {
+        if(!supabaseClient) return;
+        try {
+            const { error } = await supabaseClient.from('videos').delete().eq('id', String(videoId));
+            if(error) throw error;
+            await supabaseClient.storage.from('videos').remove([String(videoId)]);
+        } catch(e) {
+            console.error('Supabase 동영상 삭제 실패:', e);
+        }
+    }
+
+    function fbUploadVideoFile(videoId, file, onProgress) {
+        return new Promise(async (resolve, reject) => {
+            if(!supabaseClient) { reject(new Error('Supabase 미초기화')); return; }
+            try {
+                const { data, error } = await supabaseClient.storage
+                    .from('videos')
+                    .upload(String(videoId), file, { upsert: true });
+                if(error) throw error;
+                const { data: urlData } = supabaseClient.storage.from('videos').getPublicUrl(String(videoId));
+                resolve(urlData.publicUrl);
+            } catch(e) {
+                reject(e);
+            }
+        });
+    }
+</script>
 
 <script>
     const video = document.getElementById('main-video');
@@ -1860,7 +1929,7 @@
         if(!currentPlayingItem.comments) currentPlayingItem.comments = [];
         currentPlayingItem.comments.push({ author: user.nick, text: text, date: new Date().toISOString() });
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         input.value = "";
         renderComments();
 
@@ -1881,7 +1950,7 @@
         if(!confirm("댓글을 삭제하시겠습니까?")) return;
         currentPlayingItem.comments.splice(idx, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -1895,7 +1964,7 @@
         if(pos === -1) c.likedBy.push(user.nick);
         else c.likedBy.splice(pos, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -2453,6 +2522,17 @@
                     localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
                 } catch(storageErr) {
                     console.error('썸네일 저장 실패:', storageErr);
+                }
+
+                /* [신규] 온라인 공유 - Firebase Storage에 실제 영상 업로드 후 Firestore에 메타데이터 저장 */
+                if(typeof fbUploadVideoFile === 'function') {
+                    fbUploadVideoFile(videoId, f).then((downloadUrl) => {
+                        n.url = downloadUrl;
+                        try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
+                        if(typeof fbSaveVideo === 'function') fbSaveVideo(n);
+                    }).catch((err) => {
+                        console.error('온라인 업로드 실패 - 이 기기에서만 재생 가능:', err);
+                    });
                 }
                 
                 document.getElementById('up-title').value = "";
@@ -3606,25 +3686,6 @@
         }
     }
 
-    /* [신규] PIP(화면 속 화면) 토글 */
-    async function togglePip() {
-        const video = document.getElementById('main-video');
-        if (!video) return;
-        try {
-            if (!document.pictureInPictureEnabled) {
-                showToast("이 브라우저는 PIP 기능을 지원하지 않습니다", "error");
-                return;
-            }
-            if (document.pictureInPictureElement) {
-                await document.exitPictureInPicture();
-            } else {
-                await video.requestPictureInPicture();
-            }
-        } catch (e) {
-            showToast("PIP 실행 중 오류가 발생했습니다", "error");
-        }
-    }
-
     function handleCloudLayerClick(e) {
         if (!isCloudWritingModeActive) {
             togglePlayPause();
@@ -3807,7 +3868,7 @@
         comment.replies.push({ author: user.nick, text: text, date: new Date().toISOString() });
 
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
 
         input.value = "";
         renderComments();
@@ -3830,7 +3891,7 @@
         if(!confirm("답글을 삭제하시겠습니까?")) return;
         comment.replies.splice(replyIdx, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -3847,7 +3908,7 @@
         if(pos === -1) reply.likedBy.push(user.nick);
         else reply.likedBy.splice(pos, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -4207,6 +4268,20 @@
         today.setHours(0, 0, 0, 0);
         const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
         el.innerText = diffDays + '일째';
+    })();
+
+    /* [신규] 온라인 공유 - Firebase Firestore에서 다른 사람이 올린 동영상/댓글 목록 불러오기 */
+    (function syncVideosFromFirebase() {
+        if (typeof fbLoadAllVideos !== 'function') return;
+        fbLoadAllVideos().then((onlineVideos) => {
+            if (!onlineVideos) return;
+            onlineVideos.forEach((ov) => {
+                const idx = db.findIndex((v) => String(v.id) === String(ov.id));
+                if (idx >= 0) { db[idx] = ov; } else { db.push(ov); }
+            });
+            try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
+            renderList();
+        });
     })();
 </script>
 </body>
