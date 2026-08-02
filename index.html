@@ -9,7 +9,7 @@
     <title>재밌는 UCC 세상 냥이플</title>
     <style>
         :root { --border: #eee; }
-        body, input, textarea, select, button { margin: 0; font-family: 'Malgun Gothic', sans-serif; background: #fff; color: #333; overflow-x: hidden; border-radius: 0 !important; }
+        body, input, textarea, select, button { margin: 0; font-family: 'Malgun Gothic', sans-serif; background: #fff; color: #333; overflow-x: hidden; border-radius: 0 !important; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
         header { display: flex; align-items: center; justify-content: space-between; height: auto; min-height: 70px; padding: 10px 5px; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 1000; box-sizing: border-box; }
         .header-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; flex: 1; min-width: 0; }
@@ -2642,6 +2642,9 @@
         const playBtn = document.getElementById('v-play-btn');
         const searchingIndicator = document.getElementById('wait-searching-indicator');
         
+        if(playBtn.dataset.playing === '1') return;
+        playBtn.dataset.playing = '1';
+
         playBtn.style.opacity = "0";
         playBtn.style.transform = "scale(0.8)";
         
@@ -2670,6 +2673,8 @@
         waitScreen.style.display = "none"; 
         errorScreen.style.display = "none"; 
         document.getElementById('player-container').style.display = 'block'; 
+        const playBtnEl = document.getElementById('v-play-btn');
+        if(playBtnEl) { playBtnEl.dataset.playing = '0'; playBtnEl.style.display = ''; playBtnEl.style.opacity = '1'; playBtnEl.style.transform = ''; }
         
         if (item.url === "indexeddb_stored" && indexedDBInstance) {
             const tx = indexedDBInstance.transaction("videos", "readonly");
@@ -2742,6 +2747,9 @@
             if(playPromise !== undefined) {
                 playPromise.then(() => {}).catch(error => {
                     console.log("자동재생 일시 대기:", error);
+                    setTimeout(() => {
+                        video.play().catch(e => console.log("재시도 실패:", e));
+                    }, 500);
                 });
             }
         };
