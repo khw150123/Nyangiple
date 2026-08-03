@@ -486,6 +486,49 @@
         .playlist-toggle-text:hover { opacity: 0.8; }
         #video-comments-section input:disabled, #video-comments-section button:disabled { opacity: 0.5; cursor: not-allowed; }
 
+        /* ===== 모바일 가로(landscape) 컨트롤바 2줄 처리 ===== */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .custom-control-bar {
+                flex-direction: column;
+                height: auto;
+                padding: 4px 8px;
+                gap: 4px;
+            }
+            .custom-control-bar .ctrl-left-group {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+            }
+            .custom-control-bar .ctrl-right-group {
+                width: 100%;
+                justify-content: center;
+                border-top: 1px dashed rgba(255,255,255,0.2);
+                padding-top: 4px;
+                flex-wrap: wrap;
+                row-gap: 4px;
+                gap: 4px 8px;
+            }
+            .custom-control-bar .ctrl-btn {
+                flex-shrink: 0;
+                padding: 4px 5px;
+                min-width: 26px;
+                min-height: 26px;
+                box-sizing: border-box;
+            }
+            .custom-control-bar .ctrl-btn svg {
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+            }
+            #cloud-density-btn, #speed-toggle-btn, #autoplay-toggle-btn, #loop-toggle-btn {
+                font-size: 10px !important;
+                padding: 4px 6px !important;
+            }
+            .volume-container { flex-shrink: 0; gap: 3px; }
+            .volume-slider { width: 40px; }
+            .ctrl-progress-container { width: 50px; }
+        }
+
         /* ===== 다크모드 오버라이드 (기존 스타일 변경 없음, 추가만) ===== */
         body.dark-mode { background:#181818; color:#e0e0e0; }
         body.dark-mode header { background:#181818; border-bottom-color:#333; }
@@ -681,8 +724,9 @@
 <input type="file" id="backup-import-file" accept=".json" style="display: none;" onchange="handleBackupImportFile(event)">
 
 <header>
-    <div class="header-left">
-        <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')">
+    <div class="header-left" style="position:relative;">
+        <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
+        <div id="logo-tooltip" style="display:none; position:absolute; top:calc(100% + 6px); left:0; background:#53add2; color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:8px; white-space:nowrap; z-index:9999; pointer-events:none; box-shadow:0 2px 6px rgba(0,0,0,0.15);">재밌는 UCC 세상 냥이플!</div>
     </div>
     <div class="header-right">
         <div class="search-wrapper">
@@ -698,6 +742,7 @@
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
                 <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
                 <div class="nav-icon-btn" onclick="openTargetUserChannel()"><span>채널</span></div>
+                <div class="nav-icon-btn" onclick="showSection('board')"><span>게시판</span></div>
                 <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
                 <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
                 <div class="header-upload-btn" onclick="openModal('upload-modal')">
@@ -1017,6 +1062,34 @@
             </div>
         </section>
 
+        <section id="board-section" class="page-section">
+            <div style="padding:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:2px solid #53add2; padding-bottom:8px;">
+                    <h2 style="font-size:16px; font-weight:bold; margin:0; color:#53add2;">📋 게시판</h2>
+                    <button onclick="openBoardWrite()" style="background:#53add2; color:#fff; border:none; padding:7px 14px; font-size:12px; font-weight:bold; cursor:pointer; border-radius:4px;">✏️ 글쓰기</button>
+                </div>
+                <div id="board-list"></div>
+            </div>
+            <div id="board-write-modal" class="modal"><div class="modal-content"><div class="modal-body">
+                <div style="font-size:15px; font-weight:bold; margin-bottom:8px; text-align:center;">글쓰기</div>
+                <input type="text" id="board-write-title" placeholder="제목" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd;">
+                <textarea id="board-write-content" placeholder="내용을 입력하세요" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd; min-height:120px; resize:vertical;"></textarea>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
+                    <button onclick="closeBoardWrite()" style="padding:7px 14px; font-size:12px; cursor:pointer; border:1px solid #ddd; background:#fff;">취소</button>
+                    <button onclick="submitBoardPost()" style="padding:7px 14px; font-size:12px; cursor:pointer; background:#53add2; color:#fff; border:none; font-weight:bold;">등록</button>
+                </div>
+            </div></div></div>
+            <div id="board-edit-modal" class="modal"><div class="modal-content"><div class="modal-body">
+                <div style="font-size:15px; font-weight:bold; margin-bottom:8px; text-align:center;">글 수정</div>
+                <input type="text" id="board-edit-title" placeholder="제목" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd;">
+                <textarea id="board-edit-content" placeholder="내용" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd; min-height:120px; resize:vertical;"></textarea>
+                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
+                    <button onclick="closeBoardEdit()" style="padding:7px 14px; font-size:12px; cursor:pointer; border:1px solid #ddd; background:#fff;">취소</button>
+                    <button onclick="submitBoardEdit()" style="padding:7px 14px; font-size:12px; cursor:pointer; background:#53add2; color:#fff; border:none; font-weight:bold;">저장</button>
+                </div>
+            </div></div></div>
+        </section>
+
         <footer>
             <p class="footer-text">
                 콘텐츠에 대한 모든 권리와 책임은 게시자에게 있으며 냥이플은 이와 관련된 문제를 책임지지 않습니다.<br>
@@ -1109,6 +1182,67 @@
         } catch(e) {
             console.error('Supabase 동영상 삭제 실패:', e);
         }
+    }
+
+    /* [신규] 유저 온라인 동기화 */
+    async function fbSaveUser(userObj) {
+        if(!supabaseClient || !userObj) return;
+        try {
+            const { error } = await supabaseClient.from('users').upsert(userObj, { onConflict: 'id' });
+            if(error) throw error;
+        } catch(e) { console.error('Supabase 유저 저장 실패:', e); }
+    }
+
+    async function fbLoadAllUsers() {
+        if(!supabaseClient) return null;
+        try {
+            const { data, error } = await supabaseClient.from('users').select('*');
+            if(error) throw error;
+            return data || [];
+        } catch(e) { console.error('Supabase 유저 목록 불러오기 실패:', e); return null; }
+    }
+
+    /* [신규] 구독 온라인 동기화 */
+    async function fbSaveSubscription(userId, targetName, isSubscribed) {
+        if(!supabaseClient || !userId) return;
+        try {
+            if(isSubscribed) {
+                await supabaseClient.from('subscriptions').upsert({ user_id: userId, target: targetName }, { onConflict: 'user_id,target' });
+            } else {
+                await supabaseClient.from('subscriptions').delete().eq('user_id', userId).eq('target', targetName);
+            }
+        } catch(e) { console.error('Supabase 구독 저장 실패:', e); }
+    }
+
+    async function fbLoadSubscriptions(userId) {
+        if(!supabaseClient || !userId) return null;
+        try {
+            const { data, error } = await supabaseClient.from('subscriptions').select('target').eq('user_id', userId);
+            if(error) throw error;
+            return (data || []).map(r => r.target);
+        } catch(e) { console.error('Supabase 구독 목록 불러오기 실패:', e); return null; }
+    }
+
+    /* [신규] 구독자 수 온라인 동기화 */
+    async function fbSaveSubscriberCounts(counts) {
+        if(!supabaseClient) return;
+        try {
+            const rows = Object.entries(counts).map(([nick, count]) => ({ nick, count }));
+            for(const row of rows) {
+                await supabaseClient.from('subscriber_counts').upsert(row, { onConflict: 'nick' });
+            }
+        } catch(e) { console.error('Supabase 구독자수 저장 실패:', e); }
+    }
+
+    async function fbLoadSubscriberCounts() {
+        if(!supabaseClient) return null;
+        try {
+            const { data, error } = await supabaseClient.from('subscriber_counts').select('*');
+            if(error) throw error;
+            const result = {};
+            (data || []).forEach(r => { result[r.nick] = r.count; });
+            return result;
+        } catch(e) { console.error('Supabase 구독자수 불러오기 실패:', e); return null; }
     }
 
     function fbUploadVideoFile(videoId, file, onProgress) {
@@ -1713,7 +1847,14 @@
                     </span>
 
                     <div style="margin-top: 10px; width: 100%; text-align: right;">
-                        <span style="color:#777; font-weight: bold; display: block; margin-bottom: 5px; word-break:break-all;">${currentPlayingItem.desc ? linkifyText(currentPlayingItem.desc) : '설명이 없습니다.'}</span>
+                        <div style="text-align:left; margin-bottom:5px;">
+                            <span id="v-desc-short" style="color:#777; font-weight:bold; word-break:break-all; display:block;">${currentPlayingItem.desc && currentPlayingItem.desc.length > 60 ? linkifyText(currentPlayingItem.desc.slice(0, 60)) + '...' : (currentPlayingItem.desc ? linkifyText(currentPlayingItem.desc) : '설명이 없습니다.')}</span>
+                            ${currentPlayingItem.desc && currentPlayingItem.desc.length > 60 ? `
+                            <span id="v-desc-full" style="color:#777; font-weight:bold; word-break:break-all; display:none; white-space:pre-wrap;">${linkifyText(currentPlayingItem.desc)}</span>
+                            <span id="v-desc-more-btn" onclick="(function(){document.getElementById('v-desc-short').style.display='none';document.getElementById('v-desc-full').style.display='block';document.getElementById('v-desc-more-btn').style.display='none';document.getElementById('v-desc-fold-btn').style.display='inline-block';})()" style="color:#53add2; font-size:11px; font-weight:bold; cursor:pointer; display:inline-block; margin-top:3px;">▼ 더보기</span>
+                            <span id="v-desc-fold-btn" onclick="(function(){document.getElementById('v-desc-short').style.display='block';document.getElementById('v-desc-full').style.display='none';document.getElementById('v-desc-more-btn').style.display='inline-block';document.getElementById('v-desc-fold-btn').style.display='none';})()" style="color:#53add2; font-size:11px; font-weight:bold; cursor:pointer; display:none; margin-top:3px;">▲ 접기</span>
+                            ` : ''}
+                        </div>
                         <div style="margin-bottom: 5px;">
                             <img src="https://i.ibb.co/Zt9M5LV/20260617-134551.png" alt="share_link" class="share-btn-img" title="사이트 공유하기" onclick="shareNyangiple()">
                             <img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" title="추가 버튼" style="margin-left: 5px;" onclick="shareNyangiple()"/>
@@ -2056,7 +2197,7 @@
         currentPlayingItem.jjim++;
         document.getElementById('jjim-val').innerText = currentPlayingItem.jjim;
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.jjim = currentPlayingItem.jjim; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); }
+        if(target) { target.jjim = currentPlayingItem.jjim; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbSaveVideo === 'function') fbSaveVideo(target); }
 
         /* [신규] 내 영상에 찜이 달렸을 때 영상 주인에게 알림 */
         if(currentPlayingItem.author !== user.nick) {
@@ -2076,7 +2217,7 @@
         }
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
-        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널', playlist: '재생목록' };
+        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널', playlist: '재생목록', board: '게시판' };
         document.title = `재밌는 UCC 세상 냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
@@ -2089,6 +2230,7 @@
         if(s === 'mypage') renderMyCloudsList();
         if(s === 'search-result') showSkeletonBeforeRender(renderSearchResults, ['search-result-list'], false);
         if(s === 'history') renderWatchHistory();
+        if(s === 'board') renderBoardList();
         document.getElementById('sliding-menu').classList.remove('open');
     }
 
@@ -2106,6 +2248,130 @@
 
     function goBackFromChannel() {
         showSection(lastSection);
+    }
+
+    /* ===== [신규] 게시판 기능 ===== */
+    let boardPosts = [];
+    let boardEditingId = null;
+
+    async function fbLoadBoardPosts() {
+        if(!supabaseClient) return [];
+        try {
+            const { data, error } = await supabaseClient.from('board').select('*').order('regDate', { ascending: false });
+            if(error) throw error;
+            return data || [];
+        } catch(e) { console.error('게시판 불러오기 실패:', e); return []; }
+    }
+
+    async function fbSaveBoardPost(post) {
+        if(!supabaseClient) return false;
+        try {
+            const { error } = await supabaseClient.from('board').upsert(post, { onConflict: 'id' });
+            if(error) throw error;
+            return true;
+        } catch(e) { console.error('게시판 저장 실패:', e); return false; }
+    }
+
+    async function fbDeleteBoardPost(postId) {
+        if(!supabaseClient) return false;
+        try {
+            const { error } = await supabaseClient.from('board').delete().eq('id', postId);
+            if(error) throw error;
+            return true;
+        } catch(e) { console.error('게시판 삭제 실패:', e); return false; }
+    }
+
+    async function renderBoardList() {
+        const listEl = document.getElementById('board-list');
+        if(!listEl) return;
+        listEl.innerHTML = '<div style="text-align:center; color:#aaa; padding:20px;">불러오는 중...</div>';
+        boardPosts = await fbLoadBoardPosts();
+        if(boardPosts.length === 0) {
+            listEl.innerHTML = '<div style="text-align:center; color:#aaa; padding:30px;">아직 게시글이 없습니다.<br>첫 번째 글을 작성해보세요!</div>';
+            return;
+        }
+        listEl.innerHTML = boardPosts.map(p => {
+            const isAuthor = user && user.nick === p.authorNick;
+            const profileImg = p.authorProfile || 'https://i.ibb.co/P36c8H4/20260620-061219.png';
+            return `<div style="border:1px solid #eee; border-radius:8px; padding:14px; margin-bottom:14px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                    <img src="${escapeHtml(profileImg)}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid #53add2; flex-shrink:0;">
+                    <div>
+                        <div style="font-size:13px; font-weight:bold; color:#333;">${escapeHtml(p.authorNick || '익명')}</div>
+                        <div style="font-size:11px; color:#aaa;">${formatDate(p.regDate)}${p.editDate ? ' (수정됨)' : ''}</div>
+                    </div>
+                    ${isAuthor ? `<div style="margin-left:auto; display:flex; gap:6px;">
+                        <button onclick="openBoardEdit('${p.id}')" style="font-size:11px; padding:4px 10px; background:#53add2; color:#fff; border:none; border-radius:4px; cursor:pointer;">수정</button>
+                        <button onclick="deleteBoardPost('${p.id}')" style="font-size:11px; padding:4px 10px; background:#ff3300; color:#fff; border:none; border-radius:4px; cursor:pointer;">삭제</button>
+                    </div>` : ''}
+                </div>
+                <div style="font-size:14px; font-weight:bold; color:#111; margin-bottom:6px;">${escapeHtml(p.title)}</div>
+                <div style="font-size:13px; color:#555; white-space:pre-wrap; word-break:break-all; line-height:1.6;">${escapeHtml(p.content)}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function openBoardWrite() {
+        if(!user) { alert('로그인 후 글을 작성할 수 있습니다.'); openModal('login-modal'); return; }
+        document.getElementById('board-write-title').value = '';
+        document.getElementById('board-write-content').value = '';
+        openModal('board-write-modal');
+    }
+
+    function closeBoardWrite() { closeModal('board-write-modal'); }
+
+    async function submitBoardPost() {
+        if(!user) { alert('로그인이 필요합니다.'); return; }
+        const title = document.getElementById('board-write-title').value.trim();
+        const content = document.getElementById('board-write-content').value.trim();
+        if(!title) { alert('제목을 입력해주세요.'); return; }
+        if(!content) { alert('내용을 입력해주세요.'); return; }
+        const post = {
+            id: String(Date.now()),
+            title: title,
+            content: content,
+            authorNick: user.nick,
+            authorProfile: user.profileImg || 'https://i.ibb.co/P36c8H4/20260620-061219.png',
+            regDate: new Date().toISOString(),
+            editDate: null
+        };
+        const ok = await fbSaveBoardPost(post);
+        if(ok) { closeBoardWrite(); showToast('게시글이 등록됐습니다!', 'success'); renderBoardList(); }
+        else { alert('게시글 등록에 실패했습니다. 다시 시도해주세요.'); }
+    }
+
+    function openBoardEdit(postId) {
+        const post = boardPosts.find(p => p.id === postId);
+        if(!post) return;
+        boardEditingId = postId;
+        document.getElementById('board-edit-title').value = post.title;
+        document.getElementById('board-edit-content').value = post.content;
+        openModal('board-edit-modal');
+    }
+
+    function closeBoardEdit() { closeModal('board-edit-modal'); boardEditingId = null; }
+
+    async function submitBoardEdit() {
+        if(!boardEditingId) return;
+        const post = boardPosts.find(p => p.id === boardEditingId);
+        if(!post) return;
+        const title = document.getElementById('board-edit-title').value.trim();
+        const content = document.getElementById('board-edit-content').value.trim();
+        if(!title) { alert('제목을 입력해주세요.'); return; }
+        if(!content) { alert('내용을 입력해주세요.'); return; }
+        post.title = title;
+        post.content = content;
+        post.editDate = new Date().toISOString();
+        const ok = await fbSaveBoardPost(post);
+        if(ok) { closeBoardEdit(); showToast('게시글이 수정됐습니다!', 'success'); renderBoardList(); }
+        else { alert('수정에 실패했습니다. 다시 시도해주세요.'); }
+    }
+
+    async function deleteBoardPost(postId) {
+        if(!confirm('정말로 이 게시글을 삭제하시겠습니까?')) return;
+        const ok = await fbDeleteBoardPost(postId);
+        if(ok) { showToast('게시글이 삭제됐습니다.', 'success'); renderBoardList(); }
+        else { alert('삭제에 실패했습니다. 다시 시도해주세요.'); }
     }
 
     function refreshUnluckyList() {
@@ -2919,6 +3185,7 @@
             localStorage.setItem('tvple_users', JSON.stringify(users));
             user = newUser;
             localStorage.setItem('tvple_user', JSON.stringify(user));
+            if(typeof fbSaveUser === 'function') fbSaveUser(newUser);
             currentChannelTargetName = user.nick;
             document.getElementById('s-id').value = "";
             document.getElementById('s-pw').value = "";
@@ -2985,6 +3252,7 @@
 
         db = db.filter(v => v.id !== videoId);
         localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
+        if(typeof fbDeleteVideo === 'function') fbDeleteVideo(videoId);
 
         if (indexedDBInstance) {
             const tx = indexedDBInstance.transaction("videos", "readwrite");
@@ -3091,8 +3359,7 @@
             if(thumbDataUrl !== undefined) target.thumb = thumbDataUrl;
 
             localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-
-            editingVideoId = null;
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
             document.getElementById('edit-up-file').value = "";
             document.getElementById('edit-up-thumb').value = "";
 
@@ -3248,6 +3515,8 @@
         }
         localStorage.setItem('tvple_subscriptions', JSON.stringify(subscriptions));
         localStorage.setItem('tvple_subscriber_counts', JSON.stringify(subscriberCounts));
+        if(typeof fbSaveSubscription === 'function' && user) fbSaveSubscription(user.id, targetName, subscriptions.includes(targetName));
+        if(typeof fbSaveSubscriberCounts === 'function') fbSaveSubscriberCounts(subscriberCounts);
         updateChannel();
     }
 
@@ -4258,6 +4527,17 @@
     updateLoopBtnState();
     updateMuteBtnIcon();
 
+    /* [신규] 로고 툴팁 */
+    (function() {
+        const logoEl = document.getElementById('logo-img-main');
+        const tipEl = document.getElementById('logo-tooltip');
+        if(logoEl && tipEl) {
+            logoEl.addEventListener('mouseenter', function() { tipEl.style.display = 'block'; });
+            logoEl.addEventListener('mouseleave', function() { tipEl.style.display = 'none'; });
+            logoEl.addEventListener('touchstart', function() { tipEl.style.display = 'block'; setTimeout(function(){ tipEl.style.display = 'none'; }, 1500); }, { passive: true });
+        }
+    })();
+
     /* [신규] 이미지 저장 방지 (우클릭 저장/드래그 저장 차단) */
     document.addEventListener('contextmenu', function(e) {
         if(e.target && e.target.tagName === 'IMG') e.preventDefault();
@@ -4290,6 +4570,36 @@
             try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
             renderList();
         });
+
+        /* [신규] 유저 목록 불러오기 */
+        if(typeof fbLoadAllUsers === 'function') {
+            fbLoadAllUsers().then((onlineUsers) => {
+                if(!onlineUsers) return;
+                onlineUsers.forEach((ou) => {
+                    const idx = users.findIndex(u => u.id === ou.id);
+                    if(idx >= 0) { users[idx] = ou; } else { users.push(ou); }
+                });
+                try { localStorage.setItem('tvple_users', JSON.stringify(users)); } catch(e) {}
+            });
+        }
+
+        /* [신규] 구독자수 불러오기 */
+        if(typeof fbLoadSubscriberCounts === 'function') {
+            fbLoadSubscriberCounts().then((onlineCounts) => {
+                if(!onlineCounts) return;
+                Object.assign(subscriberCounts, onlineCounts);
+                try { localStorage.setItem('tvple_subscriber_counts', JSON.stringify(subscriberCounts)); } catch(e) {}
+            });
+        }
+
+        /* [신규] 내 구독 목록 불러오기 */
+        if(typeof fbLoadSubscriptions === 'function' && user) {
+            fbLoadSubscriptions(user.id).then((onlineSubs) => {
+                if(!onlineSubs) return;
+                onlineSubs.forEach(s => { if(!subscriptions.includes(s)) subscriptions.push(s); });
+                try { localStorage.setItem('tvple_subscriptions', JSON.stringify(subscriptions)); } catch(e) {}
+            });
+        }
     })();
 </script>
 </body>
