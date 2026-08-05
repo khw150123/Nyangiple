@@ -1267,7 +1267,7 @@
     const cloudLayer = document.getElementById('cloud-layer');
     const waitScreen = document.getElementById('wait-screen');
     const errorScreen = document.getElementById('error-screen');
-    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "애니/매드무비", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "테크"];
+    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "애니/매드무비", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "테크", "패러디"];
 
     const kkk11 = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ\n".repeat(11);
     const garigi = "가리기\n".repeat(30);
@@ -1822,6 +1822,12 @@
                                 <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
                             </div>
                             <div class="v-capsule-text">${widthText}x${heightText}</div>
+                        </div>
+                        <div class="v-capsule-item">
+                            <div class="v-capsule-badge">
+                                <svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>
+                            </div>
+                            <div class="v-capsule-text">${currentPlayingItem.quality || '감지 중...'}</div>
                         </div>
                     </div>
 
