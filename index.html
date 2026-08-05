@@ -731,7 +731,7 @@
     <div class="header-right">
         <div class="search-wrapper">
             <img src="https://i.ibb.co/DPh058wN/20260508-144852.jpg" class="search-bg-img">
-            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="검색..." autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
+            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="#태그, 닉네임 검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
             <div id="search-suggest-box" class="search-suggest-box" style="display:none;"></div>
         </div>
@@ -3046,7 +3046,7 @@
         } else {
             if(currentGenre !== 'all') l = l.filter(v => v.genre === currentGenre);
         }
-        if(searchQuery) l = l.filter(v => v.title.toLowerCase().includes(searchQuery));
+        if(searchQuery) l = l.filter(v => v.title.toLowerCase().includes(searchQuery) || (v.author && v.author.toLowerCase().includes(searchQuery)));
         
         if(currentSort === 'views') l.sort((a,b) => b.views - a.views);
         else if(currentSort === 'clouds') {
@@ -4295,7 +4295,7 @@
         const listEl = document.getElementById('search-result-list');
         if(!listEl) return;
 
-        let l = db.filter(v => v.title.toLowerCase().includes(searchQuery));
+        let l = db.filter(v => v.title.toLowerCase().includes(searchQuery) || (v.author && v.author.toLowerCase().includes(searchQuery)));
 
         if(headerEl) headerEl.innerHTML = `<span>"${escapeHtml(document.getElementById('main-search-input').value)}"</span> 검색 결과 (${l.length}건)`;
 
