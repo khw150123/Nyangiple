@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -49,11 +50,11 @@
         .credit-wrapper { display: none; }
 
         .search-wrapper { position: relative; display: flex; align-items: center; margin-left: 10px; gap: 0; }
-        .search-bg-img { height: 35px; cursor: default; }
-        .search-btn-img { height: 35px; cursor: pointer; }
+        .search-bg-img { height: 54px; width: 293px; object-fit: fill; display: block; cursor: default; }
+        .search-btn-img { height: 35px; width: 35px; object-fit: fill; display: block; cursor: pointer; margin-left: -1px; }
         .search-input-overlay { 
             position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-            border: none; background: none; outline: none; font-size: 10px; width: 140px; height: 35px; color: #000;
+            border: none; background: none; outline: none; font-size: 11px; width: 220px; height: 54px; color: #000;
         }
 
         .auth-container { display: flex; align-items: center; gap: 5px; }
@@ -119,7 +120,7 @@
             width: 100%;
         }
 
-        .frame-wrapper { position: relative; width: 100%; background: url('https://i.ibb.co/9Hgq2ZfP/image.png') no-repeat center center; background-size: 100% 100%; padding: 40px 20px; box-sizing: border-box; }
+        .frame-wrapper { position: relative; width: 100%; padding: 40px 20px; box-sizing: border-box; }
         .frame-bg { background: #fff; padding: 20px 10px; min-height: 450px; }
 
         .unlucky-title-img { max-width: 100%; height: auto; display: block; margin-bottom: 12px; }
@@ -393,7 +394,7 @@
         .list-author-mini span { font-size:10px; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .list-title-mini { font-size:10px; color:#888; margin-top:2px; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .list-title-mini { font-size:10px; color:#333; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .channel-video-delete-btn { background: #ff3300; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; } .channel-video-delete-btn:hover { background: #cc0000; } .channel-video-edit-btn { background: #53add2; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; margin-right: 4px; } .channel-video-edit-btn:hover { background: #3d8bb0; } #side-video-list.album-mode { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; } #side-video-list.album-mode .list-item { flex-direction: column; padding: 0; border-bottom: none; border: 1px solid #ddd; } #side-video-list.album-mode .list-thumb { width: 100%; aspect-ratio: 16/9; height: auto; } #side-video-list.album-mode .list-info { padding: 8px; } .desc-tooltip { opacity: 0; visibility: hidden; position: absolute; bottom: 110%; left: 50%; margin-left: -90px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 11px; white-space: normal; z-index: 5000; width: 180px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s; } .desc-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: rgba(87,138,182,0.85) transparent transparent transparent; } .unlucky-item:hover .desc-tooltip, .list-item:hover .desc-tooltip { opacity: 1; visibility: visible; } .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; } .modal-content { background: #fff; width: 90%; max-width: 320px; box-sizing: border-box; } .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; } .modal-btn-img { width: 110px; cursor: pointer; align-self: center; margin-top: 5px; } .v-info-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; } .v-info-right-wrapper { display: flex; align-items: center; gap: 15px; flex-shrink: 0; } .jjim-container { display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 5px; } .jjim-btn-img { height: 35px; } .jjim-count { font-size: 14px; font-weight: bold; color: #ff4444; } .share-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .share-btn-img:active { transform: scale(0.9); } .extra-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .extra-btn-img:active { transform: scale(0.9); } .share-hover-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; } .share-hover-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.9); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; } .share-hover-wrap:hover .share-hover-tip { opacity: 1; visibility: visible; } .author-vlist-btn { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .author-vlist-btn:active { transform: scale(0.9); } .tag-image-container { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 24px; } .tag-image-container img { display: block; width: 100%; height: 24px; object-fit: fill; position: absolute; top: 0; left: 0; z-index: 1; } .tag-text-overlay { position: relative; z-index: 2; color: #fff; font-size: 11px; white-space: nowrap; pointer-events: none; font-weight: bold; padding: 0 10px; line-height: 24px; } .tag-list-wrapper .tag-image-container { height: 28px; } .tag-list-wrapper .tag-image-container img { height: 28px; } .tag-list-wrapper .tag-text-overlay { font-size: 12px; line-height: 28px; } .v-capsule-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; } .v-capsule-item { display: flex; align-items: center; gap: 8px; } .v-capsule-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 12px; width: 42px; height: 20px; flex-shrink: 0; } .v-capsule-badge svg { width: 13px; height: 13px; fill: #fff; } .v-capsule-text { font-size: 13px; font-family: sans-serif; font-weight: normal; color: #333; line-height: 20px; } .modal-tag-row { display: flex; align-items: center; gap: 5px; width: 100%; } .modal-tag-row input { flex: 1; } .tag-add-btn-img { height: 24px; cursor: pointer; flex-shrink: 0; } .channel-profile-interactive-img { width: 70px; height: 70px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; flex-shrink:0; transition: opacity 0.2s; } .channel-profile-interactive-img:hover { opacity: 0.8; } .sub-action-btn-img { height: 30px; cursor: pointer; display: inline-block; vertical-align: middle; transition: transform 0.2s; } .sub-action-btn-img:active { transform: scale(0.95); } .channel-summary-card { display: flex; margin-top: 10px; border: 1px solid #e3e3e3; border-radius: 6px; overflow: hidden; background: #fafafa; } .channel-summary-item { flex: 1; text-align: center; padding: 8px 4px; border-right: 1px solid #e3e3e3; } .channel-summary-item:last-child { border-right: none; } .channel-summary-label { font-size: 10px; color: #999; margin-bottom: 3px; } .channel-summary-value { font-size: 13px; font-weight: bold; color: #333; } body.dark-mode .channel-summary-card { background: #222; border-color: #333; } body.dark-mode .channel-summary-item { border-right-color: #333; } body.dark-mode .channel-summary-value { color: #eee; } footer { padding: 20px 10px; text-align: center; border-top: 1px solid #eee; background: #fff; } .footer-text { font-size: 10px; color: #999; line-height: 1.6; } .blue-text { color: #007bff; font-weight: bold; } .top-btn { cursor: pointer; text-decoration: none; } 
+        .channel-video-delete-btn { background: #ff3300; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; } .channel-video-delete-btn:hover { background: #cc0000; } .channel-video-edit-btn { background: #53add2; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; margin-right: 4px; } .channel-video-edit-btn:hover { background: #3d8bb0; } #side-video-list.album-mode { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; } #side-video-list.album-mode .list-item { flex-direction: column; padding: 0; border-bottom: none; border: 1px solid #ddd; } #side-video-list.album-mode .list-thumb { width: 100%; aspect-ratio: 16/9; height: auto; } #side-video-list.album-mode .list-info { padding: 8px; } .desc-tooltip { opacity: 0; visibility: hidden; position: absolute; bottom: 110%; left: 50%; margin-left: -90px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 11px; white-space: normal; z-index: 5000; width: 180px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s; } .desc-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: rgba(87,138,182,0.85) transparent transparent transparent; } .unlucky-item:hover .desc-tooltip, .list-item:hover .desc-tooltip { opacity: 1; visibility: visible; } .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; } .modal-content { background: #fff; width: 90%; max-width: 320px; box-sizing: border-box; } .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; } .modal-btn-img { width: 110px; cursor: pointer; align-self: center; margin-top: 5px; } .v-info-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; } .v-info-right-wrapper { display: flex; align-items: center; gap: 15px; flex-shrink: 0; } .jjim-container { display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 5px; } .jjim-btn-img { height: 35px; } .jjim-count { font-size: 14px; font-weight: bold; color: #ff4444; } .share-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .share-btn-img:active { transform: scale(0.9); } .extra-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .extra-btn-img:active { transform: scale(0.9); } .share-hover-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; } .share-hover-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.9); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; } .share-hover-wrap:hover .share-hover-tip { opacity: 1; visibility: visible; } .author-vlist-btn { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .author-vlist-btn:active { transform: scale(0.9); } .tag-image-container { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 24px; } .tag-image-container img { display: block; width: 100%; height: 24px; object-fit: fill; position: absolute; top: 0; left: 0; z-index: 1; } .tag-text-overlay { position: relative; z-index: 2; color: #fff; font-size: 11px; white-space: nowrap; pointer-events: none; font-weight: bold; padding: 0 10px; line-height: 24px; } .tag-list-wrapper .tag-image-container { height: 28px; } .tag-list-wrapper .tag-image-container img { height: 28px; } .tag-list-wrapper .tag-text-overlay { font-size: 12px; line-height: 28px; } .v-capsule-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; } .v-capsule-item { display: flex; align-items: center; gap: 8px; } .v-capsule-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 12px; width: 42px; height: 20px; flex-shrink: 0; } .v-capsule-badge svg { width: 13px; height: 13px; fill: #fff; } .v-capsule-text { font-size: 13px; font-family: sans-serif; font-weight: normal; color: #333; line-height: 20px; } .modal-tag-row { display: flex; align-items: center; gap: 5px; width: 100%; } .modal-tag-row input { flex: 1; } .tag-add-btn-img { height: 24px; cursor: pointer; flex-shrink: 0; } .channel-profile-interactive-img { width: 70px; height: 70px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; flex-shrink:0; transition: opacity 0.2s; } .channel-profile-interactive-img:hover { opacity: 0.8; } .sub-action-btn-img { height: 30px; cursor: pointer; display: inline-block; vertical-align: middle; transition: transform 0.2s; } .sub-action-btn-img:active { transform: scale(0.95); } .channel-summary-card { display: flex; margin-top: 10px; border: 1px solid #e3e3e3; border-radius: 6px; overflow: hidden; background: #fafafa; } .channel-summary-item { flex: 1; text-align: center; padding: 8px 4px; border-right: 1px solid #e3e3e3; } .channel-summary-item:last-child { border-right: none; } .channel-summary-label { font-size: 10px; color: #999; margin-bottom: 3px; } .channel-summary-value { font-size: 13px; font-weight: bold; color: #333; } footer { padding: 20px 10px; text-align: center; border-top: 1px solid #eee; background: #fff; } .footer-text { font-size: 10px; color: #999; line-height: 1.6; } .blue-text { color: #007bff; font-weight: bold; } .top-btn { cursor: pointer; text-decoration: none; } 
         
         @media (max-width: 768px) { 
             .sidebar { display: none; } 
@@ -402,8 +403,9 @@
             .logo-img { height: 28px; } 
             .header-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 0; gap: 5px; } 
             .search-wrapper { position: relative; display: flex; align-items: center; margin-left: auto; margin-right: auto; gap: 0; } 
-            .search-bg-img, .search-btn-img { height: 28px; } 
-            .search-input-overlay { width: 100px; font-size: 8.5px; left: 8px; height: 28px; } 
+            .search-bg-img { height: 43px; width: 200px; object-fit: fill; display: block; } 
+            .search-btn-img { height: 28px; width: 28px; object-fit: fill; display: block; margin-left: -1px; } 
+            .search-input-overlay { width: 160px; font-size: 8.5px; left: 8px; height: 43px; } 
             .menu-container { position: relative; display: flex; order: 3; margin-left: 2px; } 
             .menu-toggle-btn { height: 28px; } 
             .sliding-menu { width: 170px; left: auto; right: 10px; top: 55px; } 
@@ -527,39 +529,52 @@
             .volume-container { flex-shrink: 0; gap: 3px; }
             .volume-slider { width: 40px; }
             .ctrl-progress-container { width: 50px; }
+            .sliding-menu { top: 48px; }
+            .sliding-menu.open { max-height: calc(100vh - 56px); }
+            .nav-icon-btn, .header-upload-btn { height: 32px; font-size: 10px; }
+            .nav-icon-btn img, .header-upload-btn img { height: 20px; }
         }
 
-        /* ===== 다크모드 오버라이드 (기존 스타일 변경 없음, 추가만) ===== */
-        body.dark-mode { background:#181818; color:#e0e0e0; }
-        body.dark-mode header { background:#181818; border-bottom-color:#333; }
-        body.dark-mode .sliding-menu { background:#242424; box-shadow: 2px 4px 10px rgba(0,0,0,0.5); }
-        body.dark-mode .nav-icon-btn, body.dark-mode .header-upload-btn { border-bottom-color:#333; color:#e0e0e0; }
-        body.dark-mode .user-nick-mini { color:#ccc; }
-        body.dark-mode .sidebar { background:#1f1f1f; border-right-color:#333; }
-        body.dark-mode .sidebar-item { color:#ccc; }
-        body.dark-mode .sidebar-item.active { color:#fff; }
-        body.dark-mode .frame-bg { background:#181818; }
-        body.dark-mode .unlucky-item { background:#222; border-color:#333; }
-        body.dark-mode .unlucky-title-text { background:#222; color:#eee; border-top-color:#333; }
-        body.dark-mode .home-rank-tabs { border-bottom-color:#333; }
-        body.dark-mode .home-rank-tab { color:#999; }
-        body.dark-mode .rank-section-title { color:#eee; }
-        body.dark-mode .list-item { background:#181818; border-bottom-color:#2a2a2a; }
-        body.dark-mode .list-info { color:#bbb; }
-        body.dark-mode .list-info b { color:#f0f0f0; }
-        body.dark-mode .list-filter-bar { background:#1f1f1f; border-bottom-color:#333; }
-        body.dark-mode .filter-label { color:#888; }
-        body.dark-mode #category-toggle-btn { background:#2a2a2a; color:#eee; border-color:#444; }
-        body.dark-mode #category-list-container { background:#1f1f1f !important; border-color:#333 !important; }
-        body.dark-mode .filter-item { color:#aaa; }
-        body.dark-mode #v-detail-info, body.dark-mode #video-comments-section { background:#1f1f1f; border-color:#333; color:#ddd; }
-        body.dark-mode .modal-content { background:#222; }
-        body.dark-mode footer { background:#181818; border-top-color:#333; }
-        body.dark-mode #channel-section.page-section.active, body.dark-mode .channel-fullscreen-container { background:#181818; }
-        body.dark-mode #my-info { background:#1f1f1f !important; border-color:#333 !important; color:#ddd; }
-        body.dark-mode #playlist-section { color:#ddd; }
-        body.dark-mode input, body.dark-mode textarea, body.dark-mode select { background:#2a2a2a !important; color:#eee !important; border-color:#444 !important; }
-        body.dark-mode .channel-back-text-btn { color:#7fc4e8; }
+        /* ===== 구름이 뭔가요 호버 설명 (기존 스타일 변경 없음, 추가만) ===== */
+        .cloud-help-wrap { position: relative; display: inline-flex; align-items: center; }
+        .cloud-help-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.95); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 11px; font-weight: normal; line-height: 1.5; white-space: normal; width: 240px; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; text-align: left; }
+        .cloud-help-wrap:hover .cloud-help-tip { opacity: 1; visibility: visible; }
+
+        /* ===== 데이터 삭제 호버 설명 (기존 스타일 변경 없음, 추가만) ===== */
+        .danger-help-wrap { position: relative; display: inline-flex; align-items: center; }
+        .danger-help-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #DA263C; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; }
+        .danger-help-wrap:hover .danger-help-tip { opacity: 1; visibility: visible; }
+
+        /* ===== PC/가로모드 전용 상단 네비게이션 (기존 스타일 변경 없음, 추가만) ===== */
+        .lg-nav { display: none; align-items: center; gap: 18px; margin-left: 22px; }
+        .lg-nav-item { font-size: 13px; font-weight: bold; color: #333; cursor: pointer; white-space: nowrap; user-select: none; }
+        .lg-nav-item:hover { color: #53add2; }
+        .lg-nav-channel { position: relative; }
+        .lg-channel-dropdown { display: none; flex-direction: column; position: absolute; top: calc(100% + 14px); left: 0; background: #fff; border: 1px solid var(--border); box-shadow: 2px 4px 10px rgba(0,0,0,0.15); min-width: 130px; z-index: 10000; }
+        .lg-channel-dropdown.open { display: flex; }
+        .lg-channel-dropdown-item { padding: 10px 14px; font-size: 12px; font-weight: bold; color: #333; cursor: pointer; white-space: nowrap; }
+        .lg-channel-dropdown-item:hover { background: #f5f5f5; color: #53add2; }
+        .lg-right-actions { display: none; align-items: center; gap: 8px; flex-shrink: 0; }
+        .lg-action-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: bold; color: #333; cursor: pointer; padding: 0; border: none; background: none; white-space: nowrap; user-select: none; box-sizing: border-box; }
+        .lg-action-btn img { height: 32px; object-fit: contain; }
+        .lg-action-btn span { display: none; }
+        .lg-action-btn:hover { opacity: 0.75; }
+
+        @media (orientation: landscape) {
+            .menu-container { display: none !important; }
+            .lg-nav { display: flex !important; }
+            .lg-right-actions { display: flex !important; }
+            .header-left { flex: 0 0 auto !important; }
+            .header-right { flex: 1 1 auto !important; }
+            .search-wrapper { margin-left: auto !important; margin-right: auto !important; }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .lg-nav { gap: 12px; margin-left: 12px; }
+            .lg-nav-item { font-size: 11px; }
+            .lg-action-btn img { height: 24px; }
+            .lg-channel-dropdown-item { font-size: 11px; padding: 8px 10px; }
+        }
 
         /* ===== [신규] 랜덤 자막 발사 아이콘 ===== */
         #random-cloud-fire-btn svg { width: 18px; height: 18px; fill: #fff; }
@@ -577,10 +592,6 @@
         .mypage-tab-bar { display: flex; gap: 0; margin-bottom: 12px; border-bottom: 2px solid #eee; }
         .mypage-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
         .mypage-tab.active { color: #53add2; border-bottom: 2px solid #53add2; }
-        body.dark-mode .my-clouds-item { background:#181818; border-bottom-color:#2a2a2a; }
-        body.dark-mode .my-clouds-item:hover { background:#202020; }
-        body.dark-mode .my-clouds-text { color:#f0f0f0; }
-        body.dark-mode .mypage-tab-bar { border-bottom-color:#333; }
 
         /* ===== [신규] 대댓글 ===== */
         .reply-list { margin: 8px 0 0 20px; border-left: 2px solid #eee; padding-left: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -594,9 +605,6 @@
         .reply-input-row { display: flex; gap: 5px; margin-top: 6px; margin-left: 20px; }
         .reply-input-row input { flex: 1; font-size: 11px; padding: 5px; border: 1px solid #ddd; box-sizing: border-box; }
         .reply-input-row button { font-size: 10px; font-weight: bold; padding: 0 10px; border: 1px solid #53add2; background: #53add2; color: #fff; cursor: pointer; }
-        body.dark-mode .reply-list { border-left-color:#333; }
-        body.dark-mode .reply-item b { color:#f0f0f0; }
-        body.dark-mode .reply-input-row input { }
 
         /* ===== [신규] 알림센터 패널 ===== */
         #notif-panel { display:none; position:fixed; top:60px; right:10px; width:280px; max-height:400px; overflow-y:auto; background:#fff; border:1px solid #ddd; box-shadow:2px 4px 12px rgba(0,0,0,0.2); z-index:10001; box-sizing:border-box; }
@@ -610,16 +618,10 @@
         .notif-item-text { flex:1; min-width:0; color:#333; }
         .notif-item-time { color:#999; font-size:9px; margin-top:2px; }
         .notif-empty { padding:30px; text-align:center; color:#888; font-size:12px; }
-        body.dark-mode #notif-panel { background:#242424; border-color:#333; }
-        body.dark-mode .notif-panel-header { border-bottom-color:#333; color:#eee; }
-        body.dark-mode .notif-item { border-bottom-color:#2a2a2a; color:#ddd; }
-        body.dark-mode .notif-item.unread { background:#1e2a30; }
-        body.dark-mode .notif-item:hover { background:#202020; }
 
         /* ===== [신규] 검색결과 페이지 ===== */
         .search-result-header { padding:12px 15px; font-size:13px; font-weight:bold; color:#333; border-bottom:1px solid #eee; background:#fafafa; }
         .search-result-header span { color:#53add2; }
-        body.dark-mode .search-result-header { background:#1f1f1f; border-bottom-color:#333; color:#eee; }
 
         /* ===== [신규] 최근 본 영상 ===== */
         .history-clear-btn { font-size:11px; color:#ff3300; font-weight:bold; cursor:pointer; text-decoration:underline; }
@@ -638,8 +640,6 @@
         .skel-unlucky-item { width: calc((100% - 40px) / 5); min-width: 140px; flex-shrink:0; }
         .skel-unlucky-thumb { width:100%; aspect-ratio:16/9; background:#e8e8e8; position:relative; overflow:hidden; }
         .skel-unlucky-thumb::after { content:""; position:absolute; top:0; left:-150%; width:150%; height:100%; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent); animation: skelShimmer 1.2s infinite; }
-        body.dark-mode .skel-thumb, body.dark-mode .skel-line, body.dark-mode .skel-unlucky-thumb { background:#2a2a2a; }
-        body.dark-mode .skel-thumb::after, body.dark-mode .skel-line::after, body.dark-mode .skel-unlucky-thumb::after { background:linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); }
 
         /* ===== [신규] 업로드 진행률 바 ===== */
         .upload-progress-wrap { display:none; flex-direction:column; gap:4px; }
@@ -647,7 +647,6 @@
         .upload-progress-track { width:100%; height:8px; background:#eee; overflow:hidden; }
         .upload-progress-fill { height:100%; width:0%; background:#53add2; transition:width 0.2s ease; }
         .upload-progress-label { font-size:10px; color:#666; text-align:left; }
-        body.dark-mode .upload-progress-track { background:#333; }
 
         /* ===== [신규] 토스트 알림 ===== */
         #toast-container { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:99999; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none; }
@@ -677,8 +676,6 @@
         /* ===== [신규] 키보드 단축키 안내 ===== */
         .kbd-hint { font-size: 10px; color: #999; margin-top: 4px; text-align: left; }
         .kbd-hint kbd { display:inline-block; background:#f0f0f0; border:1px solid #ccc; border-bottom-width:2px; border-radius:3px; padding:0 5px; font-size:9px; font-family:inherit; color:#555; margin:0 1px; }
-        body.dark-mode .kbd-hint { color:#888; }
-        body.dark-mode .kbd-hint kbd { background:#2a2a2a; border-color:#444; color:#ccc; }
 
         /* ===== [신규] 검색 자동완성 + 최근 검색어 ===== */
         .search-suggest-box { position:absolute; top:100%; left:0; margin-top:4px; width:220px; max-height:280px; overflow-y:auto; background:#fff; border:1px solid #ddd; box-shadow:2px 4px 10px rgba(0,0,0,0.15); z-index:10002; box-sizing:border-box; text-align:left; }
@@ -688,18 +685,12 @@
         .search-suggest-item:last-child { border-bottom:none; }
         .search-suggest-item:hover { background:#f7fbfd; }
         .search-suggest-icon { font-size:10px; flex-shrink:0; opacity:0.7; }
-        body.dark-mode .search-suggest-box { background:#242424; border-color:#333; }
-        body.dark-mode .search-suggest-header { border-bottom-color:#333; color:#999; }
-        body.dark-mode .search-suggest-item { color:#ddd; border-bottom-color:#2a2a2a; }
-        body.dark-mode .search-suggest-item:hover { background:#202020; }
         @media (max-width: 768px) { .search-suggest-box { width: 200px; right: 0; left: auto; } }
 
         /* ===== [신규] 댓글 정렬 탭 ===== */
         .comment-sort-tabs { display:flex; gap:10px; margin-bottom:8px; }
         .comment-sort-tab { font-size:11px; color:#999; cursor:pointer; font-weight:bold; }
         .comment-sort-tab.active { color:#53add2; text-decoration:underline; }
-        body.dark-mode .comment-sort-tab { color:#888; }
-        body.dark-mode .comment-sort-tab.active { color:#7fc4e8; }
 
         /* ===== [신규] 영상 내 인기 구름 자막 하이라이트 ===== */
         .top-cloud-item { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #eee; cursor:pointer; }
@@ -710,7 +701,6 @@
         .top-cloud-item:nth-child(3) .top-cloud-rank { background:#cd7f32; }
         .top-cloud-text { flex:1; min-width:0; word-break:break-all; white-space:pre-wrap; color:#333; }
         .top-cloud-count { flex-shrink:0; color:#ff3300; font-size:10px; font-weight:bold; }
-        body.dark-mode .top-cloud-text { color:#e0e0e0; }
 
         /* ===== [신규] 음소거 버튼 ===== */
         #volume-mute-btn svg { transition: opacity 0.15s ease; }
@@ -726,12 +716,24 @@
 <header>
     <div class="header-left" style="position:relative;">
         <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
-        <div id="logo-tooltip" style="display:none; position:absolute; top:calc(100% + 6px); left:0; background:rgba(87,138,182,0.85); color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:8px; white-space:nowrap; z-index:9999; pointer-events:none; box-shadow:0 2px 6px rgba(0,0,0,0.15);">재밌는 UCC 세상 냥이플!</div>
+        <div id="logo-tooltip" style="opacity:0; visibility:hidden; transition: opacity 0.25s ease, visibility 0.25s; position:absolute; top:calc(100% + 6px); left:0; background:rgba(87,138,182,0.85); color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:8px; white-space:nowrap; z-index:9999; pointer-events:none; box-shadow:0 2px 6px rgba(0,0,0,0.15);">재밌는 UCC 세상 냥이플!</div>
+        <div class="lg-nav" id="lg-nav">
+            <div class="lg-nav-item" onclick="showSection('video')">동영상</div>
+            <div class="lg-nav-item" onclick="showSection('playlist')">재생목록</div>
+            <div class="lg-nav-item lg-nav-channel">
+                <span id="lg-channel-trigger" onclick="toggleLgChannelDropdown(event)">채널</span>
+                <div class="lg-channel-dropdown" id="lg-channel-dropdown">
+                    <div class="lg-channel-dropdown-item" onclick="openMyPage(); closeLgChannelDropdown();">마이페이지</div>
+                    <div class="lg-channel-dropdown-item" onclick="showSection('history'); closeLgChannelDropdown();">최근 본 동영상</div>
+                </div>
+            </div>
+            <div class="lg-nav-item" onclick="showSection('board')">게시판</div>
+        </div>
     </div>
     <div class="header-right">
         <div class="search-wrapper">
             <img src="https://i.ibb.co/DPh058wN/20260508-144852.jpg" class="search-bg-img">
-            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="#태그, 닉네임 검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
+            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="'#태그', '닉네임', '동영상' 검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
             <div id="search-suggest-box" class="search-suggest-box" style="display:none;"></div>
         </div>
@@ -768,6 +770,10 @@
         </div>
         <div class="auth-container">
             <div id="header-user-nick" class="user-nick-mini"></div>
+        </div>
+        <div class="lg-right-actions" id="lg-right-actions">
+            <div class="lg-action-btn" onclick="handleAuthClick()"><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png"><span id="menu-auth-text-lg">로그인</span></div>
+            <div class="lg-action-btn" onclick="openModal('upload-modal')"><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg"><span>업로드</span></div>
         </div>
     </div>
 </header>
@@ -959,8 +965,11 @@
                 <div id="cloud-live-feed-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fbfbfb;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
                         <b style="font-size:12px; color:#53add2;">실시간 구름 자막</b>
-                        <span onclick="openModal('cloud-info-modal')" style="cursor:pointer; display:inline-flex; align-items:center; gap:3px; color:#999; font-size:11px;">
-                            <span style="display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border-radius:50%; background:#ccc; color:#fff; font-size:9px; font-weight:bold;">?</span>구름이 뭔가요?
+                        <span style="display:inline-flex; align-items:center; gap:3px; color:#999; font-size:11px;">
+                            <span class="cloud-help-wrap">
+                                <span style="display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border-radius:50%; background:#ccc; color:#fff; font-size:9px; font-weight:bold;">?</span>
+                                <div class="cloud-help-tip">티비플에서 2008년부터 제공했던 동영상 댓글입니다. 이 구름자막은 지금까지도 이어져 오고 있습니다. 원하는 곳에 자막을 달거나 랜덤 자막 작성을 통해 랜덤한 곳에 구름을 달아보세요!</div>
+                            </span>구름이 뭔가요?
                         </span>
                     </div>
                     <div id="cloud-live-feed-list" style="max-height:120px; overflow-y:auto;"></div>
@@ -1093,17 +1102,20 @@
         <footer>
             <p class="footer-text">
                 콘텐츠에 대한 모든 권리와 책임은 게시자에게 있으며 냥이플은 이와 관련된 문제를 책임지지 않습니다.<br>
-                SINCE 2026 BUILD <span class="blue-text">HTML</span>, <span class="blue-text">CSS</span> AND <span class="blue-text">JS</span>.<br>
+                SINCE 2026 BUILD <span class="blue-text">HTML5</span>, <span class="blue-text">CSS</span> AND <span class="blue-text">JS</span>.<br>
                 <span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
                 <span class="backup-link-text" onclick="exportBackupData()">데이터 백업 내보내기</span> | <span class="backup-link-text" onclick="triggerBackupImport()">데이터 가져오기</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
-                <span class="backup-link-text" id="darkmode-toggle-text" onclick="toggleDarkMode()">다크모드 켜기</span> | <span class="backup-link-text" id="infinite-scroll-toggle-text" onclick="toggleInfiniteScroll()">무한 스크롤: 꺼짐</span>
+                <span class="backup-link-text" id="infinite-scroll-toggle-text" onclick="toggleInfiniteScroll()">무한 스크롤: 꺼짐</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
-                <span class="backup-link-text" style="color:#ff3300;" onclick="deleteAllData()">데이터 삭제</span>
+                <span class="danger-help-wrap">
+                    <span class="backup-link-text" style="color:#ff3300;" onclick="deleteAllData()">데이터 삭제</span>
+                    <div class="danger-help-tip">모든 데이터를 삭제할 수 있습니다.</div>
+                </span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
                 냥닷컴 | <span id="nyang-company-day-count"></span>
@@ -1354,7 +1366,6 @@
     let lastResumeSaveTime = -1;
     let lastNotifCheck = localStorage.getItem('tvple_last_notif_check') || null;
 
-    let darkModeEnabled = localStorage.getItem('tvple_dark_mode') === '1';
     let infiniteScrollEnabled = localStorage.getItem('tvple_infinite_scroll') === '1';
 
     /* ===== [신규] 자동재생(다음 영상) 상태 ===== */
@@ -1394,6 +1405,24 @@
         const menu = document.getElementById('sliding-menu');
         menu.classList.toggle('open');
     }
+
+    function toggleLgChannelDropdown(e) {
+        if(e) e.stopPropagation();
+        const dd = document.getElementById('lg-channel-dropdown');
+        if(dd) dd.classList.toggle('open');
+    }
+    function closeLgChannelDropdown() {
+        const dd = document.getElementById('lg-channel-dropdown');
+        if(dd) dd.classList.remove('open');
+    }
+    document.addEventListener('click', function(e) {
+        const dd = document.getElementById('lg-channel-dropdown');
+        const trigger = document.getElementById('lg-channel-trigger');
+        if(!dd || !trigger) return;
+        if(dd.classList.contains('open') && !dd.contains(e.target) && !trigger.contains(e.target)) {
+            dd.classList.remove('open');
+        }
+    });
 
     function getTimeAgo(dateStr) {
         const now = new Date();
@@ -3127,18 +3156,6 @@
         renderList();
     }
 
-    function applyDarkModeState() {
-        document.body.classList.toggle('dark-mode', darkModeEnabled);
-        const el = document.getElementById('darkmode-toggle-text');
-        if(el) el.innerText = darkModeEnabled ? '다크모드 끄기' : '다크모드 켜기';
-    }
-
-    function toggleDarkMode() {
-        darkModeEnabled = !darkModeEnabled;
-        localStorage.setItem('tvple_dark_mode', darkModeEnabled ? '1' : '0');
-        applyDarkModeState();
-    }
-
     async function doLogin() { 
         const id = document.getElementById('l-id').value.trim();
         const pw = document.getElementById('l-pw').value;
@@ -3526,10 +3543,12 @@
         if(user) {
             document.getElementById('header-user-nick').innerText = user.nick;
             document.getElementById('menu-auth-text').innerText = "로그아웃";
+            if(document.getElementById('menu-auth-text-lg')) document.getElementById('menu-auth-text-lg').innerText = "로그아웃";
             localStorage.setItem('tvple_stats', JSON.stringify(userStats)); 
         } else {
             document.getElementById('header-user-nick').innerText = ""; 
             document.getElementById('menu-auth-text').innerText = "로그인/회원가입"; 
+            if(document.getElementById('menu-auth-text-lg')) document.getElementById('menu-auth-text-lg').innerText = "로그인";
         }
 
         let activeTargetName = currentChannelTargetName;
@@ -3764,7 +3783,7 @@
             return;
         }
 
-        const keys = ['tvple_vfinal_db_2','tvple_user','tvple_users','tvple_subscriptions','tvple_stats','tvple_playlist','tvple_subscriber_counts','tvple_resume_times','tvple_cloud_density','tvple_last_notif_check','tvple_dark_mode','tvple_infinite_scroll'];
+        const keys = ['tvple_vfinal_db_2','tvple_user','tvple_users','tvple_subscriptions','tvple_stats','tvple_playlist','tvple_subscriber_counts','tvple_resume_times','tvple_cloud_density','tvple_last_notif_check','tvple_infinite_scroll'];
         keys.forEach(k => localStorage.removeItem(k));
 
         if(indexedDBInstance) {
@@ -4521,7 +4540,6 @@
     if(initialDensityBtn) initialDensityBtn.innerText = cloudDensityLevels[cloudDensityLevel].label;
     checkNewSubscriptionVideos();
 
-    applyDarkModeState();
     const initialInfiniteScrollBtn = document.getElementById('infinite-scroll-toggle-text');
     if(initialInfiniteScrollBtn) initialInfiniteScrollBtn.innerText = infiniteScrollEnabled ? '무한 스크롤: 켜짐' : '무한 스크롤: 꺼짐';
     updateAutoplayBtnState();
@@ -4534,8 +4552,8 @@
         const logoEl = document.getElementById('logo-img-main');
         const tipEl = document.getElementById('logo-tooltip');
         if(logoEl && tipEl) {
-            logoEl.addEventListener('mouseenter', function() { tipEl.style.display = 'block'; });
-            logoEl.addEventListener('mouseleave', function() { tipEl.style.display = 'none'; });
+            logoEl.addEventListener('mouseenter', function() { tipEl.style.opacity = '1'; tipEl.style.visibility = 'visible'; });
+            logoEl.addEventListener('mouseleave', function() { tipEl.style.opacity = '0'; tipEl.style.visibility = 'hidden'; });
         }
     })();
 
