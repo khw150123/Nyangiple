@@ -537,13 +537,17 @@
 
         /* ===== 구름이 뭔가요 호버 설명 (기존 스타일 변경 없음, 추가만) ===== */
         .cloud-help-wrap { position: relative; display: inline-flex; align-items: center; }
-        .cloud-help-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.95); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 11px; font-weight: normal; line-height: 1.5; white-space: normal; width: 240px; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; text-align: left; }
+        .cloud-help-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 8px); left: 0; transform: none; background: rgba(87,138,182,0.95); color: #fff; padding: 10px 12px; border-radius: 8px; font-size: 11px; font-weight: normal; line-height: 1.5; white-space: normal; width: 240px; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; text-align: left; }
         .cloud-help-wrap:hover .cloud-help-tip { opacity: 1; visibility: visible; }
 
         /* ===== 데이터 삭제 호버 설명 (기존 스타일 변경 없음, 추가만) ===== */
         .danger-help-wrap { position: relative; display: inline-flex; align-items: center; }
         .danger-help-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #DA263C; color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; }
         .danger-help-wrap:hover .danger-help-tip { opacity: 1; visibility: visible; }
+
+        @media (max-width: 768px) and (orientation: portrait) {
+            .cloud-help-tip { left: 50%; transform: translateX(-50%); }
+        }
 
         /* ===== PC/가로모드 전용 상단 네비게이션 (기존 스타일 변경 없음, 추가만) ===== */
         .lg-nav { display: none; align-items: center; gap: 18px; margin-left: 22px; }
@@ -968,7 +972,7 @@
                         <span style="display:inline-flex; align-items:center; gap:3px; color:#999; font-size:11px;">
                             <span class="cloud-help-wrap">
                                 <span style="display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border-radius:50%; background:#ccc; color:#fff; font-size:9px; font-weight:bold;">?</span>
-                                <div class="cloud-help-tip">티비플에서 2008년부터 제공했던 동영상 댓글입니다. 이 구름자막은 지금까지도 이어져 오고 있습니다. 원하는 곳에 자막을 달거나 랜덤 자막 작성을 통해 랜덤한 곳에 구름을 달아보세요!</div>
+                                <span class="cloud-help-tip">티비플에서 2008년부터 제공했던 동영상 댓글입니다. 이 구름자막은 지금까지도 이어져 오고 있습니다. 원하는 곳에 자막을 달거나 랜덤 자막 작성을 통해 랜덤한 곳에 구름을 달아보세요!</span>
                             </span>구름이 뭔가요?
                         </span>
                     </div>
@@ -1102,7 +1106,7 @@
         <footer>
             <p class="footer-text">
                 콘텐츠에 대한 모든 권리와 책임은 게시자에게 있으며 냥이플은 이와 관련된 문제를 책임지지 않습니다.<br>
-                SINCE 2026 BUILD <span class="blue-text">HTML5</span>, <span class="blue-text">CSS</span> AND <span class="blue-text">JS</span>.<br>
+                SINCE 2026 BUILD <span class="blue-text">HTML</span>, <span class="blue-text">CSS</span> AND <span class="blue-text">JS</span>.<br>
                 <span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
@@ -1114,7 +1118,7 @@
             <p class="footer-text" style="margin-top: 10px;">
                 <span class="danger-help-wrap">
                     <span class="backup-link-text" style="color:#ff3300;" onclick="deleteAllData()">데이터 삭제</span>
-                    <div class="danger-help-tip">모든 데이터를 삭제할 수 있습니다.</div>
+                    <span class="danger-help-tip">모든 데이터를 삭제할 수 있습니다.</span>
                 </span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
