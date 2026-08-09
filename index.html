@@ -1667,7 +1667,8 @@
         currentVideoCloudCount++;
         cloudFeedLog.push({text: txt, time: video.currentTime});
         if(cloudFeedLog.length > 30) cloudFeedLog.shift();
-        updateDetail();
+        const cloudCountLiveEl = document.getElementById('cloud-count-live');
+        if(cloudCountLiveEl) cloudCountLiveEl.textContent = currentVideoCloudCount;
         renderCloudLiveFeedBox();
         setTimeout(() => { if(d.parentNode) d.remove(); }, 3300);
         return {x: d.style.left, y: d.style.top};
@@ -1813,11 +1814,13 @@
             
             const subButtonHtml = (!isMe) ? `
                 <div style="margin-top: 8px; cursor: pointer;" onclick="toggleSubscribeAction('${author.replace(/'/g, "\\'")}')">
-                    <img src="https://i.ibb.co/4ggFSfsy/Screenshot-20260626-151113-Gallery-1.png" class="sub-action-btn-img">
+                    <span style="position: relative; display: inline-block; vertical-align: middle;">
+                        <img src="https://i.ibb.co/CKVF2vKb/lv-0-20260809130716-1.gif" alt="lv-0-20260809093357-1" border="0" class="sub-action-btn-img" style="display: block;" />
+                        <span style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; color: #ffffff; pointer-events: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">${subscriberCounts[author] || 0}</span>
+                    </span>
                     <span style="font-size:11px; font-weight:bold; color: ${isSubscribed ? '#ff3300' : '#666'};">
                         ${isSubscribed ? '[ 구독 중 ]' : '[ 구독 하기 ]'}
                     </span>
-                    <span style="font-size:10px; color:#999; margin-left:6px;">구독자 ${subscriberCounts[author] || 0}명</span>
                 </div>
             ` : `<span style="font-size:11px; color:#999;">[ 본인 채널 ] 구독자 ${subscriberCounts[author] || 0}명</span>`;
 
@@ -1882,13 +1885,13 @@
                             <div class="tag-text-overlay">${currentPlayingItem.genre}</div>
                         </div>
                         ${myVideoBadgeHtml}
-                        <br>자막 수: ${totalClouds} | 화질 등급: ${currentPlayingItem.quality || '감지 중...'}
+                        <br>자막 수: <span id="cloud-count-live">${totalClouds}</span> | 화질 등급: ${currentPlayingItem.quality || '감지 중...'}
                     </div>
                 </div>
                 <div class="v-info-right-wrapper" style="flex-direction: column; align-items: flex-end; gap: 5px;">
                     <div class="jjim-container" onclick="handleJjim()" style="position: relative; display: inline-block;">
                         <a href="#" onclick="event.preventDefault();" style="display: block; line-height: 0;">
-                            <img src="https://i.ibb.co/FLKJvjxK/1783059202610-1.png" alt="1783059202610-1" border="0" class="jjim-btn-img" style="display: block;" />
+                            <img src="https://i.ibb.co/RkkQDh8M/lv-0-20260809130748-1.gif" alt="lv-0-20260809093017-1" border="0" class="jjim-btn-img" style="display: block;" />
                         </a>
                         <span class="jjim-count" id="jjim-val" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: bold; color: #ffffff; margin: 0; pointer-events: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">${currentPlayingItem.jjim}</span>
                     </div>
@@ -3482,11 +3485,13 @@
         const subCountText = `<span style="font-size:10px; color:#999; margin-left:6px;">구독자 ${subscriberCounts[activeTargetName] || 0}명</span>`;
         const subButtonHtml = (!isMe) ? `
             <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                <img src="https://i.ibb.co/4ggFSfsy/Screenshot-20260626-151113-Gallery-1.png" class="sub-action-btn-img" onclick="toggleSubscribeAction('${activeTargetName.replace(/'/g, "\\'")}')">
+                <span style="position: relative; display: inline-block; vertical-align: middle;">
+                    <img src="https://i.ibb.co/CKVF2vKb/lv-0-20260809130716-1.gif" alt="lv-0-20260809093357-1" border="0" class="sub-action-btn-img" style="display: block;" onclick="toggleSubscribeAction('${activeTargetName.replace(/'/g, "\\'")}')">
+                    <span style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; color: #ffffff; pointer-events: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">${subscriberCounts[activeTargetName] || 0}</span>
+                </span>
                 <span style="font-size:12px; font-weight:bold; color: ${isSubscribed ? '#ff3300' : '#666'};">
                     ${isSubscribed ? '[ 구독 중 ]' : '[ 미구독 상태 ]'}
                 </span>
-                ${subCountText}
             </div>
         ` : `<div style="margin-top:10px;">${subCountText}</div>`;
 
