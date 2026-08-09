@@ -565,6 +565,17 @@
         .lg-action-btn span { display: none; }
         .lg-action-btn:hover { opacity: 0.75; }
 
+        /* ===== [신규] 가로모드 - APK 다운로드 버튼 (공지사항 버튼 왼쪽) ===== */
+        .lg-notice-row { display: flex; align-items: center; gap: 10px; }
+        .lg-apk-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; text-decoration: none; }
+        .lg-apk-btn img { height: 20px; object-fit: contain; display: block; }
+        .lg-apk-btn span { font-size: 9px; font-weight: bold; color: #333; white-space: nowrap; }
+        .lg-apk-btn:hover span { color: #53add2; }
+
+        /* ===== [신규] PC/가로모드 - 냥이플 홈 화면 맨 위 우측 공지사항 버튼 ===== */
+        .home-lg-notice-btn { display: none; position: absolute; top: 14px; right: 14px; height: 36px; cursor: pointer; z-index: 50; transition: transform 0.15s; }
+        .home-lg-notice-btn:hover { transform: scale(1.1); }
+
         @media (orientation: landscape) {
             .menu-container { display: none !important; }
             .lg-nav { display: flex !important; }
@@ -573,6 +584,7 @@
             .header-left { flex: 0 0 auto !important; }
             .header-right { flex: 1 1 auto !important; }
             .search-wrapper { margin-left: auto !important; margin-right: auto !important; }
+            .home-lg-notice-btn { display: block !important; }
         }
 
         @media (max-width: 768px) and (orientation: landscape) {
@@ -581,6 +593,9 @@
             .lg-notice-btn { height: 26px; }
             .lg-action-btn img { height: 24px; }
             .lg-channel-dropdown-item { font-size: 11px; padding: 8px 10px; }
+            .lg-apk-btn img { height: 16px; }
+            .lg-apk-btn span { font-size: 8px; }
+            .home-lg-notice-btn { height: 28px; top: 8px; right: 8px; }
         }
 
         /* ===== [신규] 랜덤 자막 발사 아이콘 ===== */
@@ -723,7 +738,6 @@
 <header>
     <div class="header-left" style="position:relative;">
         <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
-        <div id="logo-tooltip" style="opacity:0; visibility:hidden; transition: opacity 0.25s ease, visibility 0.25s; position:absolute; top:calc(100% + 6px); left:0; background:rgba(87,138,182,0.85); color:#fff; font-size:11px; font-weight:bold; padding:4px 10px; border-radius:8px; white-space:nowrap; z-index:9999; pointer-events:none; box-shadow:0 2px 6px rgba(0,0,0,0.15);">재밌는 UCC 세상 냥이플!</div>
         <div class="lg-nav" id="lg-nav">
             <div class="lg-nav-item" onclick="showSection('video')">동영상</div>
             <div class="lg-nav-item" onclick="showSection('playlist')">재생목록</div>
@@ -734,7 +748,6 @@
                     <div class="lg-channel-dropdown-item" onclick="showSection('history'); closeLgChannelDropdown();">최근 본 동영상</div>
                 </div>
             </div>
-            <div class="lg-nav-item" onclick="showSection('board')">게시판</div>
         </div>
     </div>
     <div class="header-right">
@@ -750,8 +763,11 @@
             <div id="sliding-menu" class="sliding-menu">
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
                 <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
+                <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener" class="nav-icon-btn" style="text-decoration:none; color:#000;">
+                    <img src="https://i.ibb.co/tMsS2k3L/images-1-1.png" alt="images-1-1">
+                    <span>냥이플 안드로이드 앱 다운로드</span>
+                </a>
                 <div class="nav-icon-btn" onclick="openTargetUserChannel()"><span>채널</span></div>
-                <div class="nav-icon-btn" onclick="showSection('board')"><span>게시판</span></div>
                 <div class="nav-icon-btn" onclick="showSection('notice')"><span>공지</span></div>
                 <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
                 <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
@@ -784,7 +800,12 @@
                 <div class="lg-action-btn" onclick="handleAuthClick()"><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png"><span id="menu-auth-text-lg">로그인</span></div>
                 <div class="lg-action-btn" onclick="openModal('upload-modal')"><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg"><span>업로드</span></div>
             </div>
-            <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="lg-notice-btn" onclick="showSection('notice')" title="공지사항">
+            <div class="lg-notice-row">
+                <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener" class="lg-apk-btn" title="냥이플 안드로이드 앱 다운로드">
+                    <img src="https://i.ibb.co/tMsS2k3L/images-1-1.png" alt="images-1-1">
+                    <span>냥이플 안드로이드 앱 다운로드</span>
+                </a>
+            </div>
         </div>
     </div>
 </header>
@@ -795,6 +816,7 @@
     <div class="content-area">
         <section id="home-section" class="page-section active">
             <div class="frame-wrapper">
+                <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="home-lg-notice-btn" onclick="showSection('notice')" title="공지사항">
                 <div class="frame-bg">
                     <div class="home-rank-tabs" id="home-rank-tabs">
                         <div class="home-rank-tab active" data-tab="recommend" onclick="switchHomeTab('recommend')">추천</div>
@@ -950,7 +972,7 @@
                                 <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
                             </button>
                             <button class="ctrl-btn" id="random-cloud-fire-btn" onclick="fireRandomCloudManually()" title="랜덤 위치에 자막 하나 날리기">
-                                <svg viewBox="0 0 24 24"><path d="M17.5 2h-11C4.57 2 3 3.57 3 5.5v13C3 20.43 4.57 22 6.5 22h11c1.93 0 3.5-1.57 3.5-3.5v-13C21 3.57 19.43 2 17.5 2zM8 15.5A1.5 1.5 0 119.5 14 1.5 1.5 0 018 15.5zm0-7A1.5 1.5 0 119.5 7 1.5 1.5 0 018 8.5zm4 3.5a1.5 1.5 0 111.5-1.5A1.5 1.5 0 0112 12zm4 3.5a1.5 1.5 0 111.5-1.5 1.5 1.5 0 01-1.5 1.5zm0-7A1.5 1.5 0 1117.5 7 1.5 1.5 0 0116 8.5z"/></svg>
+                                <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
                             </button>
                             <button class="ctrl-btn" id="autoplay-toggle-btn" onclick="toggleAutoplayNext()" title="다음 영상 자동재생 켜기/끄기">자동재생</button>
                             <button class="ctrl-btn" id="loop-toggle-btn" onclick="toggleLoopPlay()" title="현재 영상 연속(반복) 재생 켜기/끄기">연속재생</button>
@@ -1080,34 +1102,6 @@
                 </div>
                 <div id="history-video-list"></div>
             </div>
-        </section>
-
-        <section id="board-section" class="page-section">
-            <div style="padding:15px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:2px solid #53add2; padding-bottom:8px;">
-                    <h2 style="font-size:16px; font-weight:bold; margin:0; color:#53add2;">📋 게시판</h2>
-                    <button onclick="openBoardWrite()" style="background:#53add2; color:#fff; border:none; padding:7px 14px; font-size:12px; font-weight:bold; cursor:pointer; border-radius:4px;">✏️ 글쓰기</button>
-                </div>
-                <div id="board-list"></div>
-            </div>
-            <div id="board-write-modal" class="modal"><div class="modal-content"><div class="modal-body">
-                <div style="font-size:15px; font-weight:bold; margin-bottom:8px; text-align:center;">글쓰기</div>
-                <input type="text" id="board-write-title" placeholder="제목" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd;">
-                <textarea id="board-write-content" placeholder="내용을 입력하세요" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd; min-height:120px; resize:vertical;"></textarea>
-                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
-                    <button onclick="closeBoardWrite()" style="padding:7px 14px; font-size:12px; cursor:pointer; border:1px solid #ddd; background:#fff;">취소</button>
-                    <button onclick="submitBoardPost()" style="padding:7px 14px; font-size:12px; cursor:pointer; background:#53add2; color:#fff; border:none; font-weight:bold;">등록</button>
-                </div>
-            </div></div></div>
-            <div id="board-edit-modal" class="modal"><div class="modal-content"><div class="modal-body">
-                <div style="font-size:15px; font-weight:bold; margin-bottom:8px; text-align:center;">글 수정</div>
-                <input type="text" id="board-edit-title" placeholder="제목" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd;">
-                <textarea id="board-edit-content" placeholder="내용" style="width:100%; box-sizing:border-box; padding:8px; font-size:13px; border:1px solid #ddd; min-height:120px; resize:vertical;"></textarea>
-                <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
-                    <button onclick="closeBoardEdit()" style="padding:7px 14px; font-size:12px; cursor:pointer; border:1px solid #ddd; background:#fff;">취소</button>
-                    <button onclick="submitBoardEdit()" style="padding:7px 14px; font-size:12px; cursor:pointer; background:#53add2; color:#fff; border:none; font-weight:bold;">저장</button>
-                </div>
-            </div></div></div>
         </section>
 
         <section id="notice-section" class="page-section">
@@ -2269,7 +2263,7 @@
         }
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
-        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널', playlist: '재생목록', board: '게시판', notice: '공지사항' };
+        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널', playlist: '재생목록', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
@@ -2282,7 +2276,6 @@
         if(s === 'mypage') renderMyCloudsList();
         if(s === 'search-result') showSkeletonBeforeRender(renderSearchResults, ['search-result-list'], false);
         if(s === 'history') renderWatchHistory();
-        if(s === 'board') renderBoardList();
         document.getElementById('sliding-menu').classList.remove('open');
     }
 
@@ -2300,130 +2293,6 @@
 
     function goBackFromChannel() {
         showSection(lastSection);
-    }
-
-    /* ===== [신규] 게시판 기능 ===== */
-    let boardPosts = [];
-    let boardEditingId = null;
-
-    async function fbLoadBoardPosts() {
-        if(!supabaseClient) return [];
-        try {
-            const { data, error } = await supabaseClient.from('board').select('*').order('regDate', { ascending: false });
-            if(error) throw error;
-            return data || [];
-        } catch(e) { console.error('게시판 불러오기 실패:', e); return []; }
-    }
-
-    async function fbSaveBoardPost(post) {
-        if(!supabaseClient) return false;
-        try {
-            const { error } = await supabaseClient.from('board').upsert(post, { onConflict: 'id' });
-            if(error) throw error;
-            return true;
-        } catch(e) { console.error('게시판 저장 실패:', e); return false; }
-    }
-
-    async function fbDeleteBoardPost(postId) {
-        if(!supabaseClient) return false;
-        try {
-            const { error } = await supabaseClient.from('board').delete().eq('id', postId);
-            if(error) throw error;
-            return true;
-        } catch(e) { console.error('게시판 삭제 실패:', e); return false; }
-    }
-
-    async function renderBoardList() {
-        const listEl = document.getElementById('board-list');
-        if(!listEl) return;
-        listEl.innerHTML = '<div style="text-align:center; color:#aaa; padding:20px;">불러오는 중...</div>';
-        boardPosts = await fbLoadBoardPosts();
-        if(boardPosts.length === 0) {
-            listEl.innerHTML = '<div style="text-align:center; color:#aaa; padding:30px;">아직 게시글이 없습니다.<br>첫 번째 글을 작성해보세요!</div>';
-            return;
-        }
-        listEl.innerHTML = boardPosts.map(p => {
-            const isAuthor = user && user.nick === p.authorNick;
-            const profileImg = p.authorProfile || 'https://i.ibb.co/P36c8H4/20260620-061219.png';
-            return `<div style="border:1px solid #eee; border-radius:8px; padding:14px; margin-bottom:14px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
-                    <img src="${escapeHtml(profileImg)}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid #53add2; flex-shrink:0;">
-                    <div>
-                        <div style="font-size:13px; font-weight:bold; color:#333;">${escapeHtml(p.authorNick || '익명')}</div>
-                        <div style="font-size:11px; color:#aaa;">${formatDate(p.regDate)}${p.editDate ? ' (수정됨)' : ''}</div>
-                    </div>
-                    ${isAuthor ? `<div style="margin-left:auto; display:flex; gap:6px;">
-                        <button onclick="openBoardEdit('${p.id}')" style="font-size:11px; padding:4px 10px; background:#53add2; color:#fff; border:none; border-radius:4px; cursor:pointer;">수정</button>
-                        <button onclick="deleteBoardPost('${p.id}')" style="font-size:11px; padding:4px 10px; background:#ff3300; color:#fff; border:none; border-radius:4px; cursor:pointer;">삭제</button>
-                    </div>` : ''}
-                </div>
-                <div style="font-size:14px; font-weight:bold; color:#111; margin-bottom:6px;">${escapeHtml(p.title)}</div>
-                <div style="font-size:13px; color:#555; white-space:pre-wrap; word-break:break-all; line-height:1.6;">${escapeHtml(p.content)}</div>
-            </div>`;
-        }).join('');
-    }
-
-    function openBoardWrite() {
-        if(!user) { alert('로그인 후 글을 작성할 수 있습니다.'); openModal('login-modal'); return; }
-        document.getElementById('board-write-title').value = '';
-        document.getElementById('board-write-content').value = '';
-        openModal('board-write-modal');
-    }
-
-    function closeBoardWrite() { closeModal('board-write-modal'); }
-
-    async function submitBoardPost() {
-        if(!user) { alert('로그인이 필요합니다.'); return; }
-        const title = document.getElementById('board-write-title').value.trim();
-        const content = document.getElementById('board-write-content').value.trim();
-        if(!title) { alert('제목을 입력해주세요.'); return; }
-        if(!content) { alert('내용을 입력해주세요.'); return; }
-        const post = {
-            id: String(Date.now()),
-            title: title,
-            content: content,
-            authorNick: user.nick,
-            authorProfile: user.profileImg || 'https://i.ibb.co/P36c8H4/20260620-061219.png',
-            regDate: new Date().toISOString(),
-            editDate: null
-        };
-        const ok = await fbSaveBoardPost(post);
-        if(ok) { closeBoardWrite(); showToast('게시글이 등록됐습니다!', 'success'); renderBoardList(); }
-        else { alert('게시글 등록에 실패했습니다. 다시 시도해주세요.'); }
-    }
-
-    function openBoardEdit(postId) {
-        const post = boardPosts.find(p => p.id === postId);
-        if(!post) return;
-        boardEditingId = postId;
-        document.getElementById('board-edit-title').value = post.title;
-        document.getElementById('board-edit-content').value = post.content;
-        openModal('board-edit-modal');
-    }
-
-    function closeBoardEdit() { closeModal('board-edit-modal'); boardEditingId = null; }
-
-    async function submitBoardEdit() {
-        if(!boardEditingId) return;
-        const post = boardPosts.find(p => p.id === boardEditingId);
-        if(!post) return;
-        const title = document.getElementById('board-edit-title').value.trim();
-        const content = document.getElementById('board-edit-content').value.trim();
-        if(!title) { alert('제목을 입력해주세요.'); return; }
-        if(!content) { alert('내용을 입력해주세요.'); return; }
-        post.title = title;
-        post.content = content;
-        post.editDate = new Date().toISOString();
-        const ok = await fbSaveBoardPost(post);
-        if(ok) { closeBoardEdit(); showToast('게시글이 수정됐습니다!', 'success'); renderBoardList(); }
-        else { alert('수정에 실패했습니다. 다시 시도해주세요.'); }
-    }
-
-    async function deleteBoardPost(postId) {
-        if(!confirm('정말로 이 게시글을 삭제하시겠습니까?')) return;
-        const ok = await fbDeleteBoardPost(postId);
-        if(ok) { showToast('게시글이 삭제됐습니다.', 'success'); renderBoardList(); }
-        else { alert('삭제에 실패했습니다. 다시 시도해주세요.'); }
     }
 
     function refreshUnluckyList() {
