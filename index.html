@@ -728,9 +728,72 @@
         /* ===== [신규] 음소거 버튼 ===== */
         #volume-mute-btn svg { transition: opacity 0.15s ease; }
         #volume-mute-btn.muted svg { opacity: 0.5; }
+
+        /* ===== [신규] 최상단 공지 배너 (PC/가로모드, 모바일 세로모드) ===== */
+        .top-notice-banner { display: none; position: relative; width: 100%; box-sizing: border-box; overflow: hidden; transform-origin: right center; transition: height 0.45s cubic-bezier(0.55,0,0.85,0.35), opacity 0.4s ease-out, transform 0.45s cubic-bezier(0.55,0,0.85,0.35); }
+        .top-notice-banner.closing { opacity: 0; transform: scaleX(0); }
+        .top-notice-banner-img { max-width: 100%; width: auto; height: auto; display: block; cursor: pointer; user-select: none; -webkit-user-drag: none; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+        .top-notice-banner-mobile .top-notice-banner-img { cursor: default; margin: 0 auto; }
+        .top-notice-banner-pc-inner { position: relative; display: inline-block; width: 60%; max-width: 480px; margin: 0 auto; }
+        .top-notice-banner-pc-inner .top-notice-banner-img { width: 100%; max-width: none; }
+        .top-notice-banner-close-zone { position: absolute; top: 0; right: 0; width: 18%; min-width: 40px; height: 100%; cursor: pointer; z-index: 2; }
+
+        @media (orientation: landscape) {
+            .top-notice-banner-pc { display: block; text-align: center; }
+        }
+        @media (max-width: 768px) and (orientation: portrait) {
+            .top-notice-banner-mobile { display: block; }
+        }
     </style>
 </head>
 <body>
+
+<!-- [신규] 최상단 공지 배너 : PC/가로모드용 -->
+<div id="top-notice-banner-pc" class="top-notice-banner top-notice-banner-pc">
+    <div class="top-notice-banner-pc-inner">
+        <img src="https://i.ibb.co/PzYRzG89/image.png" alt="image" class="top-notice-banner-img" onclick="handleTopNoticeBannerClick(event)">
+        <div class="top-notice-banner-close-zone" onclick="closeTopNoticeBannerPc(event)"></div>
+    </div>
+</div>
+
+<!-- [신규] 최상단 공지 배너 : 모바일 세로모드용 -->
+<div id="top-notice-banner-mobile" class="top-notice-banner top-notice-banner-mobile">
+    <img src="https://i.ibb.co/PzYRzG89/image.png" alt="image" class="top-notice-banner-img">
+</div>
+
+<script>
+    (function() {
+        var TOP_NOTICE_BANNER_STORAGE_KEY = 'nyangiple_top_notice_banner_dismissed_at';
+        var TOP_NOTICE_BANNER_HIDE_MS = 7 * 24 * 60 * 60 * 1000;
+
+        try {
+            var dismissedAt = localStorage.getItem(TOP_NOTICE_BANNER_STORAGE_KEY);
+            if (dismissedAt && (Date.now() - parseInt(dismissedAt, 10)) < TOP_NOTICE_BANNER_HIDE_MS) {
+                var pcBanner = document.getElementById('top-notice-banner-pc');
+                if (pcBanner) pcBanner.style.display = 'none';
+            }
+        } catch (e) {}
+
+        window.handleTopNoticeBannerClick = function(e) {
+            window.open('https://padlet.com/Nyangiple/padlet-wpqkygyo0llgw06h/wish/v3w8Zw9lVxvxaN52', '_blank', 'noopener');
+        };
+
+        window.closeTopNoticeBannerPc = function(e) {
+            if (e) e.stopPropagation();
+            var banner = document.getElementById('top-notice-banner-pc');
+            if (!banner) return;
+            var startHeight = banner.offsetHeight;
+            banner.style.height = startHeight + 'px';
+            void banner.offsetHeight;
+            banner.classList.add('closing');
+            banner.style.height = '0px';
+            try { localStorage.setItem(TOP_NOTICE_BANNER_STORAGE_KEY, String(Date.now())); } catch (err) {}
+            setTimeout(function() {
+                banner.style.display = 'none';
+            }, 460);
+        };
+    })();
+</script>
 
 <input type="file" id="direct-profile-changer" accept="image/*" style="display: none;" onchange="changeProfileDirectly()">
 <input type="file" id="direct-banner-changer" accept="image/*" style="display: none;" onchange="changeBannerDirectly()">
