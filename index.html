@@ -60,6 +60,8 @@
 
         .auth-container { display: flex; align-items: center; gap: 5px; }
         .user-nick-mini { font-size: 9px; color: #666; text-align: center; max-width: 65px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        /* [신규] 로그인 시 헤더/홈에 닉네임 텍스트를 노출하지 않음 (기존 스타일 변경 없음, 추가만) */
+        #header-user-nick { display: none !important; }
 
         .container { display: flex; width: 100%; min-height: calc(100vh - 70px); }
         .sidebar { width: 150px; border-right: 1px solid var(--border); background: #f9f9f9; flex-shrink: 0; padding-top: 10px; }
@@ -831,7 +833,13 @@
 
 <header>
     <div class="header-left" style="position:relative;">
-        <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
+        <!-- [신규] 알림함 버튼을 냥이플 로고 바로 아래에 고정 배치 (로고 자체와 다른 요소는 변경 없음) -->
+        <div class="logo-wrap" style="position:relative; display:inline-block;">
+            <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
+            <div id="notif-bell" class="notif-bell" onclick="openNotifications()" style="position:absolute; top:100%; left:0; margin-top:4px; cursor:pointer; font-size:16px; display:none; z-index:1002;">
+                🔔<span id="notif-badge" style="position:absolute; top:-4px; right:-6px; background:#ff3300; color:#fff; font-size:9px; font-weight:bold; border-radius:50%; min-width:14px; height:14px; display:none; align-items:center; justify-content:center; padding:1px; line-height:1;"></span>
+            </div>
+        </div>
         <div class="lg-nav" id="lg-nav">
             <div class="lg-nav-item" onclick="showSection('video')">동영상</div>
             <div class="lg-nav-item" onclick="showSection('playlist')">재생목록</div>
@@ -842,6 +850,8 @@
                     <div class="lg-channel-dropdown-item" onclick="showSection('history'); closeLgChannelDropdown();">최근 본 동영상</div>
                 </div>
             </div>
+            <!-- [신규] PC/가로모드 - 채널 오른쪽에 마이페이지 섹션 추가 (기존 항목은 변경 없음) -->
+            <div class="lg-nav-item" onclick="openMyPage()">마이페이지</div>
         </div>
     </div>
     <div class="header-right">
@@ -876,9 +886,6 @@
             </div>
         </div>
 
-        <div id="notif-bell" class="notif-bell" onclick="openNotifications()" style="position:relative; cursor:pointer; font-size:16px; margin-right:6px; display:none;">
-            🔔<span id="notif-badge" style="position:absolute; top:-4px; right:-6px; background:#ff3300; color:#fff; font-size:9px; font-weight:bold; border-radius:50%; min-width:14px; height:14px; display:none; align-items:center; justify-content:center; padding:1px; line-height:1;"></span>
-        </div>
         <div id="notif-panel">
             <div class="notif-panel-header">
                 <span>알림</span>
@@ -1191,6 +1198,22 @@
                     <div id="mypage-channel-quicklinks" style="display:flex; gap:15px; margin-bottom:15px;">
                         <span class="blue-text top-btn" onclick="showSection('history')">최근 본 동영상</span>
                     </div>
+
+                    <!-- [신규] 마이페이지 - 닉네임 / 내 링크(유튜브 채널 등) 설정 (기존 요소는 변경 없음, 추가만) -->
+                    <div id="mypage-profile-settings" style="background:#fafafa; border:1px solid #eee; padding:15px; margin-bottom:15px; box-sizing:border-box;">
+                        <div style="font-size:13px; font-weight:bold; margin-bottom:10px; color:#333;">프로필 설정</div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
+                            <label style="font-size:12px; font-weight:bold; color:#333; flex:0 0 70px;">이름/닉네임</label>
+                            <input type="text" id="mypage-nick-input" placeholder="닉네임" style="flex:1; min-width:120px; padding:7px 10px; border:1px solid #ccc; border-radius:3px; font-size:13px; box-sizing:border-box;">
+                            <div class="login-panel-submit-btn" style="flex:0 0 auto; padding:8px 14px; font-size:12px;" onclick="saveMyNickname()">저장</div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                            <label style="font-size:12px; font-weight:bold; color:#333; flex:0 0 70px;">내 링크</label>
+                            <input type="text" id="mypage-link-input" placeholder="유튜브 채널 등 내 링크 주소를 입력하세요" style="flex:1; min-width:120px; padding:7px 10px; border:1px solid #ccc; border-radius:3px; font-size:13px; box-sizing:border-box;">
+                            <div class="login-panel-submit-btn" style="flex:0 0 auto; padding:8px 14px; font-size:12px;" onclick="saveMyLink()">저장</div>
+                        </div>
+                    </div>
+
                     <div id="my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
 
                     <div class="channel-video-list-title" id="channel-list-title-text">채널 동영상 목록</div>
@@ -3204,6 +3227,7 @@
                     authorProfile: user ? user.profileImg : null,
                     authorDesc: userDescChecked,
                     authorBanner: user ? (user.bannerImg || null) : null,
+                    authorLink: user ? (user.myLink || null) : null,
                     thumb: thumbDataUrl || null,
                     savedClouds: [],
                     comments: []
@@ -4065,16 +4089,19 @@
         let targetProfileImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
         let targetDesc = "소개글이 없습니다.";
         let statsRowHtml = "";
+        let targetMyLink = ""; /* [신규] 자기 링크(유튜브 채널 등) */
 
         if(isMe) {
             targetProfileImg = user.profileImg || targetProfileImg;
             targetDesc = user.desc || targetDesc;
             statsRowHtml = `재생: ${userStats.play}회 / 남긴 자막: ${userStats.cloud}개`;
+            targetMyLink = user.myLink || "";
         } else {
             const foundSample = db.find(v => v.author === activeTargetName);
             if(foundSample) {
                 targetProfileImg = foundSample.authorProfile || targetProfileImg;
                 targetDesc = foundSample.authorDesc || targetDesc;
+                targetMyLink = foundSample.authorLink || "";
             }
             const targetViewsSum = db.filter(v => v.author === activeTargetName).reduce((sum, current) => sum + current.views, 0);
             statsRowHtml = `총 비디오 조회수: ${targetViewsSum}회`;
@@ -4155,13 +4182,92 @@
                     ${subButtonHtml}
                     ${channelSummaryCardHtml}
                     <div style="font-size:13px; color:#333; white-space:pre-wrap; line-height:1.4; word-break:break-all; margin-top:8px;"><b>채널 소개</b><br>${escapeHtml(targetDesc)}</div>
+                    ${targetMyLink ? `<div style="margin-top:8px; font-size:12px;"><a href="${escapeHtml(targetMyLink)}" target="_blank" rel="noopener" style="color:#53add2; font-weight:bold; text-decoration:underline; word-break:break-all;">🔗 ${escapeHtml(targetMyLink)}</a></div>` : ''}
                 </div>
             </div>`; 
+
+        /* [신규] 마이페이지 프로필 설정 입력창에 현재 값 반영 */
+        if(isMe) {
+            const nickInputEl = document.getElementById('mypage-nick-input');
+            const linkInputEl = document.getElementById('mypage-link-input');
+            if(nickInputEl && document.activeElement !== nickInputEl) nickInputEl.value = user.nick;
+            if(linkInputEl && document.activeElement !== linkInputEl) linkInputEl.value = user.myLink || "";
+        }
 
         renderChannelGenreFilter(activeTargetName);
         renderChannelInternalVideos(activeTargetName);
         if(currentPlayingItem) updateDetail();
         checkNewSubscriptionVideos();
+    }
+
+    /* [신규] 마이페이지 - 닉네임 변경 (기존 함수는 변경 없음, 추가만) */
+    function saveMyNickname() {
+        if(!user) { showToast("로그인이 필요합니다.", "error"); return; }
+        const inputEl = document.getElementById('mypage-nick-input');
+        if(!inputEl) return;
+        const newNick = inputEl.value.trim();
+        if(!newNick) { alert("닉네임을 입력해주세요."); return; }
+        if(newNick === user.nick) { showToast("변경된 내용이 없습니다.", "success"); return; }
+        if(users.find(u => u.nick === newNick && u.id !== user.id)) { alert("이미 사용 중인 닉네임입니다."); return; }
+
+        const oldNick = user.nick;
+        user.nick = newNick;
+
+        const uIdx = users.findIndex(u => u.id === user.id);
+        if(uIdx >= 0) users[uIdx].nick = newNick;
+
+        db.forEach(v => {
+            if(v.author === oldNick) v.author = newNick;
+            (v.comments || []).forEach(c => {
+                if(c.author === oldNick) c.author = newNick;
+                (c.replies || []).forEach(r => { if(r.author === oldNick) r.author = newNick; });
+            });
+        });
+
+        const subIdx = subscriptions.indexOf(oldNick);
+        if(subIdx >= 0) subscriptions[subIdx] = newNick;
+
+        if(subscriberCounts[oldNick] !== undefined) {
+            subscriberCounts[newNick] = subscriberCounts[oldNick];
+            delete subscriberCounts[oldNick];
+        }
+
+        myCloudLog.forEach(c => { if(c.author === oldNick) c.author = newNick; });
+
+        if(currentChannelTargetName === oldNick) currentChannelTargetName = newNick;
+
+        localStorage.setItem('tvple_user', JSON.stringify(user));
+        localStorage.setItem('tvple_users', JSON.stringify(users));
+        localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
+        localStorage.setItem('tvple_subscriptions', JSON.stringify(subscriptions));
+        localStorage.setItem('tvple_subscriber_counts', JSON.stringify(subscriberCounts));
+        localStorage.setItem('tvple_my_cloud_log', JSON.stringify(myCloudLog));
+
+        if(typeof fbSaveUser === 'function') fbSaveUser(user);
+
+        updateChannel();
+        renderList();
+        showToast("닉네임이 변경되었습니다.", "success");
+    }
+
+    /* [신규] 마이페이지 - 내 링크(유튜브 채널 등) 저장 (기존 함수는 변경 없음, 추가만) */
+    function saveMyLink() {
+        if(!user) { showToast("로그인이 필요합니다.", "error"); return; }
+        const inputEl = document.getElementById('mypage-link-input');
+        if(!inputEl) return;
+        const link = inputEl.value.trim();
+        user.myLink = link;
+
+        const uIdx = users.findIndex(u => u.id === user.id);
+        if(uIdx >= 0) users[uIdx].myLink = link;
+
+        localStorage.setItem('tvple_user', JSON.stringify(user));
+        localStorage.setItem('tvple_users', JSON.stringify(users));
+
+        if(typeof fbSaveUser === 'function') fbSaveUser(user);
+
+        updateChannel();
+        showToast("내 링크가 저장되었습니다.", "success");
     }
 
     function triggerBannerChanger() {
