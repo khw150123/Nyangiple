@@ -7,6 +7,8 @@
     <meta name="naver-site-verification" content="e4095acde3cfd3c0b24c03e17dda32865159b5fe">
     <meta name="google-site-verification" content="VjVMOy82XiTaSV_cYaeKorhuuNIRPd8ZW1-9AYFxFvI">
     <title>냥이플</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>emailjs.init("6SjliBKhSXYtbaVQs");</script>
     <style>
         :root { --border: #eee; }
         body, input, textarea, select, button { margin: 0; font-family: 'Malgun Gothic', sans-serif; background: #fff; color: #333; overflow-x: hidden; border-radius: 0 !important; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
@@ -155,6 +157,11 @@
         .home-rank-tabs { display: flex; gap: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; }
         .home-rank-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; box-sizing: border-box; user-select: none; }
         .home-rank-tab.active { color: #53add2; border-bottom: 2px solid #53add2; }
+        /* ===== [신규] 홈 - 마이페이지 탭 (PC/가로모드 전용) ===== */
+        .home-rank-tab-mypage-only { display: none; }
+        @media (orientation: landscape) {
+            .home-rank-tab-mypage-only { display: block; }
+        }
         .home-tab-content { display: none; }
         .home-tab-content.active { display: block; }
         .rank-section-title { font-size: 13px; font-weight: bold; color: #333; margin: 0 0 10px 2px; text-align: left; }
@@ -729,92 +736,94 @@
         #volume-mute-btn svg { transition: opacity 0.15s ease; }
         #volume-mute-btn.muted svg { opacity: 0.5; }
 
-        /* ===== [신규] 최상단 공지 배너 (PC/가로모드, 모바일 세로모드) ===== */
-        .top-notice-banner { display: none; position: relative; width: 100%; box-sizing: border-box; overflow: hidden; transform-origin: right center; transition: height 0.45s cubic-bezier(0.55,0,0.85,0.35), opacity 0.4s ease-out, transform 0.45s cubic-bezier(0.55,0,0.85,0.35); }
-        .top-notice-banner.closing { opacity: 0; transform: scaleX(0); }
-        .top-notice-banner-img { max-width: 100%; width: auto; height: auto; display: block; cursor: pointer; user-select: none; -webkit-user-drag: none; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
-        .top-notice-banner-mobile-inner { position: relative; display: inline-block; }
-        .top-notice-banner-mobile .top-notice-banner-img { cursor: pointer; margin: 0; }
-        .top-notice-banner-pc-inner { position: relative; display: inline-block; width: 60%; max-width: 480px; margin: 0 auto; }
-        .top-notice-banner-pc-inner .top-notice-banner-img { width: 100%; max-width: none; }
-        .top-notice-banner-close-zone { position: absolute; top: 0; right: 0; width: 18%; min-width: 40px; height: 100%; cursor: pointer; z-index: 2; }
+        /* ===== [신규] 로그인 모달 - 전용 UI 스타일 (다른 모달에는 영향 없음) ===== */
+        .login-panel-wrap { width: 94%; max-width: 640px; box-sizing: border-box; }
+        .login-panel-content { background: #fff; border-radius: 4px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .login-panel-titlebar { background: #f7f7f7; border-bottom: 1px solid #e0e0e0; padding: 12px 18px; font-size: 14px; font-weight: bold; color: #333; }
+        .login-panel-main { display: flex; flex-wrap: wrap; align-items: stretch; gap: 16px; padding: 18px; }
+        .login-panel-form { flex: 2 1 260px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+        .login-panel-field { display: flex; align-items: center; gap: 10px; }
+        .login-panel-field label { flex: 0 0 82px; font-size: 12px; color: #555; font-weight: bold; text-align: right; }
+        .login-panel-field input { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; box-sizing: border-box; }
+        .login-panel-checkbox-row { font-size: 11px; color: #666; padding-left: 92px; }
+        .login-panel-checkbox-row input { margin-right: 4px; vertical-align: middle; }
+        .login-panel-actions { display: flex; border-top: 1px solid #eee; }
+        .login-panel-cancel-btn, .login-panel-submit-btn { flex: 1; text-align: center; padding: 12px; font-size: 13px; font-weight: bold; cursor: pointer; user-select: none; }
+        .login-panel-cancel-btn { background: #f5f5f5; color: #666; }
+        .login-panel-cancel-btn:hover { background: #ececec; }
+        .login-panel-submit-btn { background: linear-gradient(135deg, #5b9fd4 0%, #316EA1 100%); color: #fff; }
+        .login-panel-submit-btn:hover { background: linear-gradient(135deg, #4a8ec4 0%, #285a82 100%); }
+        .login-panel-linkbar { background: #fafafa; border: 1px solid #eee; border-radius: 4px; text-align: center; padding: 12px; font-size: 12px; color: #555; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .login-panel-linkbar:hover { background: #f0f0f0; }
+        @media (max-width: 480px) {
+            .login-panel-wrap { width: 98%; }
+            .login-panel-main { padding: 12px; gap: 10px; }
+            .login-panel-field { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .login-panel-field label { text-align: left; flex: none; width: 100%; }
+            .login-panel-field input { width: 100%; font-size: 16px; box-sizing: border-box; }
+            .login-panel-checkbox-row { padding-left: 0; }
+            .login-panel-cancel-btn, .login-panel-submit-btn { padding: 14px 8px; font-size: 14px; }
+        }
 
-        @media (orientation: landscape) {
-            .top-notice-banner-pc { display: block !important; text-align: center; }
+        /* ===== [신규] 회원가입 모달 - 전용 UI 스타일 (다른 모달에는 영향 없음) ===== */
+        .signup-panel-wrap { width: 94%; max-width: 640px; box-sizing: border-box; }
+        .signup-panel-content { background: #fff; border-radius: 4px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .signup-panel-titlebar { background: #f7f7f7; border-bottom: 1px solid #e0e0e0; padding: 12px 18px; font-size: 14px; font-weight: bold; color: #333; }
+        .signup-panel-row { display: flex; align-items: center; gap: 14px; padding: 13px 18px; border-bottom: 1px solid #eee; }
+        .signup-panel-row-last { border-bottom: none; }
+        .signup-panel-row-optional { align-items: flex-start; }
+        .signup-panel-row label { flex: 0 0 92px; font-size: 13px; font-weight: bold; color: #333; padding-top: 2px; }
+        .signup-input-wrap { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+        .signup-panel-row input[type="text"], .signup-panel-row input[type="password"] { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; box-sizing: border-box; }
+        .signup-panel-row textarea { flex: 1; min-width: 0; padding: 8px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; box-sizing: border-box; resize: vertical; min-height: 54px; font-family: inherit; }
+        .signup-captcha-question { flex-shrink: 0; font-size: 13px; font-weight: bold; color: #333; background: #f2f2f2; border: 1px solid #ddd; border-radius: 3px; padding: 7px 12px; letter-spacing: 1px; white-space: nowrap; }
+        .signup-captcha-input { max-width: 90px; }
+        .captcha-canvas { flex-shrink: 0; display: block; border: 1px solid #ddd; border-radius: 3px; cursor: pointer; background: #f2f2f2; }
+        .signup-required-tag { flex-shrink: 0; font-size: 11px; color: #d2691e; font-weight: bold; }
+        .signup-optional-tag { flex-shrink: 0; font-size: 11px; color: #999; font-weight: bold; }
+        .signup-panel-actions { display: flex; border-top: 1px solid #eee; }
+        @media (max-width: 480px) {
+            .signup-panel-wrap { width: 98%; }
+            .signup-panel-row { flex-wrap: wrap; padding: 10px 12px; gap: 6px; }
+            .signup-panel-row label { flex: 1 1 100%; padding-top: 0; }
+            .signup-input-wrap { width: 100%; flex-wrap: wrap; }
+            .signup-panel-row input[type="text"], .signup-panel-row input[type="password"] { font-size: 16px; }
+            .signup-panel-row textarea { font-size: 16px; }
+            .signup-required-tag, .signup-optional-tag { order: -1; margin-left: auto; }
+            .captcha-canvas { width: 110px; height: 38px; }
+            .signup-captcha-input { max-width: 100%; flex: 1; min-width: 0; font-size: 16px; }
+            .signup-panel-actions .login-panel-cancel-btn,
+            .signup-panel-actions .login-panel-submit-btn { padding: 14px 8px; font-size: 14px; }
         }
-        @media (max-width: 768px) and (orientation: portrait) {
-            .top-notice-banner-mobile { display: block; text-align: center; }
+
+        /* ===== [신규] 회원가입 모달 - 모바일 가로(landscape) 모드 최적화 (다른 모달/스타일에는 영향 없음) ===== */
+        @media (max-height: 500px) and (orientation: landscape) {
+            #signup-modal {
+                align-items: flex-start;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 10px 0;
+                box-sizing: border-box;
+            }
+            #signup-modal .signup-panel-wrap {
+                margin: 0 auto;
+                max-width: 480px;
+            }
+            #signup-modal .signup-panel-titlebar {
+                padding: 8px 16px;
+            }
+            #signup-modal .signup-panel-row {
+                padding: 8px 16px;
+                gap: 10px;
+            }
+            #signup-modal .signup-panel-row textarea {
+                min-height: 40px;
+            }
         }
+
     </style>
 </head>
 <body>
-
-<!-- [신규] 최상단 공지 배너 : PC/가로모드용 -->
-<div id="top-notice-banner-pc" class="top-notice-banner top-notice-banner-pc">
-    <div class="top-notice-banner-pc-inner">
-        <img src="https://i.ibb.co/PzYRzG89/image.png" alt="image" class="top-notice-banner-img" onclick="handleTopNoticeBannerClick(event)">
-        <div class="top-notice-banner-close-zone" onclick="closeTopNoticeBannerPc(event)"></div>
-    </div>
-</div>
-
-<!-- [신규] 최상단 공지 배너 : 모바일 세로모드용 -->
-<div id="top-notice-banner-mobile" class="top-notice-banner top-notice-banner-mobile">
-    <div class="top-notice-banner-mobile-inner">
-        <img src="https://i.ibb.co/PzYRzG89/image.png" alt="image" class="top-notice-banner-img" onclick="handleTopNoticeBannerClick(event)">
-        <div class="top-notice-banner-close-zone" onclick="closeTopNoticeBannerMobile(event)"></div>
-    </div>
-</div>
-
-<script>
-    (function() {
-        var TOP_NOTICE_BANNER_STORAGE_KEY = 'nyangiple_top_notice_banner_dismissed_at';
-        var TOP_NOTICE_BANNER_HIDE_MS = 7 * 24 * 60 * 60 * 1000;
-
-        try {
-            var dismissedAt = localStorage.getItem(TOP_NOTICE_BANNER_STORAGE_KEY);
-            if (dismissedAt && (Date.now() - parseInt(dismissedAt, 10)) < TOP_NOTICE_BANNER_HIDE_MS) {
-                var pcBanner = document.getElementById('top-notice-banner-pc');
-                if (pcBanner) pcBanner.style.setProperty('display', 'none', 'important');
-                var mobileBannerInit = document.getElementById('top-notice-banner-mobile');
-                if (mobileBannerInit) mobileBannerInit.style.display = 'none';
-            }
-        } catch (e) {}
-
-        window.handleTopNoticeBannerClick = function(e) {
-            window.open('https://padlet.com/Nyangiple/padlet-wpqkygyo0llgw06h/wish/v3w8Zw9lVxvxaN52', '_blank', 'noopener');
-        };
-
-        window.closeTopNoticeBannerPc = function(e) {
-            if (e) e.stopPropagation();
-            var banner = document.getElementById('top-notice-banner-pc');
-            if (!banner) return;
-            var startHeight = banner.offsetHeight;
-            banner.style.height = startHeight + 'px';
-            void banner.offsetHeight;
-            banner.classList.add('closing');
-            banner.style.height = '0px';
-            try { localStorage.setItem(TOP_NOTICE_BANNER_STORAGE_KEY, String(Date.now())); } catch (err) {}
-            setTimeout(function() {
-                banner.style.setProperty('display', 'none', 'important');
-            }, 460);
-        };
-
-        window.closeTopNoticeBannerMobile = function(e) {
-            if (e) e.stopPropagation();
-            var banner = document.getElementById('top-notice-banner-mobile');
-            if (!banner) return;
-            var startHeight = banner.offsetHeight;
-            banner.style.height = startHeight + 'px';
-            void banner.offsetHeight;
-            banner.classList.add('closing');
-            banner.style.height = '0px';
-            try { localStorage.setItem(TOP_NOTICE_BANNER_STORAGE_KEY, String(Date.now())); } catch (err) {}
-            setTimeout(function() {
-                banner.style.display = 'none';
-            }, 460);
-        };
-    })();
-</script>
 
 <input type="file" id="direct-profile-changer" accept="image/*" style="display: none;" onchange="changeProfileDirectly()">
 <input type="file" id="direct-banner-changer" accept="image/*" style="display: none;" onchange="changeBannerDirectly()">
@@ -915,6 +924,7 @@
                         <div class="home-rank-tab" data-tab="rankJjim" onclick="switchHomeTab('rankJjim')">찜랭</div>
                         <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')">댓글왕</div>
                         <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')">자막왕</div>
+                        <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
                     <img src="https://i.ibb.co/MxRGNnrM/Screenshot-20260620-125318-Samsung-Browser-1.png" alt="Screenshot-20260620-125318-Samsung-Browser-1" class="unlucky-title-img">
@@ -1001,6 +1011,25 @@
                         <div class="unlucky-outer-container">
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
+                        </div>
+                    </div>
+
+                    <div class="home-tab-content" id="home-tab-mypage">
+                        <div class="mypage-tab-bar">
+                            <div class="mypage-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">채널 정보</div>
+                            <div class="mypage-tab" id="home-mypage-tab-btn-clouds" onclick="setHomeMyPageTab('clouds')">내가 남긴 구름 자막</div>
+                        </div>
+
+                        <div id="home-mypage-tab-content-channel">
+                            <div id="home-my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
+                            <div class="channel-video-list-title" id="home-channel-list-title-text">채널 동영상 목록</div>
+                            <div id="home-channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
+                            <div id="home-channel-internal-video-list" class="channel-internal-list"></div>
+                        </div>
+
+                        <div id="home-mypage-tab-content-clouds" style="display:none;">
+                            <div id="home-mypage-cloud-summary" style="font-size:12px; color:#666; margin-bottom:10px;"></div>
+                            <div id="home-my-clouds-list"></div>
                         </div>
                     </div>
                 </div>
@@ -1136,16 +1165,9 @@
         <section id="channel-section" class="page-section">
             <div class="channel-fullscreen-container">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
-                <h2 style="font-size:18px; text-align: left; margin-bottom:15px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">채널 정보</h2>
-                <div style="display:flex; gap:15px; margin-bottom:15px;">
-                    <span class="blue-text top-btn" onclick="openMyPage()">마이페이지</span>
-                    <span class="blue-text top-btn" onclick="showSection('history')">최근 본 동영상</span>
-                </div>
-                <div id="my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
-                
-                <div class="channel-video-list-title" id="channel-list-title-text">채널 동영상 목록</div>
-                <div id="channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
-                <div id="channel-internal-video-list" class="channel-internal-list"></div>
+                <h2 style="font-size:18px; text-align: left; margin-bottom:15px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">채널 순위</h2>
+                <div style="font-size:12px; color:#888; margin-bottom:12px;">구름 자막과 영상 재생수를 기준으로 산정된 순위입니다. (최대 1000위)</div>
+                <div id="channel-rank-list" class="channel-internal-list"></div>
             </div>
         </section>
 
@@ -1158,9 +1180,28 @@
 
         <section id="mypage-section" class="page-section">
             <div style="padding:15px;">
-                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">마이페이지 - 내가 남긴 구름 자막</h2>
-                <div id="mypage-cloud-summary" style="font-size:12px; color:#666; margin-bottom:10px;"></div>
-                <div id="my-clouds-list"></div>
+                <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
+                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">마이페이지</h2>
+                <div class="mypage-tab-bar">
+                    <div class="mypage-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">채널 정보</div>
+                    <div class="mypage-tab" id="mypage-tab-btn-clouds" onclick="setMyPageTab('clouds')">내가 남긴 구름 자막</div>
+                </div>
+
+                <div id="mypage-tab-content-channel">
+                    <div id="mypage-channel-quicklinks" style="display:flex; gap:15px; margin-bottom:15px;">
+                        <span class="blue-text top-btn" onclick="showSection('history')">최근 본 동영상</span>
+                    </div>
+                    <div id="my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
+
+                    <div class="channel-video-list-title" id="channel-list-title-text">채널 동영상 목록</div>
+                    <div id="channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
+                    <div id="channel-internal-video-list" class="channel-internal-list"></div>
+                </div>
+
+                <div id="mypage-tab-content-clouds" style="display:none;">
+                    <div id="mypage-cloud-summary" style="font-size:12px; color:#666; margin-bottom:10px;"></div>
+                    <div id="my-clouds-list"></div>
+                </div>
             </div>
         </section>
 
@@ -1222,11 +1263,108 @@
     </div>
 </div>
 
-<div id="login-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('login-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">로그인/회원가입</div><input type="text" id="l-id" placeholder="아이디"><input type="password" id="l-pw" placeholder="비밀번호"><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png" class="modal-btn-img" onclick="doLogin()"><div style="display:flex; justify-content:center; gap:15px; font-size:12px; color:#53add2; font-weight:bold;"><span style="cursor:pointer; text-decoration:underline;" onclick="closeModal('login-modal'); openModal('signup-modal')">회원가입</span><span style="cursor:pointer; text-decoration:underline;" onclick="closeModal('login-modal'); openModal('find-id-modal')">아이디 찾기</span></div></div></div></div>
+<div id="login-modal" class="modal"><div class="login-panel-wrap">
+    <div class="login-panel-content">
+        <div class="login-panel-titlebar">로그인</div>
+        <div class="login-panel-main">
+            <div class="login-panel-form">
+                <div class="login-panel-field">
+                    <label>아이디/이메일</label>
+                    <input type="text" id="l-id" placeholder="아이디 또는 이메일 주소">
+                </div>
+                <div class="login-panel-field">
+                    <label>비밀번호</label>
+                    <input type="password" id="l-pw" placeholder="비밀번호">
+                </div>
+                <div class="login-panel-checkbox-row"><label><input type="checkbox" id="l-autologin"> 자동 로그인</label></div>
+            </div>
+        </div>
+        <div class="login-panel-actions">
+            <div class="login-panel-cancel-btn" onclick="closeModal('login-modal')">✕ 취소</div>
+            <div class="login-panel-submit-btn" onclick="doLogin()">➜ 로그인</div>
+        </div>
+    </div>
+    <div class="login-panel-linkbar" onclick="closeModal('login-modal'); openModal('signup-modal'); generateSignupCaptcha()">👤➕ 아이디가 없으신가요? 지금 바로 가입하세요!</div>
+    <div class="login-panel-linkbar" onclick="closeModal('login-modal'); openModal('find-id-modal'); generateFindPwCaptcha()">🔍 비밀번호를 잊어버리셨나요? 여기서 찾아보세요.</div>
+</div></div>
 
-<div id="signup-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('signup-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">회원가입</div><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">프로필 사진 선택 (미선택시 기본 이미지)</div><input type="file" id="s-profile" accept="image/*"><input type="text" id="s-id" placeholder="아이디"><input type="password" id="s-pw" placeholder="비밀번호"><input type="text" id="s-nick" placeholder="닉네임"><textarea id="s-desc" placeholder="소개"></textarea><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png" class="modal-btn-img" onclick="doSignup()"><div style="text-align:center; font-size:12px; color:#53add2; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="closeModal('signup-modal'); openModal('login-modal')">이미 계정이 있으신가요? 로그인</div></div></div></div>
+<div id="signup-modal" class="modal"><div class="signup-panel-wrap">
+    <div class="signup-panel-content">
+        <div class="signup-panel-titlebar">회원가입</div>
 
-<div id="find-id-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('find-id-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">아이디 찾기</div><input type="text" id="f-nick" placeholder="가입시 등록한 닉네임"><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png" class="modal-btn-img" onclick="doFindId()"><div id="find-id-result" style="font-size:12px; color:#333; text-align:center; white-space:pre-wrap;"></div><div style="text-align:center; font-size:12px; color:#53add2; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="closeModal('find-id-modal'); openModal('login-modal')">로그인 화면으로 돌아가기</div></div></div></div>
+        <div class="signup-panel-row">
+            <label>이메일 주소</label>
+            <div class="signup-input-wrap"><input type="text" id="s-email" placeholder="이메일 주소"></div>
+            <span class="signup-required-tag">필수</span>
+        </div>
+
+        <div class="signup-panel-row">
+            <label>채널 아이디</label>
+            <div class="signup-input-wrap"><input type="text" id="s-id" placeholder="채널 아이디"></div>
+            <span class="signup-required-tag">필수</span>
+        </div>
+
+        <div class="signup-panel-row">
+            <label>비밀번호</label>
+            <div class="signup-input-wrap"><input type="password" id="s-pw" placeholder="비밀번호"></div>
+            <span class="signup-required-tag">필수</span>
+        </div>
+
+        <div class="signup-panel-row">
+            <label>닉네임</label>
+            <div class="signup-input-wrap"><input type="text" id="s-nick" placeholder="닉네임"></div>
+            <span class="signup-required-tag">필수</span>
+        </div>
+
+        <div class="signup-panel-row">
+            <label>자동 입력 방지</label>
+            <div class="signup-input-wrap"><canvas id="s-captcha-canvas" class="captcha-canvas" width="120" height="42" onclick="generateSignupCaptcha()" title="새로고침"></canvas><input type="text" id="s-captcha-answer" placeholder="문자 입력" class="signup-captcha-input"></div>
+            <span class="signup-required-tag">필수</span>
+        </div>
+
+        <div class="signup-panel-row signup-panel-row-optional">
+            <label>프로필 사진</label>
+            <div class="signup-input-wrap"><input type="file" id="s-profile" accept="image/*"></div>
+            <span class="signup-optional-tag">선택</span>
+        </div>
+
+        <div class="signup-panel-row signup-panel-row-optional signup-panel-row-last">
+            <label>소개</label>
+            <div class="signup-input-wrap"><textarea id="s-desc" placeholder="소개글을 입력해주세요"></textarea></div>
+            <span class="signup-optional-tag">선택</span>
+        </div>
+
+        <div class="signup-panel-actions">
+            <div class="login-panel-cancel-btn" onclick="closeModal('signup-modal')">✕ 취소</div>
+            <div class="login-panel-submit-btn" onclick="doSignup()">○ 확인</div>
+        </div>
+    </div>
+    <div class="login-panel-linkbar" onclick="closeModal('signup-modal'); openModal('login-modal')">이미 계정이 있으신가요? 로그인</div>
+</div></div>
+
+<div id="find-id-modal" class="modal"><div class="signup-panel-wrap">
+    <div class="signup-panel-content">
+        <div class="signup-panel-titlebar">비밀번호 찾기</div>
+
+        <div class="signup-panel-row">
+            <label>이메일 주소</label>
+            <div class="signup-input-wrap"><input type="text" id="f-email" placeholder="이메일 주소"></div>
+        </div>
+
+        <div class="signup-panel-row signup-panel-row-last">
+            <label>자동 입력 방지</label>
+            <div class="signup-input-wrap"><canvas id="f-captcha-canvas" class="captcha-canvas" width="120" height="42" onclick="generateFindPwCaptcha()" title="새로고침"></canvas><input type="text" id="f-captcha-answer" placeholder="문자 입력" class="signup-captcha-input"></div>
+        </div>
+
+        <div id="find-id-result" style="font-size:12px; color:#333; text-align:center; white-space:pre-wrap; padding:0 18px 14px;"></div>
+
+        <div class="signup-panel-actions">
+            <div class="login-panel-cancel-btn" onclick="closeModal('find-id-modal')">✕ 취소</div>
+            <div class="login-panel-submit-btn" onclick="doFindId()">○ 확인</div>
+        </div>
+    </div>
+    <div class="login-panel-linkbar" onclick="closeModal('find-id-modal'); openModal('login-modal')">로그인 화면으로 돌아가기</div>
+</div></div>
 
 <div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="upload-submit-btn" onclick="doUpload()"></div></div></div>
 
@@ -1499,6 +1637,9 @@
     function toggleSlidingMenu() {
         const menu = document.getElementById('sliding-menu');
         menu.classList.toggle('open');
+        document.querySelectorAll('.padlet-embed iframe').forEach(f => {
+            f.style.visibility = menu.classList.contains('open') ? 'hidden' : 'visible';
+        });
     }
 
     function toggleLgChannelDropdown(e) {
@@ -1646,6 +1787,7 @@
         catContainer.innerHTML = catHtml;
         document.getElementById('category-toggle-btn').innerText = (currentGenre === 'all' ? '전체' : currentGenre) + " ▼";
         updateChannel(); renderList();
+        if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
     }
 
     function executeSearch() {
@@ -2359,37 +2501,106 @@
     }
 
     function showSection(s) {
-        if(s !== 'channel') {
+        if(s !== 'channel' && s !== 'mypage') {
             lastSection = s; 
         }
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
-        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널', playlist: '재생목록', notice: '공지사항' };
+        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널 순위', playlist: '재생목록', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
         if(s === 'channel') {
+            renderChannelRankList();
+        }
+        if(s === 'mypage') {
             if(user && (!currentChannelTargetName || currentChannelTargetName === "")) {
                 currentChannelTargetName = user.nick;
             }
             updateChannel();
+            renderMyCloudsList();
         }
-        if(s === 'mypage') renderMyCloudsList();
         if(s === 'search-result') showSkeletonBeforeRender(renderSearchResults, ['search-result-list'], false);
         if(s === 'history') renderWatchHistory();
         document.getElementById('sliding-menu').classList.remove('open');
+        document.querySelectorAll('.padlet-embed iframe').forEach(f => { f.style.visibility = 'visible'; });
+    }
+
+    function setMyPageTab(tab) {
+        const channelBtn = document.getElementById('mypage-tab-btn-channel');
+        const cloudsBtn = document.getElementById('mypage-tab-btn-clouds');
+        const channelContent = document.getElementById('mypage-tab-content-channel');
+        const cloudsContent = document.getElementById('mypage-tab-content-clouds');
+        if(!channelBtn || !cloudsBtn || !channelContent || !cloudsContent) return;
+
+        if(tab === 'clouds') {
+            channelBtn.classList.remove('active');
+            cloudsBtn.classList.add('active');
+            channelContent.style.display = 'none';
+            cloudsContent.style.display = 'block';
+            renderMyCloudsList();
+        } else {
+            cloudsBtn.classList.remove('active');
+            channelBtn.classList.add('active');
+            cloudsContent.style.display = 'none';
+            channelContent.style.display = 'block';
+            updateChannel();
+        }
+    }
+
+    /* [신규] 채널 순위 - 구름 자막 수 + 영상 재생수 기준, 최대 1000위 */
+    function computeChannelRanking() {
+        const statsByAuthor = {};
+        db.forEach(v => {
+            const author = v.author;
+            if(!author) return;
+            if(!statsByAuthor[author]) statsByAuthor[author] = { views: 0, clouds: 0 };
+            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
+            statsByAuthor[author].views += (v.views || 0);
+            statsByAuthor[author].clouds += Math.floor((v.views || 0) / 3) + savedCount;
+        });
+        return Object.keys(statsByAuthor).map(author => ({
+            author: author,
+            views: statsByAuthor[author].views,
+            clouds: statsByAuthor[author].clouds,
+            score: statsByAuthor[author].views + statsByAuthor[author].clouds
+        })).sort((a, b) => b.score - a.score).slice(0, 1000);
+    }
+
+    function renderChannelRankList() {
+        const container = document.getElementById('channel-rank-list');
+        if(!container) return;
+
+        const ranking = computeChannelRanking();
+        if(ranking.length === 0) {
+            container.innerHTML = "<div style='font-size:12px; color:#888; padding:20px 0;'>랭킹 정보가 없습니다.</div>";
+            return;
+        }
+
+        container.innerHTML = ranking.map((item, idx) => {
+            const rank = idx + 1;
+            const safeAuthor = item.author.replace(/'/g, "\\'");
+            return `
+            <div class="list-item" onclick="showUserChannel('${safeAuthor}')">
+                <div style="width:34px; flex-shrink:0; font-size:13px; font-weight:bold; color:#53add2; text-align:center; align-self:center;">${rank}</div>
+                <div class="list-info">
+                    <b>${escapeHtml(item.author)}님의 채널</b><br>
+                    <span style="font-size:12px; color:#666;">영상 재생수: ${item.views} | 구름 자막: ${item.clouds}</span>
+                </div>
+            </div>`;
+        }).join('');
     }
 
     function openTargetUserChannel() {
-        if(currentChannelTargetName !== (user ? user.nick : "")) channelGenreFilter = 'all';
-        currentChannelTargetName = user ? user.nick : "";
+        document.getElementById('sliding-menu').classList.remove('open');
         showSection('channel');
     }
 
     function showUserChannel(authorName) {
         if(currentChannelTargetName !== authorName) channelGenreFilter = 'all';
         currentChannelTargetName = authorName;
-        showSection('channel');
+        document.getElementById('sliding-menu').classList.remove('open');
+        showSection('mypage');
     }
 
     function goBackFromChannel() {
@@ -2707,6 +2918,198 @@
         if (tabName !== 'recommend') {
             renderHomeRankLists();
         }
+        if (tabName === 'mypage') {
+            renderHomeMyPageChannelInfo();
+        }
+    }
+
+    /* ---------- [신규] 홈 - 마이페이지 탭 (PC/가로모드 전용) ---------- */
+    let homeChannelGenreFilter = 'all';
+
+    function setHomeMyPageTab(tab) {
+        const channelBtn = document.getElementById('home-mypage-tab-btn-channel');
+        const cloudsBtn = document.getElementById('home-mypage-tab-btn-clouds');
+        const channelContent = document.getElementById('home-mypage-tab-content-channel');
+        const cloudsContent = document.getElementById('home-mypage-tab-content-clouds');
+        if(!channelBtn || !cloudsBtn || !channelContent || !cloudsContent) return;
+
+        if(tab === 'clouds') {
+            channelBtn.classList.remove('active');
+            cloudsBtn.classList.add('active');
+            channelContent.style.display = 'none';
+            cloudsContent.style.display = 'block';
+            renderHomeMyCloudsList();
+        } else {
+            cloudsBtn.classList.remove('active');
+            channelBtn.classList.add('active');
+            cloudsContent.style.display = 'none';
+            channelContent.style.display = 'block';
+            renderHomeMyPageChannelInfo();
+        }
+    }
+
+    function renderHomeChannelGenreFilter() {
+        const barContainer = document.getElementById('home-channel-genre-filter-bar');
+        if(!barContainer) return;
+
+        let barHtml = `<span class="filter-item ${homeChannelGenreFilter==='all'?'active':''}" onclick="setHomeChannelGenreFilter('all')">전체</span>`;
+        genres.forEach(g => {
+            barHtml += `<span class="filter-item ${homeChannelGenreFilter===g?'active':''}" onclick="setHomeChannelGenreFilter('${g}')">${g}</span>`;
+        });
+        barContainer.innerHTML = barHtml;
+    }
+
+    function setHomeChannelGenreFilter(g) {
+        homeChannelGenreFilter = g;
+        renderHomeChannelGenreFilter();
+        renderHomeChannelInternalVideos();
+    }
+
+    function renderHomeChannelInternalVideos() {
+        const targetContainer = document.getElementById('home-channel-internal-video-list');
+        if(!targetContainer) return;
+        if(!user) { targetContainer.innerHTML = ""; return; }
+
+        let myVideos = db.filter(v => v.author === user.nick);
+        if(homeChannelGenreFilter !== 'all') myVideos = myVideos.filter(v => v.genre === homeChannelGenreFilter);
+
+        if(myVideos.length === 0) {
+            targetContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px 0;'>업로드한 동영상이 없습니다.</div>";
+            return;
+        }
+
+        targetContainer.innerHTML = myVideos.map(v => {
+            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
+            const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
+            const channelItemLength = v.playTime || "03:45";
+
+            return `
+            <div class="list-item" onclick="preparePlay(${v.id})">
+                <div class="list-thumb-col">
+                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
+                        <div class="list-duration-badge">${channelItemLength}</div>
+                    </div>
+                    ${renderAuthorMiniHtml(v.author, v.title)}
+                </div>
+                <div class="list-info">
+                    <b>${escapeHtml(v.title)}</b>
+                    길이: <span style="font-weight:bold; color:#ff3300;">${channelItemLength}</span> | 조회수: ${v.views} | 장르: ${v.genre}<br>
+                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${formatDate(v.regDate)}
+                </div>
+                <button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button>
+            </div>`;
+        }).join('');
+    }
+
+    function renderHomeMyPageChannelInfo() {
+        const infoEl = document.getElementById('home-my-info');
+        if(!infoEl) return;
+
+        if(!user) {
+            infoEl.innerHTML = "로그인이 필요합니다.";
+            const listEl = document.getElementById('home-channel-internal-video-list');
+            if(listEl) listEl.innerHTML = "";
+            const titleEl = document.getElementById('home-channel-list-title-text');
+            if(titleEl) titleEl.innerText = "채널 동영상 목록";
+            const filterEl = document.getElementById('home-channel-genre-filter-bar');
+            if(filterEl) filterEl.innerHTML = "";
+            return;
+        }
+
+        const titleEl = document.getElementById('home-channel-list-title-text');
+        if(titleEl) titleEl.innerText = `${user.nick} 님의 동영상 목록`;
+
+        const targetProfileImg = user.profileImg || "https://i.ibb.co/P36c8H4/20260620-061219.png";
+        let targetDesc = user.desc || "소개글이 없습니다.";
+        if(targetDesc.trim() === "") targetDesc = "소개글이 없습니다.";
+        const statsRowHtml = `재생: ${userStats.play}회 / 남긴 자막: ${userStats.cloud}개`;
+        const subCountText = `<span style="font-size:10px; color:#999; margin-left:6px;">구독자 ${subscriberCounts[user.nick] || 0}명</span>`;
+
+        const targetBannerImg = user.bannerImg || "";
+        const bannerEditIcon = `<div class="channel-banner-edit-hint">✏️ 배너 변경</div>`;
+        const bannerHtml = targetBannerImg
+            ? `<div class="channel-banner-wrap"><div style="width:100%; height:100px; background-image:url('${targetBannerImg}'); background-size:cover; background-position:center; margin-bottom:12px; cursor:pointer;" title="클릭하여 배너 이미지 변경" onclick="triggerBannerChanger()">${bannerEditIcon}</div></div>`
+            : `<div style="width:100%; height:50px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-size:11px; margin-bottom:12px; cursor:pointer; border:1px dashed #ccc; box-sizing:border-box;" title="클릭하여 배너 이미지 추가" onclick="triggerBannerChanger()">✏️ 배너 이미지 추가하기</div>`;
+
+        const profileEditOverlay = `<div class="channel-edit-overlay"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>`;
+
+        const channelTotalViews = db.filter(v => v.author === user.nick).reduce((sum, current) => sum + current.views, 0);
+        const channelGradeLabel = isAuthorVeteran(user.nick) ? '베테랑' : '일반';
+        const channelGradeColorStyle = isAuthorVeteran(user.nick) ? 'color:#8BC34A;' : '';
+        let channelJoinDateText = '정보 없음';
+        if(user.regDate) channelJoinDateText = formatDate(user.regDate);
+
+        const channelSummaryCardHtml = `
+            <div class="channel-summary-card">
+                <div class="channel-summary-item">
+                    <div class="channel-summary-label">총 조회수</div>
+                    <div class="channel-summary-value">${channelTotalViews}회</div>
+                </div>
+                <div class="channel-summary-item">
+                    <div class="channel-summary-label">등급</div>
+                    <div class="channel-summary-value" style="${channelGradeColorStyle}">${channelGradeLabel}</div>
+                </div>
+                <div class="channel-summary-item">
+                    <div class="channel-summary-label">가입일</div>
+                    <div class="channel-summary-value">${channelJoinDateText}</div>
+                </div>
+            </div>`;
+
+        infoEl.innerHTML = `
+            ${bannerHtml}
+            <div style="display: flex; align-items: flex-start; gap: 15px; width:100%; box-sizing:border-box;">
+                <div class="channel-edit-overlay-wrap">
+                    <img src="${targetProfileImg}" class="channel-profile-interactive-img" title="클릭하여 프로필 사진 변경" onclick="triggerProfileChanger()">
+                    ${profileEditOverlay}
+                </div>
+                <div style="flex:1; min-width:0;">
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <b style="font-size: 16px; color:#111;">${escapeHtml(user.nick)} (내 채널)</b>
+                        <img src="https://i.ibb.co/JjBBV1Zv/1781695445893-1-1.png" alt="view_author_videos" class="author-vlist-btn" style="height:26px; cursor:pointer;" title="올린 동영상 모아보기" onclick="filterByAuthor('${user.nick.replace(/'/g, "\\'")}')">
+                    </div>
+                    <span style="font-size:12px; color:#666; display:inline-block; margin-top:4px; margin-bottom: 4px;">${statsRowHtml}</span><br>
+                    <div style="margin-top:10px;">${subCountText}</div>
+                    ${channelSummaryCardHtml}
+                    <div style="font-size:13px; color:#333; white-space:pre-wrap; line-height:1.4; word-break:break-all; margin-top:8px;"><b>채널 소개</b><br>${escapeHtml(targetDesc)}</div>
+                </div>
+            </div>`;
+
+        renderHomeChannelGenreFilter();
+        renderHomeChannelInternalVideos();
+    }
+
+    function renderHomeMyCloudsList() {
+        const listEl = document.getElementById('home-my-clouds-list');
+        const summaryEl = document.getElementById('home-mypage-cloud-summary');
+        if(!listEl) return;
+
+        if(!user) {
+            listEl.innerHTML = "<div class='my-clouds-empty'>로그인이 필요합니다.</div>";
+            if(summaryEl) summaryEl.innerText = "";
+            return;
+        }
+
+        const myClouds = myCloudLog.filter(c => c.author === user.nick);
+        if(summaryEl) summaryEl.innerText = `총 ${myClouds.length}개의 구름 자막을 남겼습니다.`;
+
+        if(myClouds.length === 0) {
+            listEl.innerHTML = "<div class='my-clouds-empty'>아직 남긴 구름 자막이 없습니다.</div>";
+            return;
+        }
+
+        listEl.innerHTML = myClouds.map(c => {
+            const v = db.find(video => video.id === c.videoId);
+            const thumbStyle = v && v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : '';
+            const vTitle = v ? escapeHtml(v.title) : "(삭제된 동영상)";
+            return `
+            <div class="my-clouds-item" onclick="${v ? `preparePlay(${v.id})` : ''}">
+                <div class="my-clouds-thumb" style="${thumbStyle}"></div>
+                <div class="my-clouds-info">
+                    <div class="my-clouds-text">${escapeHtml(c.text)}</div>
+                    <div class="my-clouds-meta">${vTitle} · ${formatVideoDuration(c.time)}지점 · ${getTimeAgo(c.date)}</div>
+                </div>
+            </div>`;
+        }).join('');
     }
 
     function scrollRank36Right() {
@@ -3154,7 +3557,7 @@
         if(!id || !pw) { alert("아이디와 비밀번호를 입력해주세요."); return; }
 
         const pwHash = await hashPassword(pw);
-        const found = users.find(u => u.id === id);
+        const found = users.find(u => u.id === id || u.email === id);
 
         if(!found || (found.pw !== pwHash && found.pw !== pw)) {
             alert("아이디 또는 비밀번호가 일치하지 않습니다. 계정이 없으시면 회원가입을 먼저 진행해주세요.");
@@ -3174,34 +3577,57 @@
         if(currentPlayingItem) renderCloudLiveFeedBox();
         showToast(`${user.nick}님, 환영합니다!`, "success");
         refreshNotifBadgeAndPanel();
+
+        if(found.email && found.email === id) {
+            const loginTime = new Date().toLocaleString("ko-KR");
+            emailjs.send("service_oscefhp", "template_zz2v52n", {
+                to_email: found.email,
+                login_time: loginTime
+            }).catch(function(err) {
+                console.error("로그인 알림 메일 발송 실패:", err);
+            });
+        }
     }
 
     async function doSignup() {
+        const email = document.getElementById('s-email').value.trim();
         const id = document.getElementById('s-id').value.trim();
         const pw = document.getElementById('s-pw').value;
         const nick = document.getElementById('s-nick').value.trim();
         const desc = document.getElementById('s-desc').value || "소개글이 없습니다.";
         const pFile = document.getElementById('s-profile').files[0];
         const defaultImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
+        const captchaAnswer = document.getElementById('s-captcha-answer').value.trim();
 
-        if(!id || !pw || !nick) { alert("아이디, 비밀번호, 닉네임을 모두 입력해주세요."); return; }
+        if(!email || !id || !pw || !nick) { alert("이메일 주소, 채널 아이디, 비밀번호, 닉네임을 모두 입력해주세요."); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert("올바른 이메일 주소 형식이 아닙니다."); return; }
+        if(!captchaAnswer) { alert("자동 입력 방지 문자를 입력해주세요."); return; }
+        if(captchaAnswer.toUpperCase() !== signupCaptchaAnswer.toUpperCase()) {
+            alert("자동 입력 방지 문자가 올바르지 않습니다.");
+            generateSignupCaptcha();
+            return;
+        }
         if(users.find(u => u.id === id)) { alert("이미 사용 중인 아이디입니다."); return; }
+        if(users.find(u => u.email === email)) { alert("이미 사용 중인 이메일 주소입니다."); return; }
 
         const pwHash = await hashPassword(pw);
 
         function finishSignup(profileImg) {
-            const newUser = { id: id, pw: pwHash, nick: nick, desc: desc, profileImg: profileImg, regDate: new Date().toISOString() };
+            const newUser = { id: id, email: email, pw: pwHash, nick: nick, desc: desc, profileImg: profileImg, regDate: new Date().toISOString() };
             users.push(newUser);
             localStorage.setItem('tvple_users', JSON.stringify(users));
             user = newUser;
             localStorage.setItem('tvple_user', JSON.stringify(user));
             if(typeof fbSaveUser === 'function') fbSaveUser(newUser);
             currentChannelTargetName = user.nick;
+            document.getElementById('s-email').value = "";
             document.getElementById('s-id').value = "";
             document.getElementById('s-pw').value = "";
             document.getElementById('s-nick').value = "";
             document.getElementById('s-desc').value = "";
             document.getElementById('s-profile').value = "";
+            document.getElementById('s-captcha-answer').value = "";
+            generateSignupCaptcha();
             closeModal('signup-modal');
             updateChannel();
             showToast(`${nick}님, 냥이플 가입을 환영합니다!`, "success");
@@ -3216,19 +3642,97 @@
         }
     }
 
-    function doFindId() {
-        const nick = document.getElementById('f-nick').value.trim();
-        const resultEl = document.getElementById('find-id-result');
-        if(!nick) { resultEl.innerText = "닉네임을 입력해주세요."; return; }
+    /* [신규] 자동 입력 방지 - 숫자/영어 랜덤 문자 캡차(캔버스) 공용 함수 */
+    const CAPTCHA_CHARSET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"; /* 혼동되는 0,1,O,I 제외 */
+    function generateCaptchaCode(len) {
+        let s = "";
+        for(let i = 0; i < len; i++) s += CAPTCHA_CHARSET[Math.floor(Math.random() * CAPTCHA_CHARSET.length)];
+        return s;
+    }
+    function drawCaptchaCanvas(canvasId, code) {
+        const canvas = document.getElementById(canvasId);
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#f2f2f2";
+        ctx.fillRect(0, 0, w, h);
+        for(let i = 0; i < 4; i++) {
+            ctx.strokeStyle = `rgba(${100 + Math.floor(Math.random() * 100)},${100 + Math.floor(Math.random() * 100)},${100 + Math.floor(Math.random() * 100)},0.35)`;
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * w, Math.random() * h);
+            ctx.lineTo(Math.random() * w, Math.random() * h);
+            ctx.stroke();
+        }
+        const charW = w / code.length;
+        for(let i = 0; i < code.length; i++) {
+            ctx.save();
+            const x = charW * i + charW / 2;
+            const y = h / 2 + (Math.random() * 8 - 4);
+            ctx.translate(x, y);
+            ctx.rotate((Math.random() * 40 - 20) * Math.PI / 180);
+            ctx.font = `bold ${Math.floor(h * 0.55)}px 'Comic Sans MS', cursive, sans-serif`;
+            ctx.fillStyle = `hsl(${Math.floor(Math.random() * 360)}, 55%, 35%)`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(code[i], 0, 0);
+            ctx.restore();
+        }
+        for(let i = 0; i < 20; i++) {
+            ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.15})`;
+            ctx.beginPath();
+            ctx.arc(Math.random() * w, Math.random() * h, 1, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
 
-        const matches = users.filter(u => u.nick === nick);
-        if(matches.length === 0) {
-            resultEl.innerText = "일치하는 닉네임의 계정이 없습니다.";
+    /* [신규] 회원가입 - 자동 입력 방지(숫자/영어 랜덤 문자) */
+    let signupCaptchaAnswer = "";
+    function generateSignupCaptcha() {
+        signupCaptchaAnswer = generateCaptchaCode(5);
+        drawCaptchaCanvas('s-captcha-canvas', signupCaptchaAnswer);
+        const ansEl = document.getElementById('s-captcha-answer');
+        if(ansEl) ansEl.value = "";
+    }
+
+    /* [신규] 비밀번호 찾기 - 자동 입력 방지(숫자/영어 랜덤 문자) */
+    let findPwCaptchaAnswer = "";
+    function generateFindPwCaptcha() {
+        findPwCaptchaAnswer = generateCaptchaCode(5);
+        drawCaptchaCanvas('f-captcha-canvas', findPwCaptchaAnswer);
+        const ansEl = document.getElementById('f-captcha-answer');
+        if(ansEl) ansEl.value = "";
+        const resultEl = document.getElementById('find-id-result');
+        if(resultEl) resultEl.innerText = "";
+    }
+
+    function doFindId() {
+        const email = document.getElementById('f-email').value.trim();
+        const captchaAnswer = document.getElementById('f-captcha-answer').value.trim();
+        const resultEl = document.getElementById('find-id-result');
+
+        if(!email) { resultEl.innerText = "이메일 주소를 입력해주세요."; return; }
+        if(!captchaAnswer) { resultEl.innerText = "자동 입력 방지 문자를 입력해주세요."; return; }
+        if(captchaAnswer.toUpperCase() !== findPwCaptchaAnswer.toUpperCase()) {
+            resultEl.innerText = "자동 입력 방지 문자가 올바르지 않습니다.";
+            generateFindPwCaptcha();
             return;
         }
 
-        const idList = matches.map(u => escapeHtml(u.id)).join(', ');
-        resultEl.innerHTML = `회원님의 아이디: <b>${idList}</b><br><span style="color:#53add2; font-weight:bold; text-decoration:underline; cursor:pointer;" onclick="fillIdAndGoLogin('${matches[0].id.replace(/'/g, "\\'")}')">이 아이디로 로그인하기</span>`;
+        const matches = users.filter(u => u.email === email);
+        if(matches.length === 0) {
+            resultEl.innerText = "일치하는 이메일의 계정이 없습니다.";
+            generateFindPwCaptcha();
+            return;
+        }
+
+        const tempPw = Math.random().toString(36).slice(-8);
+        hashPassword(tempPw).then(function(tempHash) {
+            matches.forEach(u => { u.pw = tempHash; });
+            localStorage.setItem('tvple_users', JSON.stringify(users));
+            if(typeof fbSaveUser === 'function') matches.forEach(u => fbSaveUser(u));
+            resultEl.innerHTML = `임시 비밀번호가 발급되었습니다: <b>${escapeHtml(tempPw)}</b><br><span style="color:#53add2; font-weight:bold; text-decoration:underline; cursor:pointer;" onclick="fillIdAndGoLogin('${matches[0].id.replace(/'/g, "\\'")}')">이 아이디로 로그인하기</span>`;
+        });
     }
 
     function fillIdAndGoLogin(id) {
@@ -3252,6 +3756,7 @@
             if (currentChannelTargetName === user.nick) {
                 updateChannel();
             }
+            if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
         };
         reader.readAsDataURL(file);
     }
@@ -3675,6 +4180,7 @@
             if (currentChannelTargetName === user.nick) {
                 updateChannel();
             }
+            if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
         };
         reader.readAsDataURL(file);
     }
@@ -3795,7 +4301,7 @@
         else { openModal('login-modal'); }
     }
 
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; document.getElementById('sliding-menu').classList.remove('open'); }
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; document.getElementById('sliding-menu').classList.remove('open'); document.querySelectorAll('.padlet-embed iframe').forEach(f => { f.style.visibility = 'visible'; }); }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; showSection(lastSection); }
     
     function togglePlayPause() {
@@ -4096,6 +4602,9 @@
 
     function openMyPage() {
         if(!user) { showToast("로그인이 필요합니다.", "error"); openModal('login-modal'); return; }
+        if(currentChannelTargetName !== user.nick) channelGenreFilter = 'all';
+        currentChannelTargetName = user.nick;
+        setMyPageTab('channel');
         document.getElementById('sliding-menu').classList.remove('open');
         showSection('mypage');
     }
@@ -4523,6 +5032,7 @@
 
     /* [신규] 최초 알림 패널/배지 상태 반영 */
     refreshNotifBadgeAndPanel();
+    generateSignupCaptcha();
 
     initUI(); showSection('home');
     document.querySelectorAll('#sort-filters .filter-item').forEach(i => i.classList.toggle('active', i.dataset.sort === currentSort));
