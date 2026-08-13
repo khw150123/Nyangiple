@@ -1308,7 +1308,6 @@
         </div>
     </div>
     <div class="login-panel-linkbar" onclick="closeModal('login-modal'); openModal('signup-modal'); generateSignupCaptcha()">👤➕ 아이디가 없으신가요? 지금 바로 가입하세요!</div>
-    <div class="login-panel-linkbar" onclick="closeModal('login-modal'); openModal('find-id-modal'); generateFindPwCaptcha()">🔍 비밀번호를 잊어버리셨나요? 여기서 찾아보세요.</div>
 </div></div>
 
 <div id="signup-modal" class="modal"><div class="signup-panel-wrap">
@@ -1365,30 +1364,6 @@
     <div class="login-panel-linkbar" onclick="closeModal('signup-modal'); openModal('login-modal')">이미 계정이 있으신가요? 로그인</div>
 </div></div>
 
-<div id="find-id-modal" class="modal"><div class="signup-panel-wrap">
-    <div class="signup-panel-content">
-        <div class="signup-panel-titlebar">비밀번호 찾기</div>
-
-        <div class="signup-panel-row">
-            <label>이메일 주소</label>
-            <div class="signup-input-wrap"><input type="text" id="f-email" placeholder="이메일 주소"></div>
-        </div>
-
-        <div class="signup-panel-row signup-panel-row-last">
-            <label>자동 입력 방지</label>
-            <div class="signup-input-wrap"><canvas id="f-captcha-canvas" class="captcha-canvas" width="120" height="42" onclick="generateFindPwCaptcha()" title="새로고침"></canvas><input type="text" id="f-captcha-answer" placeholder="문자 입력" class="signup-captcha-input"></div>
-        </div>
-
-        <div id="find-id-result" style="font-size:12px; color:#333; text-align:center; white-space:pre-wrap; padding:0 18px 14px;"></div>
-
-        <div class="signup-panel-actions">
-            <div class="login-panel-cancel-btn" onclick="closeModal('find-id-modal')">✕ 취소</div>
-            <div class="login-panel-submit-btn" onclick="doFindId()">○ 확인</div>
-        </div>
-    </div>
-    <div class="login-panel-linkbar" onclick="closeModal('find-id-modal'); openModal('login-modal')">로그인 화면으로 돌아가기</div>
-</div></div>
-
 <div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="upload-submit-btn" onclick="doUpload()"></div></div></div>
 
 <div id="edit-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('edit-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">동영상 수정</div><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">동영상 파일 재선택 (미선택시 기존 영상 유지)</div><input type="file" id="edit-up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 기존 썸네일 유지)</div><input type="file" id="edit-up-thumb" accept="image/*"><input type="text" id="edit-up-title" placeholder="제목"><textarea id="edit-up-desc" placeholder="설명"></textarea><div id="edit-modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="edit-up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addEditTagInputField()"></div></div><select id="edit-up-genre" onchange="toggleGenreCustomInput('edit-up-genre','edit-up-genre-custom')"></select><input type="text" id="edit-up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="edit-upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="edit-upload-progress-fill"></div></div><div class="upload-progress-label" id="edit-upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="edit-upload-submit-btn" onclick="doEditVideo()"></div></div></div>
@@ -1397,132 +1372,156 @@
 
 <div id="toast-container"></div>
 
-<!-- [신규] 온라인 공유 기능 - Supabase 연동 -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<!-- [신규] 온라인 공유 기능 - Backendless 연동 -->
 <script>
-    const SUPABASE_URL = 'https://ttaqmmdkhwyrfeogfcdc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0YXFtbWRraHd5cmZlb2dmY2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MTg1NjgsImV4cCI6MjEwMTA5NDU2OH0.-0SESyvZ99o1zNKfKBPAibIzUhY10MvBmpa5hw9mcwA';
-    let supabaseClient = null;
-    try {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch(e) {
-        console.error('Supabase 초기화 실패:', e);
+    const BACKENDLESS_APP_ID = '79DD790D-1DD2-45A3-9344-ED225A1EF7A7';
+    const BACKENDLESS_API_KEY = '0C978774-5375-4789-99FA-1D55F880A4F4';
+    const BACKENDLESS_BASE_URL = 'https://api.backendless.com/' + BACKENDLESS_APP_ID + '/' + BACKENDLESS_API_KEY;
+
+    async function blRequest(path, options) {
+        options = options || {};
+        const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+        const res = await fetch(BACKENDLESS_BASE_URL + path, Object.assign({}, options, { headers: headers }));
+        if(!res.ok) {
+            const errText = await res.text();
+            throw new Error('Backendless 오류(' + res.status + '): ' + errText);
+        }
+        if(res.status === 204) return null;
+        return await res.json();
+    }
+
+    function blEscape(value) {
+        return String(value).replace(/'/g, "\\'");
+    }
+
+    async function blUpsert(table, obj, keyField) {
+        const keyValue = obj[keyField];
+        const whereClause = encodeURIComponent(keyField + "='" + blEscape(keyValue) + "'");
+        const existing = await blRequest('/data/' + table + '?where=' + whereClause);
+        if(existing && existing.length > 0) {
+            const objectId = existing[0].objectId;
+            return blRequest('/data/' + table + '/' + objectId, { method: 'PUT', body: JSON.stringify(obj) });
+        } else {
+            return blRequest('/data/' + table, { method: 'POST', body: JSON.stringify(obj) });
+        }
     }
 
     async function fbLoadAllVideos() {
-        if(!supabaseClient) return null;
         try {
-            const { data, error } = await supabaseClient.from('videos').select('*');
-            if(error) throw error;
+            const data = await blRequest('/data/videos?pageSize=100');
             return data || [];
         } catch(e) {
-            console.error('Supabase 동영상 목록 불러오기 실패:', e);
+            console.error('Backendless 동영상 목록 불러오기 실패:', e);
             return null;
         }
     }
 
     async function fbSaveVideo(videoObj) {
-        if(!supabaseClient) return;
         try {
-            const { error } = await supabaseClient.from('videos').upsert(videoObj, { onConflict: 'id' });
-            if(error) throw error;
+            await blUpsert('videos', videoObj, 'id');
         } catch(e) {
-            console.error('Supabase 동영상 저장 실패:', e);
+            console.error('Backendless 동영상 저장 실패:', e);
         }
     }
 
     async function fbUpdateVideoComments(videoId, comments) {
-        if(!supabaseClient) return;
         try {
-            const { error } = await supabaseClient.from('videos').update({ comments: comments }).eq('id', String(videoId));
-            if(error) throw error;
+            const whereClause = encodeURIComponent("id='" + blEscape(videoId) + "'");
+            const existing = await blRequest('/data/videos?where=' + whereClause);
+            if(existing && existing.length > 0) {
+                const objectId = existing[0].objectId;
+                await blRequest('/data/videos/' + objectId, { method: 'PUT', body: JSON.stringify({ comments: comments }) });
+            }
         } catch(e) {
-            console.error('Supabase 댓글 저장 실패:', e);
+            console.error('Backendless 댓글 저장 실패:', e);
         }
     }
 
     async function fbDeleteVideo(videoId) {
-        if(!supabaseClient) return;
         try {
-            const { error } = await supabaseClient.from('videos').delete().eq('id', String(videoId));
-            if(error) throw error;
-            await supabaseClient.storage.from('videos').remove([String(videoId)]);
+            const whereClause = encodeURIComponent("id='" + blEscape(videoId) + "'");
+            const existing = await blRequest('/data/videos?where=' + whereClause);
+            if(existing && existing.length > 0) {
+                const objectId = existing[0].objectId;
+                await blRequest('/data/videos/' + objectId, { method: 'DELETE' });
+            }
+            try { await blRequest('/files/videos/' + String(videoId), { method: 'DELETE' }); } catch(e2) {}
         } catch(e) {
-            console.error('Supabase 동영상 삭제 실패:', e);
+            console.error('Backendless 동영상 삭제 실패:', e);
         }
     }
 
     /* [신규] 유저 온라인 동기화 */
     async function fbSaveUser(userObj) {
-        if(!supabaseClient || !userObj) return;
+        if(!userObj) return;
         try {
-            const { error } = await supabaseClient.from('users').upsert(userObj, { onConflict: 'id' });
-            if(error) throw error;
-        } catch(e) { console.error('Supabase 유저 저장 실패:', e); }
+            await blUpsert('users', userObj, 'id');
+        } catch(e) { console.error('Backendless 유저 저장 실패:', e); }
     }
 
     async function fbLoadAllUsers() {
-        if(!supabaseClient) return null;
         try {
-            const { data, error } = await supabaseClient.from('users').select('*');
-            if(error) throw error;
+            const data = await blRequest('/data/users?pageSize=100');
             return data || [];
-        } catch(e) { console.error('Supabase 유저 목록 불러오기 실패:', e); return null; }
+        } catch(e) { console.error('Backendless 유저 목록 불러오기 실패:', e); return null; }
     }
 
     /* [신규] 구독 온라인 동기화 */
     async function fbSaveSubscription(userId, targetName, isSubscribed) {
-        if(!supabaseClient || !userId) return;
+        if(!userId) return;
         try {
+            const whereClause = encodeURIComponent("user_id='" + blEscape(userId) + "' and target='" + blEscape(targetName) + "'");
+            const existing = await blRequest('/data/subscriptions?where=' + whereClause);
             if(isSubscribed) {
-                await supabaseClient.from('subscriptions').upsert({ user_id: userId, target: targetName }, { onConflict: 'user_id,target' });
+                if(!existing || existing.length === 0) {
+                    await blRequest('/data/subscriptions', { method: 'POST', body: JSON.stringify({ user_id: userId, target: targetName }) });
+                }
             } else {
-                await supabaseClient.from('subscriptions').delete().eq('user_id', userId).eq('target', targetName);
+                if(existing && existing.length > 0) {
+                    for(const row of existing) {
+                        await blRequest('/data/subscriptions/' + row.objectId, { method: 'DELETE' });
+                    }
+                }
             }
-        } catch(e) { console.error('Supabase 구독 저장 실패:', e); }
+        } catch(e) { console.error('Backendless 구독 저장 실패:', e); }
     }
 
     async function fbLoadSubscriptions(userId) {
-        if(!supabaseClient || !userId) return null;
+        if(!userId) return null;
         try {
-            const { data, error } = await supabaseClient.from('subscriptions').select('target').eq('user_id', userId);
-            if(error) throw error;
+            const whereClause = encodeURIComponent("user_id='" + blEscape(userId) + "'");
+            const data = await blRequest('/data/subscriptions?where=' + whereClause);
             return (data || []).map(r => r.target);
-        } catch(e) { console.error('Supabase 구독 목록 불러오기 실패:', e); return null; }
+        } catch(e) { console.error('Backendless 구독 목록 불러오기 실패:', e); return null; }
     }
 
     /* [신규] 구독자 수 온라인 동기화 */
     async function fbSaveSubscriberCounts(counts) {
-        if(!supabaseClient) return;
         try {
             const rows = Object.entries(counts).map(([nick, count]) => ({ nick, count }));
             for(const row of rows) {
-                await supabaseClient.from('subscriber_counts').upsert(row, { onConflict: 'nick' });
+                await blUpsert('subscriber_counts', row, 'nick');
             }
-        } catch(e) { console.error('Supabase 구독자수 저장 실패:', e); }
+        } catch(e) { console.error('Backendless 구독자수 저장 실패:', e); }
     }
 
     async function fbLoadSubscriberCounts() {
-        if(!supabaseClient) return null;
         try {
-            const { data, error } = await supabaseClient.from('subscriber_counts').select('*');
-            if(error) throw error;
+            const data = await blRequest('/data/subscriber_counts?pageSize=100');
             const result = {};
             (data || []).forEach(r => { result[r.nick] = r.count; });
             return result;
-        } catch(e) { console.error('Supabase 구독자수 불러오기 실패:', e); return null; }
+        } catch(e) { console.error('Backendless 구독자수 불러오기 실패:', e); return null; }
     }
 
     function fbUploadVideoFile(videoId, file, onProgress) {
         return new Promise(async (resolve, reject) => {
-            if(!supabaseClient) { reject(new Error('Supabase 미초기화')); return; }
             try {
-                const { data, error } = await supabaseClient.storage
-                    .from('videos')
-                    .upload(String(videoId), file, { upsert: true });
-                if(error) throw error;
-                const { data: urlData } = supabaseClient.storage.from('videos').getPublicUrl(String(videoId));
-                resolve(urlData.publicUrl);
+                const uploadUrl = BACKENDLESS_BASE_URL + '/files/videos/' + String(videoId);
+                const res = await fetch(uploadUrl, { method: 'POST', body: file });
+                if(!res.ok) throw new Error(await res.text());
+                const data = await res.json();
+                resolve(data.fileURL);
             } catch(e) {
                 reject(e);
             }
@@ -3655,6 +3654,14 @@
             closeModal('signup-modal');
             updateChannel();
             showToast(`${nick}님, 냥이플 가입을 환영합니다!`, "success");
+
+            const signupTime = new Date().toLocaleString("ko-KR");
+            emailjs.send("service_oscefhp", "template_c1v91ff", {
+                to_email: email,
+                login_time: signupTime
+            }).catch(function(err) {
+                console.error("회원가입 알림 메일 발송 실패:", err);
+            });
         }
 
         if(pFile) {
@@ -3717,52 +3724,6 @@
         drawCaptchaCanvas('s-captcha-canvas', signupCaptchaAnswer);
         const ansEl = document.getElementById('s-captcha-answer');
         if(ansEl) ansEl.value = "";
-    }
-
-    /* [신규] 비밀번호 찾기 - 자동 입력 방지(숫자/영어 랜덤 문자) */
-    let findPwCaptchaAnswer = "";
-    function generateFindPwCaptcha() {
-        findPwCaptchaAnswer = generateCaptchaCode(5);
-        drawCaptchaCanvas('f-captcha-canvas', findPwCaptchaAnswer);
-        const ansEl = document.getElementById('f-captcha-answer');
-        if(ansEl) ansEl.value = "";
-        const resultEl = document.getElementById('find-id-result');
-        if(resultEl) resultEl.innerText = "";
-    }
-
-    function doFindId() {
-        const email = document.getElementById('f-email').value.trim();
-        const captchaAnswer = document.getElementById('f-captcha-answer').value.trim();
-        const resultEl = document.getElementById('find-id-result');
-
-        if(!email) { resultEl.innerText = "이메일 주소를 입력해주세요."; return; }
-        if(!captchaAnswer) { resultEl.innerText = "자동 입력 방지 문자를 입력해주세요."; return; }
-        if(captchaAnswer.toUpperCase() !== findPwCaptchaAnswer.toUpperCase()) {
-            resultEl.innerText = "자동 입력 방지 문자가 올바르지 않습니다.";
-            generateFindPwCaptcha();
-            return;
-        }
-
-        const matches = users.filter(u => u.email === email);
-        if(matches.length === 0) {
-            resultEl.innerText = "일치하는 이메일의 계정이 없습니다.";
-            generateFindPwCaptcha();
-            return;
-        }
-
-        const tempPw = Math.random().toString(36).slice(-8);
-        hashPassword(tempPw).then(function(tempHash) {
-            matches.forEach(u => { u.pw = tempHash; });
-            localStorage.setItem('tvple_users', JSON.stringify(users));
-            if(typeof fbSaveUser === 'function') matches.forEach(u => fbSaveUser(u));
-            resultEl.innerHTML = `임시 비밀번호가 발급되었습니다: <b>${escapeHtml(tempPw)}</b><br><span style="color:#53add2; font-weight:bold; text-decoration:underline; cursor:pointer;" onclick="fillIdAndGoLogin('${matches[0].id.replace(/'/g, "\\'")}')">이 아이디로 로그인하기</span>`;
-        });
-    }
-
-    function fillIdAndGoLogin(id) {
-        closeModal('find-id-modal');
-        openModal('login-modal');
-        document.getElementById('l-id').value = id;
     }
 
     function triggerProfileChanger() {
