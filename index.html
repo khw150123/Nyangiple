@@ -1373,43 +1373,38 @@
 <div id="toast-container"></div>
 
 <!-- [신규] 온라인 공유 기능 - Backendless 연동 -->
+<script src="https://api.backendless.com/sdk/js/latest/backendless.min.js"></script>
 <script>
     const BACKENDLESS_APP_ID = '79DD790D-1DD2-45A3-9344-ED225A1EF7A7';
-    const BACKENDLESS_API_KEY = '0C978774-5375-4789-99FA-1D55F880A4F4';
-    const BACKENDLESS_BASE_URL = 'https://api.backendless.com/' + BACKENDLESS_APP_ID + '/' + BACKENDLESS_API_KEY;
-
-    async function blRequest(path, options) {
-        options = options || {};
-        const headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
-        const res = await fetch(BACKENDLESS_BASE_URL + path, Object.assign({}, options, { headers: headers }));
-        if(!res.ok) {
-            const errText = await res.text();
-            throw new Error('Backendless 오류(' + res.status + '): ' + errText);
-        }
-        if(res.status === 204) return null;
-        return await res.json();
+    const BACKENDLESS_JS_KEY = 'C5FC7244-BDD4-448F-9B96-8D590A280038';
+    try {
+        Backendless.initApp(BACKENDLESS_APP_ID, BACKENDLESS_JS_KEY);
+    } catch(e) {
+        console.error('Backendless 초기화 실패:', e);
     }
 
-    function blEscape(value) {
-        return String(value).replace(/'/g, "\\'");
+    function blEscape(v) {
+        return String(v).replace(/'/g, "''");
     }
 
-    async function blUpsert(table, obj, keyField) {
-        const keyValue = obj[keyField];
-        const whereClause = encodeURIComponent(keyField + "='" + blEscape(keyValue) + "'");
-        const existing = await blRequest('/data/' + table + '?where=' + whereClause);
-        if(existing && existing.length > 0) {
-            const objectId = existing[0].objectId;
-            return blRequest('/data/' + table + '/' + objectId, { method: 'PUT', body: JSON.stringify(obj) });
-        } else {
-            return blRequest('/data/' + table, { method: 'POST', body: JSON.stringify(obj) });
-        }
+    async function blFindByKey(tableName, keyField, keyValue) {
+        const qb = Backendless.DataQueryBuilder.create().setWhereClause(`${keyField} = '${blEscape(keyValue)}'`);
+        const rows = await Backendless.Data.of(tableName).find(qb);
+        return (rows && rows.length > 0) ? rows[0] : null;
+    }
+
+    async function blUpsert(tableName, keyField, keyValue, payload) {
+        const existing = await blFindByKey(tableName, keyField, keyValue);
+        const row = { data: JSON.stringify(payload) };
+        row[keyField] = String(keyValue);
+        if(existing) row.objectId = existing.objectId;
+        return Backendless.Data.of(tableName).save(row);
     }
 
     async function fbLoadAllVideos() {
         try {
-            const data = await blRequest('/data/videos?pageSize=100');
-            return data || [];
+            const rows = await Backendless.Data.of('Videos').find(Backendless.DataQueryBuilder.create().setPageSize(100));
+            return (rows || []).map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
         } catch(e) {
             console.error('Backendless 동영상 목록 불러오기 실패:', e);
             return null;
@@ -1418,7 +1413,7 @@
 
     async function fbSaveVideo(videoObj) {
         try {
-            await blUpsert('videos', videoObj, 'id');
+            await blUpsert('Videos', 'videoId', videoObj.id, videoObj);
         } catch(e) {
             console.error('Backendless 동영상 저장 실패:', e);
         }
@@ -1426,12 +1421,11 @@
 
     async function fbUpdateVideoComments(videoId, comments) {
         try {
-            const whereClause = encodeURIComponent("id='" + blEscape(videoId) + "'");
-            const existing = await blRequest('/data/videos?where=' + whereClause);
-            if(existing && existing.length > 0) {
-                const objectId = existing[0].objectId;
-                await blRequest('/data/videos/' + objectId, { method: 'PUT', body: JSON.stringify({ comments: comments }) });
-            }
+            const existing = await blFindByKey('Videos', 'videoId', videoId);
+            if(!existing) return;
+            const videoObj = JSON.parse(existing.data);
+            videoObj.comments = comments;
+            await Backendless.Data.of('Videos').save({ objectId: existing.objectId, videoId: String(videoId), data: JSON.stringify(videoObj) });
         } catch(e) {
             console.error('Backendless 댓글 저장 실패:', e);
         }
@@ -1439,13 +1433,9 @@
 
     async function fbDeleteVideo(videoId) {
         try {
-            const whereClause = encodeURIComponent("id='" + blEscape(videoId) + "'");
-            const existing = await blRequest('/data/videos?where=' + whereClause);
-            if(existing && existing.length > 0) {
-                const objectId = existing[0].objectId;
-                await blRequest('/data/videos/' + objectId, { method: 'DELETE' });
-            }
-            try { await blRequest('/files/videos/' + String(videoId), { method: 'DELETE' }); } catch(e2) {}
+            const existing = await blFindByKey('Videos', 'videoId', videoId);
+            if(existing) await Backendless.Data.of('Videos').remove(existing);
+            await Backendless.Files.remove(`videos/${videoId}`).catch(()=>{});
         } catch(e) {
             console.error('Backendless 동영상 삭제 실패:', e);
         }
@@ -1455,14 +1445,14 @@
     async function fbSaveUser(userObj) {
         if(!userObj) return;
         try {
-            await blUpsert('users', userObj, 'id');
+            await blUpsert('Users2', 'userKey', userObj.id, userObj);
         } catch(e) { console.error('Backendless 유저 저장 실패:', e); }
     }
 
     async function fbLoadAllUsers() {
         try {
-            const data = await blRequest('/data/users?pageSize=100');
-            return data || [];
+            const rows = await Backendless.Data.of('Users2').find(Backendless.DataQueryBuilder.create().setPageSize(100));
+            return (rows || []).map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
         } catch(e) { console.error('Backendless 유저 목록 불러오기 실패:', e); return null; }
     }
 
@@ -1470,46 +1460,43 @@
     async function fbSaveSubscription(userId, targetName, isSubscribed) {
         if(!userId) return;
         try {
-            const whereClause = encodeURIComponent("user_id='" + blEscape(userId) + "' and target='" + blEscape(targetName) + "'");
-            const existing = await blRequest('/data/subscriptions?where=' + whereClause);
+            const existing = await blFindByKey('Subscriptions', 'userId', userId);
+            let list = existing ? (JSON.parse(existing.data) || []) : [];
             if(isSubscribed) {
-                if(!existing || existing.length === 0) {
-                    await blRequest('/data/subscriptions', { method: 'POST', body: JSON.stringify({ user_id: userId, target: targetName }) });
-                }
+                if(!list.includes(targetName)) list.push(targetName);
             } else {
-                if(existing && existing.length > 0) {
-                    for(const row of existing) {
-                        await blRequest('/data/subscriptions/' + row.objectId, { method: 'DELETE' });
-                    }
-                }
+                list = list.filter(t => t !== targetName);
             }
+            const row = { userId: String(userId), data: JSON.stringify(list) };
+            if(existing) row.objectId = existing.objectId;
+            await Backendless.Data.of('Subscriptions').save(row);
         } catch(e) { console.error('Backendless 구독 저장 실패:', e); }
     }
 
     async function fbLoadSubscriptions(userId) {
         if(!userId) return null;
         try {
-            const whereClause = encodeURIComponent("user_id='" + blEscape(userId) + "'");
-            const data = await blRequest('/data/subscriptions?where=' + whereClause);
-            return (data || []).map(r => r.target);
+            const existing = await blFindByKey('Subscriptions', 'userId', userId);
+            return existing ? (JSON.parse(existing.data) || []) : [];
         } catch(e) { console.error('Backendless 구독 목록 불러오기 실패:', e); return null; }
     }
 
     /* [신규] 구독자 수 온라인 동기화 */
     async function fbSaveSubscriberCounts(counts) {
         try {
-            const rows = Object.entries(counts).map(([nick, count]) => ({ nick, count }));
-            for(const row of rows) {
-                await blUpsert('subscriber_counts', row, 'nick');
+            for(const [nick, count] of Object.entries(counts)) {
+                await blUpsert('SubscriberCounts', 'nick', nick, { count: count });
             }
         } catch(e) { console.error('Backendless 구독자수 저장 실패:', e); }
     }
 
     async function fbLoadSubscriberCounts() {
         try {
-            const data = await blRequest('/data/subscriber_counts?pageSize=100');
+            const rows = await Backendless.Data.of('SubscriberCounts').find(Backendless.DataQueryBuilder.create().setPageSize(100));
             const result = {};
-            (data || []).forEach(r => { result[r.nick] = r.count; });
+            (rows || []).forEach(r => {
+                try { const d = JSON.parse(r.data); result[r.nick] = d.count; } catch(e) {}
+            });
             return result;
         } catch(e) { console.error('Backendless 구독자수 불러오기 실패:', e); return null; }
     }
@@ -1517,11 +1504,8 @@
     function fbUploadVideoFile(videoId, file, onProgress) {
         return new Promise(async (resolve, reject) => {
             try {
-                const uploadUrl = BACKENDLESS_BASE_URL + '/files/videos/' + String(videoId);
-                const res = await fetch(uploadUrl, { method: 'POST', body: file });
-                if(!res.ok) throw new Error(await res.text());
-                const data = await res.json();
-                resolve(data.fileURL);
+                const fileInfo = await Backendless.Files.upload(file, `videos/${videoId}`, true);
+                resolve(fileInfo.fileURL || fileInfo.publicUrl);
             } catch(e) {
                 reject(e);
             }
