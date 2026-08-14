@@ -123,10 +123,14 @@
             width: 100%;
         }
 
-        .frame-wrapper { position: relative; width: 100%; padding: 40px 20px; box-sizing: border-box; }
+        .frame-wrapper { position: relative; width: 100%; padding: 40px 20px; box-sizing: border-box; background: #EFEFEF; }
         .frame-bg { background: #fff; padding: 20px 10px; min-height: 450px; }
 
         .unlucky-title-img { max-width: 100%; height: auto; display: block; margin-bottom: 12px; }
+        /* ===== [신규] 불운의 동영상/32시간 인기/자작 동영상 타이틀 이미지 - PC/가로모드에서도 모바일과 동일한 크기로 고정 ===== */
+        @media (orientation: landscape) {
+            .unlucky-title-img { max-width: 420px; }
+        }
 
         .unlucky-outer-container { position: relative; display: flex; align-items: center; width: 100%; }
         .unlucky-scroll-container { display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; width: 100%; box-sizing: border-box; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
@@ -156,13 +160,16 @@
         .unlucky-shuffle-wrapper img { width: 32px; height: auto; display: block; cursor: pointer; animation: rotateShuffleBtn 8s linear infinite; } 
         @keyframes rotateShuffleBtn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } 
 
-        .home-rank-tabs { display: flex; gap: 0; margin-bottom: 15px; border-bottom: 2px solid #eee; }
+        .home-rank-tabs { display: flex; gap: 0; margin: -20px -10px 15px -10px; padding: 12px 10px 0 10px; background: #EFEFEF; border-bottom: 2px solid #eee; }
         .home-rank-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; box-sizing: border-box; user-select: none; }
-        .home-rank-tab.active { color: #53add2; border-bottom: 2px solid #53add2; }
+        .home-rank-tab.active { color: #53add2; border-bottom: 2px solid #53add2; background: #fff; border-radius: 6px 6px 0 0; }
         /* ===== [신규] 홈 - 마이페이지 탭 (PC/가로모드 전용) ===== */
         .home-rank-tab-mypage-only { display: none; }
+        /* ===== [신규] 홈 랭킹탭 - PC/가로모드 전용 글자 표시 ===== */
+        .tab-label-pc { display: none; }
         @media (orientation: landscape) {
-            .home-rank-tab-mypage-only { display: block; }
+            .tab-label-mobile { display: none; }
+            .tab-label-pc { display: inline; }
         }
         .home-tab-content { display: none; }
         .home-tab-content.active { display: block; }
@@ -404,6 +411,37 @@
         .list-title-mini { font-size:10px; color:#333; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .channel-video-delete-btn { background: #ff3300; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; } .channel-video-delete-btn:hover { background: #cc0000; } .channel-video-edit-btn { background: #53add2; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; margin-right: 4px; } .channel-video-edit-btn:hover { background: #3d8bb0; } #side-video-list.album-mode { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; } #side-video-list.album-mode .list-item { flex-direction: column; padding: 0; border-bottom: none; border: 1px solid #ddd; } #side-video-list.album-mode .list-thumb { width: 100%; aspect-ratio: 16/9; height: auto; } #side-video-list.album-mode .list-info { padding: 8px; } .desc-tooltip { opacity: 0; visibility: hidden; position: absolute; bottom: 110%; left: 50%; margin-left: -90px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 11px; white-space: normal; z-index: 5000; width: 180px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s; } .desc-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: rgba(87,138,182,0.85) transparent transparent transparent; } .unlucky-item:hover .desc-tooltip, .list-item:hover .desc-tooltip { opacity: 1; visibility: visible; } .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; } .modal-content { background: #fff; width: 90%; max-width: 320px; box-sizing: border-box; } .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; } .modal-btn-img { width: 110px; cursor: pointer; align-self: center; margin-top: 5px; } .v-info-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; } .v-info-right-wrapper { display: flex; align-items: center; gap: 15px; flex-shrink: 0; } .jjim-container { display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 5px; } .jjim-btn-img { height: 35px; } .jjim-count { font-size: 14px; font-weight: bold; color: #ff4444; } .share-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .share-btn-img:active { transform: scale(0.9); } .extra-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .extra-btn-img:active { transform: scale(0.9); } .share-hover-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; } .share-hover-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.9); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; } .share-hover-wrap:hover .share-hover-tip { opacity: 1; visibility: visible; } .author-vlist-btn { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .author-vlist-btn:active { transform: scale(0.9); } .tag-image-container { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 24px; } .tag-image-container img { display: block; width: 100%; height: 24px; object-fit: fill; position: absolute; top: 0; left: 0; z-index: 1; } .tag-text-overlay { position: relative; z-index: 2; color: #fff; font-size: 11px; white-space: nowrap; pointer-events: none; font-weight: bold; padding: 0 10px; line-height: 24px; } .tag-list-wrapper .tag-image-container { height: 28px; } .tag-list-wrapper .tag-image-container img { height: 28px; } .tag-list-wrapper .tag-text-overlay { font-size: 12px; line-height: 28px; } .v-capsule-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; } .v-capsule-item { display: flex; align-items: center; gap: 8px; } .v-capsule-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 12px; width: 42px; height: 20px; flex-shrink: 0; } .v-capsule-badge svg { width: 13px; height: 13px; fill: #fff; } .v-capsule-text { font-size: 13px; font-family: sans-serif; font-weight: normal; color: #333; line-height: 20px; } .modal-tag-row { display: flex; align-items: center; gap: 5px; width: 100%; } .modal-tag-row input { flex: 1; } .tag-add-btn-img { height: 24px; cursor: pointer; flex-shrink: 0; } .channel-profile-interactive-img { width: 70px; height: 70px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; flex-shrink:0; transition: opacity 0.2s; } .channel-profile-interactive-img:hover { opacity: 0.8; } .sub-action-btn-img { height: 30px; cursor: pointer; display: inline-block; vertical-align: middle; transition: transform 0.2s; } .sub-action-btn-img:active { transform: scale(0.95); } .channel-summary-card { display: flex; margin-top: 10px; border: 1px solid #e3e3e3; border-radius: 6px; overflow: hidden; background: #fafafa; } .channel-summary-item { flex: 1; text-align: center; padding: 8px 4px; border-right: 1px solid #e3e3e3; } .channel-summary-item:last-child { border-right: none; } .channel-summary-label { font-size: 10px; color: #999; margin-bottom: 3px; } .channel-summary-value { font-size: 13px; font-weight: bold; color: #333; } footer { padding: 20px 10px; text-align: left; border-top: 1px solid #eee; background: #EFEFEF; } .footer-text { font-size: 12px; color: #999; line-height: 1.6; } .blue-text { color: #437DAD; font-weight: bold; } .top-btn { cursor: pointer; text-decoration: none; } 
         
+        /* ===== [신규] PC/가로모드 - 좌측 장르 사이드바 숨김 / 동영상 화면 빈공간 배경 / 관련·인기 동영상 목록 우측 배치 ===== */
+        @media (orientation: landscape) {
+            .sidebar { display: none; }
+            #video-section { background: #EFEFEF; }
+            #player-container {
+                display: grid;
+                grid-template-columns: 1fr 340px;
+                grid-template-areas:
+                    "player    related"
+                    "info      related"
+                    "topclouds popular"
+                    "live      popular"
+                    "comments  popular";
+                gap: 15px;
+                align-items: start;
+            }
+            #fullscreen-player-target { grid-area: player; }
+            #v-detail-info { grid-area: info; }
+            #top-clouds-box { grid-area: topclouds; }
+            #cloud-live-feed-box { grid-area: live; }
+            #related-videos-box { grid-area: related; }
+            #popular-videos-box { grid-area: popular; }
+            #video-comments-section { grid-area: comments; }
+            #home-section .unlucky-item { width: calc((100% - 40px) / 10); min-width: 70px; }
+            #home-section #home-unlucky .unlucky-item, #home-section #home-hot-32h .unlucky-item, #home-section #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 4); min-width: 65px; }
+            #home-section .unlucky-title-text { font-size: 5.5px; padding: 2.5px 2px; }
+        }
+        /* ===== [신규] 관련동영상 제목 옆 링크(쇠사슬) 아이콘 - 동영상 정보 재생 아이콘 뱃지와 동일한 디자인 ===== */
+        .related-link-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 50%; width: 18px; height: 18px; flex-shrink: 0; }
+        .related-link-badge svg { width: 11px; height: 11px; fill: #fff; }
+
         @media (max-width: 768px) { 
             .sidebar { display: none; } 
             header { padding: 8px; min-height: auto; display: flex; align-items: center; justify-content: space-between; } 
@@ -421,6 +459,7 @@
             .nav-icon-btn, .header-upload-btn { height: 45px; font-size: 10px; padding: 0 10px; } 
             .frame-wrapper { padding: 15px 10px; } 
             .frame-bg { padding: 10px 5px; min-height: auto; } 
+            .home-rank-tabs { margin: -10px -5px 15px -5px; padding: 10px 5px 0 5px; } 
             .unlucky-item { width: calc((100% - 10px) / 2); min-width: 130px; } 
             .unlucky-next-btn { height: 32px; margin-left: 5px; } 
             .unlucky-prev-btn { height: 32px; margin-right: 5px; } 
@@ -924,13 +963,13 @@
                 <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="home-lg-notice-btn" onclick="showSection('notice')" title="공지사항">
                 <div class="frame-bg">
                     <div class="home-rank-tabs" id="home-rank-tabs">
-                        <div class="home-rank-tab active" data-tab="recommend" onclick="switchHomeTab('recommend')">추천</div>
-                        <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')">36랭</div>
-                        <div class="home-rank-tab" data-tab="rankDay" onclick="switchHomeTab('rankDay')">일랭</div>
-                        <div class="home-rank-tab" data-tab="rankMonth" onclick="switchHomeTab('rankMonth')">월랭</div>
-                        <div class="home-rank-tab" data-tab="rankJjim" onclick="switchHomeTab('rankJjim')">찜랭</div>
-                        <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')">댓글왕</div>
-                        <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')">자막왕</div>
+                        <div class="home-rank-tab active" data-tab="recommend" onclick="switchHomeTab('recommend')"><span class="tab-label-mobile">추천</span><span class="tab-label-pc">추천 동영상</span></div>
+                        <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')"><span class="tab-label-mobile">36랭</span><span class="tab-label-pc">36h 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankDay" onclick="switchHomeTab('rankDay')"><span class="tab-label-mobile">일랭</span><span class="tab-label-pc">일간 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankMonth" onclick="switchHomeTab('rankMonth')"><span class="tab-label-mobile">월랭</span><span class="tab-label-pc">월간 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankJjim" onclick="switchHomeTab('rankJjim')"><span class="tab-label-mobile">찜랭</span><span class="tab-label-pc">찜 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')"><span class="tab-label-mobile">댓랭</span><span class="tab-label-pc">댓글 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')"><span class="tab-label-mobile">구랭</span><span class="tab-label-pc">구름 랭킹</span></div>
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
@@ -1133,7 +1172,7 @@
                     <div id="cloud-live-feed-list" style="max-height:120px; overflow-y:auto;"></div>
                 </div>
                 <div id="related-videos-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
-                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold;">관련동영상</h4>
+                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold; display:flex; align-items:center; gap:6px;"><span class="related-link-badge"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>관련동영상</h4>
                     <div id="related-videos-list"></div>
                 </div>
                 <div id="popular-videos-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
@@ -2156,7 +2195,7 @@
                             ` : ''}
                         </div>
                         <div style="margin-bottom: 5px; position:relative; display:inline-flex; align-items:center;">
-                            <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = (currentPlayingItem && currentPlayingItem.url) ? currentPlayingItem.url : 'https://khw150123.github.io/Nyangiple.com/'; window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span><span class="share-hover-wrap"><img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="shareNyangiple()"/><span class="share-hover-tip">카카오톡으로 공유하기</span></span>
+                            <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = (video && video.src && video.src !== 'indexeddb_stored') ? video.src : ((currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : null); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span><span class="share-hover-wrap"><img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="shareNyangiple()"/><span class="share-hover-tip">카카오톡으로 공유하기</span></span>
                         </div>
                         ${tagsHtml}
                         <div style="color: #999; font-size: 11px; margin-top: 5px;">업로드됨: ${formatDate(currentPlayingItem.regDate)}${currentPlayingItem.editDate ? `<br>수정됨: ${formatDate(currentPlayingItem.editDate)}` : ''}</div>
@@ -3383,6 +3422,18 @@
                 if (res && res.data) {
                     const blobUrl = URL.createObjectURL(res.data);
                     bindVideoEventAndPlay(blobUrl, item);
+                    /* [신규] 온라인 url이 아직 indexeddb_stored로 남아있으면(예전 업로드 실패/미완료), 이 기기에 남아있는 영상 파일로 자동 재업로드하여 온라인 url을 복구 */
+                    if (item.url === "indexeddb_stored" && typeof fbUploadVideoFile === 'function') {
+                        fbUploadVideoFile(item.id, res.data).then((downloadUrl) => {
+                            item.url = downloadUrl;
+                            const dbTarget = db.find(v => String(v.id) === String(item.id));
+                            if (dbTarget) dbTarget.url = downloadUrl;
+                            try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e2) {}
+                            if (typeof fbSaveVideo === 'function') fbSaveVideo(dbTarget || item);
+                        }).catch((err) => {
+                            console.error('온라인 url 자동 복구 실패:', err);
+                        });
+                    }
                 } else {
                     waitScreen.style.display = "none";
                     errorScreen.style.display = "flex";
