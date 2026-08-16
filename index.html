@@ -48,6 +48,8 @@
         .sliding-menu.open { max-height: 500px; border-width: 1px; } 
 
         .nav-icon-btn { cursor: pointer; display: flex; align-items: center; font-size: 11px; font-weight: bold; width: 100%; height: 50px; box-sizing: border-box; padding: 0 15px; gap: 10px; border-bottom: 1px solid #f5f5f5; }
+        .nav-icon-btn.visited-section { background-color: #ededed; color: #999; }
+        .nav-icon-btn.visited-section img { filter: grayscale(100%); opacity: 0.6; }
         .logo-img { height: 35px; cursor: pointer; flex-shrink: 0; }
 
         .header-upload-btn { background: none; border: none; padding: 0 15px; cursor: pointer; width: 100%; height: 50px; box-sizing: border-box; display: flex; align-items: center; font-size: 11px; font-weight: bold; gap: 10px; border-bottom: 1px solid #f5f5f5; text-align: left; }
@@ -927,16 +929,16 @@
             <img src="https://i.ibb.co/fd18xtDj/Screenshot-20260620-125318-Samsung-Browser-2.png" class="menu-toggle-btn" onclick="toggleSlidingMenu()">
             <div class="menu-loading-spinner"></div>
             <div id="sliding-menu" class="sliding-menu">
-                <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
-                <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
+                <div class="nav-icon-btn" data-section="video" onclick="showSection('video')"><span>동영상</span></div>
+                <div class="nav-icon-btn" data-section="playlist" onclick="showSection('playlist')"><span>재생목록</span></div>
                 <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener" class="nav-icon-btn" style="text-decoration:none; color:#000;">
                     <img src="https://i.ibb.co/tMsS2k3L/images-1-1.png" alt="images-1-1">
                     <span>냥이플 안드로이드 앱 다운로드</span>
                 </a>
-                <div class="nav-icon-btn" onclick="openTargetUserChannel()"><span>채널</span></div>
-                <div class="nav-icon-btn" onclick="showSection('notice')"><span>공지</span></div>
-                <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
-                <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
+                <div class="nav-icon-btn" data-section="channel" onclick="openTargetUserChannel()"><span>채널</span></div>
+                <div class="nav-icon-btn" data-section="notice" onclick="showSection('notice')"><span>공지</span></div>
+                <div class="nav-icon-btn" data-section="mypage" onclick="openMyPage()"><span>마이페이지</span></div>
+                <div class="nav-icon-btn" data-section="history" onclick="showSection('history')"><span>최근 본 동영상</span></div>
                 <div class="header-upload-btn" onclick="openModal('upload-modal')">
                     <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg">
                     <span>업로드</span>
@@ -2606,6 +2608,9 @@
         }
         if(s === 'search-result') showSkeletonBeforeRender(renderSearchResults, ['search-result-list'], false);
         if(s === 'history') renderWatchHistory();
+        const visitedMenuItem = document.querySelector('.nav-icon-btn[data-section="' + s + '"]');
+        document.querySelectorAll('.nav-icon-btn.visited-section').forEach(el => el.classList.remove('visited-section'));
+        if(visitedMenuItem) visitedMenuItem.classList.add('visited-section');
         document.getElementById('sliding-menu').classList.remove('open');
         document.querySelectorAll('.padlet-embed iframe').forEach(f => { f.style.visibility = 'visible'; });
     }
