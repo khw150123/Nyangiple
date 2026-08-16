@@ -11,15 +11,20 @@
     <script>emailjs.init("6SjliBKhSXYtbaVQs");</script>
     <style>
         :root { --border: #eee; }
+        input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(83,173,210,0.5); }
         body, input, textarea, select, button { margin: 0; font-family: 'Malgun Gothic', sans-serif; background: #fff; color: #333; overflow-x: hidden; border-radius: 0 !important; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
-        header { display: flex; align-items: center; justify-content: space-between; height: auto; min-height: 70px; padding: 10px 5px; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 1000; box-sizing: border-box; }
+        header { display: flex; align-items: center; justify-content: space-between; height: auto; min-height: 70px; padding: 10px 5px; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 1100; box-sizing: border-box; }
         .header-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; flex: 1; min-width: 0; }
         .header-right { display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; flex-shrink: 0; }
 
         .menu-container { position: relative; display: flex; flex-direction: column; align-items: flex-start; width: auto; }
         .menu-toggle-btn { height: 35px; cursor: pointer; z-index: 1001; transition: transform 0.3s ease; flex-shrink: 0; }
         .menu-toggle-btn:active { transform: scale(0.9); }
+        .menu-loading-spinner { display: none; position: absolute; top: 0; left: 0; width: 35px; height: 35px; box-sizing: border-box; border: 3px solid rgba(87,138,182,0.25); border-top-color: rgba(87,138,182,0.85); border-radius: 50%; animation: menu-spin 0.7s linear infinite; pointer-events: none; z-index: 1001; }
+        .menu-container.spinning .menu-toggle-btn { visibility: hidden; }
+        .menu-container.spinning .menu-loading-spinner { display: block; }
+        @keyframes menu-spin { to { transform: rotate(360deg); } }
         
         .sliding-menu { 
             display: flex; 
@@ -49,6 +54,12 @@
         .header-upload-btn img, .nav-icon-btn img { height: 28px; object-fit: contain; }
 
         .credit-wrapper { display: none; }
+
+        .logo-hover-tip { opacity: 0; visibility: hidden; position: absolute; top: 100%; left: 0; margin-top: 32px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .logo-hover-tip::after { content: ""; position: absolute; bottom: 100%; left: 20px; border-width: 5px; border-style: solid; border-color: transparent transparent rgba(87,138,182,0.85) transparent; }
+        @media (hover: hover) and (pointer: fine) {
+            .logo-wrap:hover .logo-hover-tip { opacity: 1; visibility: visible; }
+        }
 
         .search-wrapper { position: relative; display: flex; align-items: center; margin-left: 10px; gap: 0; }
         .search-bg-img { height: 54px; width: 293px; object-fit: fill; display: block; cursor: default; position: relative; top: 3px; }
@@ -159,6 +170,15 @@
         .unlucky-shuffle-wrapper a { display: inline-block; } 
         .unlucky-shuffle-wrapper img { width: 32px; height: auto; display: block; cursor: pointer; animation: rotateShuffleBtn 8s linear infinite; } 
         @keyframes rotateShuffleBtn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } 
+
+        /* ===== [신규] 홈 - 추천 탭 박스/그리드 레이아웃 (정렬·위치·간격·크기만 조정, 기존 클래스/색상/기능 변경 없음) ===== */
+        .home-reco-box { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 15px; box-sizing: border-box; overflow: visible; }
+        .home-reco-box .unlucky-title-img { margin-bottom: 10px; }
+        .home-reco-outer .unlucky-prev-btn { position: absolute; left: 4px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 20; }
+        .home-reco-outer .unlucky-next-btn { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 20; }
+        .home-reco-outer .unlucky-prev-btn:active { transform: translateY(-50%) scale(0.9); }
+        .home-reco-outer .unlucky-next-btn:active { transform: translateY(-50%) scale(0.9); }
+        .home-reco-box .unlucky-title-text { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
         .home-rank-tabs { display: flex; gap: 0; margin: -20px -10px 15px -10px; padding: 12px 10px 0 10px; background: #EFEFEF; border-bottom: 2px solid #eee; }
         .home-rank-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; box-sizing: border-box; user-select: none; }
@@ -454,7 +474,8 @@
             .search-input-overlay { width: 160px; font-size: 8.5px; left: 8px; height: 43px; } 
             .menu-container { position: relative; display: flex; order: 3; margin-left: 2px; } 
             .menu-toggle-btn { height: 28px; } 
-            .sliding-menu { width: 170px; left: auto; right: 10px; top: 55px; } 
+            .menu-loading-spinner { width: 28px; height: 28px; }
+            .sliding-menu { width: 100%; left: 0; right: 0; top: 55px; } 
             .sliding-menu.open { max-height: 400px; } 
             .nav-icon-btn, .header-upload-btn { height: 45px; font-size: 10px; padding: 0 10px; } 
             .frame-wrapper { padding: 15px 10px; } 
@@ -875,6 +896,7 @@
         <!-- [신규] 알림함 버튼을 냥이플 로고 바로 아래에 고정 배치 (로고 자체와 다른 요소는 변경 없음) -->
         <div class="logo-wrap" style="position:relative; display:inline-block;">
             <img src="https://i.ibb.co/0yKZy3Sx/Resized-1000043089-removebg-preview-removebg-preview.png" class="logo-img" onclick="showSection('home')" id="logo-img-main">
+            <div class="logo-hover-tip">재밌는 UCC 세상 냥이플!</div>
             <div id="notif-bell" class="notif-bell" onclick="openNotifications()" style="position:absolute; top:100%; left:0; margin-top:4px; cursor:pointer; font-size:16px; display:none; z-index:1002;">
                 🔔<span id="notif-badge" style="position:absolute; top:-4px; right:-6px; background:#ff3300; color:#fff; font-size:9px; font-weight:bold; border-radius:50%; min-width:14px; height:14px; display:none; align-items:center; justify-content:center; padding:1px; line-height:1;"></span>
             </div>
@@ -903,6 +925,7 @@
         
         <div class="menu-container">
             <img src="https://i.ibb.co/fd18xtDj/Screenshot-20260620-125318-Samsung-Browser-2.png" class="menu-toggle-btn" onclick="toggleSlidingMenu()">
+            <div class="menu-loading-spinner"></div>
             <div id="sliding-menu" class="sliding-menu">
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
                 <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
@@ -973,42 +996,46 @@
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
-                    <img src="https://i.ibb.co/MxRGNnrM/Screenshot-20260620-125318-Samsung-Browser-1.png" alt="Screenshot-20260620-125318-Samsung-Browser-1" class="unlucky-title-img">
-                    <div class="unlucky-outer-container">
-                        <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollUnluckyLeft()">
-                        <div id="home-unlucky" class="unlucky-scroll-container"></div>
-                        <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollUnluckyRight()">
-                    </div>
-                    <div class="unlucky-shuffle-wrapper">
-                        <a href="https://ibb.co/F4NFMwmD" onclick="event.preventDefault(); shufflePlayUnlucky();">
-                            <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Screenshot-20260628-092011-Samsung-Browser-1" border="0">
-                        </a>
-                    </div>
-
-                    <div style="margin-top: 35px;"></div>
-                    <img src="https://i.ibb.co/tph1Q2fn/Screenshot-20260630-164342-Samsung-Browser-1.png" alt="Screenshot-20260630-164342-Samsung-Browser-1" class="unlucky-title-img">
-                    <div class="unlucky-outer-container">
-                        <img src="https://i.ibb.co/VcFs78XM/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollHotLeft()">
-                        <div id="home-hot-32h" class="unlucky-scroll-container"></div>
-                        <img src="https://i.ibb.co/4RgbLgzN/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="Screenshot-20260630-164342-Samsung-Browser-2" class="unlucky-next-btn" onclick="scrollHotRight()">
-                    </div>
-                    <div class="unlucky-shuffle-wrapper">
-                        <a href="#" onclick="event.preventDefault(); shufflePlayHot();">
-                            <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle Hot Videos" border="0">
-                        </a>
+                    <div class="home-reco-box">
+                        <img src="https://i.ibb.co/MxRGNnrM/Screenshot-20260620-125318-Samsung-Browser-1.png" alt="Screenshot-20260620-125318-Samsung-Browser-1" class="unlucky-title-img">
+                        <div class="unlucky-outer-container home-reco-outer">
+                            <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollUnluckyLeft()">
+                            <div id="home-unlucky" class="unlucky-scroll-container"></div>
+                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollUnluckyRight()">
+                        </div>
+                        <div class="unlucky-shuffle-wrapper">
+                            <a href="https://ibb.co/F4NFMwmD" onclick="event.preventDefault(); shufflePlayUnlucky();">
+                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Screenshot-20260628-092011-Samsung-Browser-1" border="0">
+                            </a>
+                        </div>
                     </div>
 
-                    <div style="margin-top: 35px;"></div>
-                    <img src="https://i.ibb.co/CpHP1dc4/1783060875685.png" alt="1783060875685" class="unlucky-title-img">
-                    <div class="unlucky-outer-container" style="margin-top:10px;">
-                        <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollMyUploadedLeft()">
-                        <div id="home-my-uploaded" class="unlucky-scroll-container"></div>
-                        <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollMyUploadedRight()">
+                    <div class="home-reco-box">
+                        <img src="https://i.ibb.co/tph1Q2fn/Screenshot-20260630-164342-Samsung-Browser-1.png" alt="Screenshot-20260630-164342-Samsung-Browser-1" class="unlucky-title-img">
+                        <div class="unlucky-outer-container home-reco-outer">
+                            <img src="https://i.ibb.co/VcFs78XM/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollHotLeft()">
+                            <div id="home-hot-32h" class="unlucky-scroll-container"></div>
+                            <img src="https://i.ibb.co/4RgbLgzN/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="Screenshot-20260630-164342-Samsung-Browser-2" class="unlucky-next-btn" onclick="scrollHotRight()">
+                        </div>
+                        <div class="unlucky-shuffle-wrapper">
+                            <a href="#" onclick="event.preventDefault(); shufflePlayHot();">
+                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle Hot Videos" border="0">
+                            </a>
+                        </div>
                     </div>
-                    <div class="unlucky-shuffle-wrapper">
-                        <a href="#" onclick="event.preventDefault(); shufflePlayMyUploaded();">
-                            <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle My Videos" border="0">
-                        </a>
+
+                    <div class="home-reco-box">
+                        <img src="https://i.ibb.co/CpHP1dc4/1783060875685.png" alt="1783060875685" class="unlucky-title-img">
+                        <div class="unlucky-outer-container home-reco-outer" style="margin-top:10px;">
+                            <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollMyUploadedLeft()">
+                            <div id="home-my-uploaded" class="unlucky-scroll-container"></div>
+                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollMyUploadedRight()">
+                        </div>
+                        <div class="unlucky-shuffle-wrapper">
+                            <a href="#" onclick="event.preventDefault(); shufflePlayMyUploaded();">
+                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle My Videos" border="0">
+                            </a>
+                        </div>
                     </div>
                     </div>
 
@@ -1254,6 +1281,9 @@
                     </div>
 
                     <div id="my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
+
+                    <!-- [신규] 마이페이지 - 온라인 업로드 미완료 영상 상태 표시 (기존 요소는 변경 없음, 추가만) -->
+                    <div id="mypage-upload-status"></div>
 
                     <div class="channel-video-list-title" id="channel-list-title-text">채널 동영상 목록</div>
                     <div id="channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
@@ -2546,12 +2576,21 @@
     }
 
     function showSection(s) {
+        const menuBox = document.querySelector('.menu-container');
+        if(menuBox) menuBox.classList.add('spinning');
+        setTimeout(function() {
+            _showSectionImpl(s);
+            if(menuBox) menuBox.classList.remove('spinning');
+        }, 300);
+    }
+
+    function _showSectionImpl(s) {
         if(s !== 'channel' && s !== 'mypage') {
             lastSection = s; 
         }
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
-        const sectionTitleMap = { home: '홈', video: '동영상', channel: '채널 순위', playlist: '재생목록', notice: '공지사항' };
+        const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '재생목록', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
@@ -2663,8 +2702,8 @@
                 <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                     <div class="unlucky-duration-badge">${timeString}</div>
                 </div>
-                <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                 <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
+                <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -2689,8 +2728,8 @@
                     <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="unlucky-duration-badge">${timeString}</div>
                     </div>
-                    <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                     <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
+                    <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                     <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                 </div>`;
             }).join('');
@@ -2713,8 +2752,8 @@
                         <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                             <div class="unlucky-duration-badge">${timeString}</div>
                         </div>
-                        <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                         <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
+                        <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                         <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                     </div>`;
                 }).join('');
@@ -4031,6 +4070,64 @@
         }).join('');
     }
 
+    /* [신규] 마이페이지 - 온라인 업로드 미완료 영상 상태 표시 + 재시도 (기존 함수는 변경 없음, 추가만) */
+    function renderUploadStatusList() {
+        const container = document.getElementById('mypage-upload-status');
+        if(!container) return;
+        if(!user) { container.innerHTML = ''; return; }
+        const failedList = db.filter(v => v.author === user.nick && v.url === 'indexeddb_stored');
+        if(failedList.length === 0) { container.innerHTML = ''; return; }
+        container.innerHTML = `
+            <div style="background:#fff8f0; border:1px solid #ffcc80; padding:12px; margin-bottom:15px; box-sizing:border-box;">
+                <div style="font-size:13px; font-weight:bold; color:#e65100; margin-bottom:8px;">⚠ 온라인 업로드 미완료 영상 (${failedList.length}개)</div>
+                <div style="font-size:11px; color:#888; margin-bottom:8px;">아래 영상은 온라인 서버에 업로드가 완료되지 않아 이 기기에서만 재생됩니다. "재시도"를 눌러 다시 업로드해보세요.</div>
+                ${failedList.map(v => `
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 0; border-top:1px solid #ffe0b2;">
+                        <span style="font-size:12px; color:#333; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.title)}</span>
+                        <button class="channel-video-edit-btn" style="flex-shrink:0;" onclick="retryOnlineUpload(${v.id})" id="retry-upload-btn-${v.id}">재시도</button>
+                    </div>
+                `).join('')}
+            </div>`;
+    }
+
+    function retryOnlineUpload(videoId) {
+        const btn = document.getElementById('retry-upload-btn-' + videoId);
+        if(btn) { btn.innerText = '업로드 중...'; btn.style.pointerEvents = 'none'; }
+        if(!indexedDBInstance) {
+            showToast('잠시 후 다시 시도해주세요.', 'error');
+            if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+            return;
+        }
+        const tx = indexedDBInstance.transaction(["videos"], "readonly");
+        const store = tx.objectStore("videos");
+        const getReq = store.get(Number(videoId));
+        getReq.onsuccess = (e) => {
+            const res = e.target.result;
+            if(!res || !res.data) {
+                showToast('이 기기에 영상 파일이 남아있지 않아 재업로드할 수 없습니다.', 'error');
+                if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+                return;
+            }
+            if(typeof fbUploadVideoFile !== 'function') return;
+            fbUploadVideoFile(videoId, res.data).then((downloadUrl) => {
+                const target = db.find(v => String(v.id) === String(videoId));
+                if(target) target.url = downloadUrl;
+                try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e2) {}
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target || { id: videoId, url: downloadUrl });
+                showToast('온라인 업로드에 성공했습니다!', 'success');
+                renderUploadStatusList();
+            }).catch((err) => {
+                console.error('재업로드 실패:', err);
+                showToast('업로드에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+                if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+            });
+        };
+        getReq.onerror = () => {
+            showToast('이 기기에 영상 파일이 남아있지 않아 재업로드할 수 없습니다.', 'error');
+            if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+        };
+    }
+
     function toggleSubscribeAction(targetName) {
         if(!user) {
             alert("로그인을 해야 구독을 할 수 있습니다.");
@@ -4192,6 +4289,7 @@
 
         renderChannelGenreFilter(activeTargetName);
         renderChannelInternalVideos(activeTargetName);
+        renderUploadStatusList();
         if(currentPlayingItem) updateDetail();
         checkNewSubscriptionVideos();
     }
