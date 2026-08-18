@@ -1488,6 +1488,7 @@
             await blUpsert('Videos', 'videoId', videoObj.id, videoObj);
         } catch(e) {
             console.error('Backendless 동영상 저장 실패:', e);
+            alert('영상 정보 저장 실패: ' + (e && e.message ? e.message : JSON.stringify(e)));
         }
     }
 
