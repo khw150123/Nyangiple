@@ -1483,12 +1483,32 @@
         }
     }
 
+    function blDataURLtoFile(dataUrl, filename) {
+        const arr = dataUrl.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--) { u8arr[n] = bstr.charCodeAt(n); }
+        return new File([u8arr], filename, { type: mime });
+    }
+
     async function fbSaveVideo(videoObj) {
         try {
+            if(videoObj.thumb && typeof videoObj.thumb === 'string' && videoObj.thumb.indexOf('data:') === 0) {
+                try {
+                    const thumbFile = blDataURLtoFile(videoObj.thumb, `thumb_${videoObj.id}.jpg`);
+                    const fileInfo = await Backendless.Files.upload(thumbFile, `thumbs/${videoObj.id}`, true);
+                    videoObj.thumb = (fileInfo && (fileInfo.fileURL || fileInfo.publicUrl)) || videoObj.thumb;
+                } catch(thumbErr) {
+                    console.error('썸네일 온라인 업로드 실패:', thumbErr);
+                    videoObj.thumb = null;
+                }
+            }
             await blUpsert('Videos', 'videoId', videoObj.id, videoObj);
         } catch(e) {
             console.error('Backendless 동영상 저장 실패:', e);
-            alert('영상 정보 저장 실패: ' + (e && e.message ? e.message : JSON.stringify(e)));
         }
     }
 
