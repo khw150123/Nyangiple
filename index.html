@@ -1481,18 +1481,41 @@
         return (rows && rows.length > 0) ? rows[0] : null;
     }
 
+    /* [신규] 같은 키에 대한 upsert가 거의 동시에 여러 번 호출되어도 중복 레코드가 생기지 않도록, 이전 저장이 끝난 뒤 순서대로 처리되게 하는 큐 */
+    const blUpsertQueue = new Map();
+
     async function blUpsert(tableName, keyField, keyValue, payload) {
-        const existing = await blFindByKey(tableName, keyField, keyValue);
-        const row = { data: JSON.stringify(payload) };
-        row[keyField] = String(keyValue);
-        if(existing) row.objectId = existing.objectId;
-        return Backendless.Data.of(tableName).save(row);
+        const lockKey = `${tableName}::${keyField}::${String(keyValue)}`;
+        const prev = blUpsertQueue.get(lockKey) || Promise.resolve();
+        const run = prev.catch(() => {}).then(async () => {
+            const existing = await blFindByKey(tableName, keyField, keyValue);
+            const row = { data: JSON.stringify(payload) };
+            row[keyField] = String(keyValue);
+            if(existing) row.objectId = existing.objectId;
+            return Backendless.Data.of(tableName).save(row);
+        });
+        blUpsertQueue.set(lockKey, run);
+        try {
+            return await run;
+        } finally {
+            if(blUpsertQueue.get(lockKey) === run) blUpsertQueue.delete(lockKey);
+        }
     }
 
     async function fbLoadAllVideos() {
         try {
-            const rows = await Backendless.Data.of('Videos').find(Backendless.DataQueryBuilder.create().setPageSize(100));
-            return (rows || []).map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
+            let all = [];
+            let offset = 0;
+            const pageSize = 100;
+            while(true) {
+                const qb = Backendless.DataQueryBuilder.create().setPageSize(pageSize).setOffset(offset);
+                const rows = await Backendless.Data.of('Videos').find(qb);
+                if(!rows || rows.length === 0) break;
+                all = all.concat(rows);
+                if(rows.length < pageSize) break;
+                offset += pageSize;
+            }
+            return all.map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
         } catch(e) {
             console.error('Backendless 동영상 목록 불러오기 실패:', e);
             return null;
@@ -1560,8 +1583,18 @@
 
     async function fbLoadAllUsers() {
         try {
-            const rows = await Backendless.Data.of('Users2').find(Backendless.DataQueryBuilder.create().setPageSize(100));
-            return (rows || []).map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
+            let all = [];
+            let offset = 0;
+            const pageSize = 100;
+            while(true) {
+                const qb = Backendless.DataQueryBuilder.create().setPageSize(pageSize).setOffset(offset);
+                const rows = await Backendless.Data.of('Users2').find(qb);
+                if(!rows || rows.length === 0) break;
+                all = all.concat(rows);
+                if(rows.length < pageSize) break;
+                offset += pageSize;
+            }
+            return all.map(r => { try { return JSON.parse(r.data); } catch(e) { return null; } }).filter(Boolean);
         } catch(e) { console.error('Backendless 유저 목록 불러오기 실패:', e); return null; }
     }
 
@@ -1601,9 +1634,19 @@
 
     async function fbLoadSubscriberCounts() {
         try {
-            const rows = await Backendless.Data.of('SubscriberCounts').find(Backendless.DataQueryBuilder.create().setPageSize(100));
+            let allRows = [];
+            let offset = 0;
+            const pageSize = 100;
+            while(true) {
+                const qb = Backendless.DataQueryBuilder.create().setPageSize(pageSize).setOffset(offset);
+                const rows = await Backendless.Data.of('SubscriberCounts').find(qb);
+                if(!rows || rows.length === 0) break;
+                allRows = allRows.concat(rows);
+                if(rows.length < pageSize) break;
+                offset += pageSize;
+            }
             const result = {};
-            (rows || []).forEach(r => {
+            allRows.forEach(r => {
                 try { const d = JSON.parse(r.data); result[r.nick] = d.count; } catch(e) {}
             });
             return result;
@@ -1683,6 +1726,7 @@
     let searchQuery = "";
     let userStats = JSON.parse(localStorage.getItem('tvple_stats') || '{"play":0, "cloud":0}');
     let currentPlayingItem = null;
+    const videoUploadInProgress = new Set(); /* [신규] 같은 영상이 중복으로 온라인 재업로드되는 것을 막기 위한 진행중 목록 */
     let currentVideoCloudCount = 0;
     let cloudFeedLog = [];
     let lastSection = 'home'; 
@@ -1999,7 +2043,7 @@
         renderList(); 
     }
 
-    function shoot(txt, type="normal", x=null, y=null) {
+    function shoot(txt, type="normal", x=null, y=null, skipFeedRender=false) {
         if(video.paused) return null;
         const d = document.createElement('div');
         d.className = 'cloud';
@@ -2024,7 +2068,7 @@
         if(cloudFeedLog.length > 30) cloudFeedLog.shift();
         const cloudCountLiveEl = document.getElementById('cloud-count-live');
         if(cloudCountLiveEl) cloudCountLiveEl.textContent = currentVideoCloudCount;
-        renderCloudLiveFeedBox();
+        if(!skipFeedRender) renderCloudLiveFeedBox();
         setTimeout(() => { if(d.parentNode) d.remove(); }, 3300);
         return {x: d.style.left, y: d.style.top};
     }
@@ -2033,12 +2077,15 @@
         if(!currentPlayingItem || !currentPlayingItem.savedClouds) return;
         const currentTime = Math.floor(video.currentTime);
         
+        let anyCloudFiredThisTick = false;
         currentPlayingItem.savedClouds.forEach(c => {
             if(c.time === currentTime && !c.fired) {
-                shoot(c.text, "normal", c.x, c.y);
+                shoot(c.text, "normal", c.x, c.y, true);
                 c.fired = true; 
+                anyCloudFiredThisTick = true;
             }
         });
+        if(anyCloudFiredThisTick) renderCloudLiveFeedBox();
 
         const disp = document.getElementById('custom-time-display');
         if(disp) {
@@ -2605,23 +2652,38 @@
         filterTagName = "";
     }
 
+    let jjimSaveDebounceTimer = null;
     function handleJjim() {
         if(!user) { alert("로그인을 해야 찜할 수 있습니다."); openModal('login-modal'); return; }
         currentPlayingItem.jjim++;
         document.getElementById('jjim-val').innerText = currentPlayingItem.jjim;
-        const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.jjim = currentPlayingItem.jjim; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbSaveVideo === 'function') fbSaveVideo(target); }
 
-        /* [신규] 내 영상에 찜이 달렸을 때 영상 주인에게 알림 */
-        if(currentPlayingItem.author !== user.nick) {
-            pushNotification(currentPlayingItem.author, {
-                type: 'jjim',
-                icon: '❤️',
-                text: `${user.nick}님이 "${currentPlayingItem.title}"을(를) 찜했습니다.`,
-                videoId: currentPlayingItem.id,
-                date: new Date().toISOString()
-            });
-        }
+        /* [수정] 찜은 연타(스팸클릭) 가능한 버튼인데, 클릭할 때마다 서버 저장(fbSaveVideo)과
+           알림 발송(pushNotification)이 그대로 실행되어 연타 시 네트워크 요청이 쏟아지며
+           재생 중 렉을 유발하고, 영상 주인 알림함에도 같은 알림이 클릭 수만큼 중복 저장되던 문제가
+           있었음. 화면의 숫자는 클릭할 때마다 즉시 올리되, 서버 저장/알림은 클릭이 잠시 멈춘 뒤
+           한 번만 보내도록 디바운스 처리. */
+        const itemForSave = currentPlayingItem;
+        clearTimeout(jjimSaveDebounceTimer);
+        jjimSaveDebounceTimer = setTimeout(() => {
+            const target = db.find(v => v.id === itemForSave.id);
+            if(target) {
+                target.jjim = itemForSave.jjim;
+                localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+            }
+
+            /* [신규] 내 영상에 찜이 달렸을 때 영상 주인에게 알림 */
+            if(itemForSave.author !== user.nick) {
+                pushNotification(itemForSave.author, {
+                    type: 'jjim',
+                    icon: '❤️',
+                    text: `${user.nick}님이 "${itemForSave.title}"을(를) 찜했습니다.`,
+                    videoId: itemForSave.id,
+                    date: new Date().toISOString()
+                });
+            }
+        }, 800);
     }
 
     function showSection(s) {
@@ -3420,6 +3482,30 @@
             return;
         }
 
+        /* [신규] 재생은 즉시 시작하고, 다른 사람이 남긴 구름자막/댓글은 뒤에서 조용히 최신으로 갱신 (재생 지연 없음) */
+        if(typeof blFindByKey === 'function') {
+            const targetId = item.id;
+            blFindByKey('Videos', 'videoId', targetId).then((fresh) => {
+                if(!fresh || !fresh.data) return;
+                if(!currentPlayingItem || currentPlayingItem.id !== targetId) return; 
+                try {
+                    const freshData = JSON.parse(fresh.data);
+                    if(freshData.savedClouds) {
+                        freshData.savedClouds.forEach(c => { c.fired = false; });
+                        currentPlayingItem.savedClouds = freshData.savedClouds;
+                    }
+                    if(freshData.comments) currentPlayingItem.comments = freshData.comments;
+                    if(freshData.views !== undefined) currentPlayingItem.views = freshData.views;
+                    if(freshData.jjim !== undefined) currentPlayingItem.jjim = freshData.jjim;
+                    updateDetail();
+                } catch(parseErr) {
+                    console.error('최신 구름자막 파싱 실패:', parseErr);
+                }
+            }).catch((freshErr) => {
+                console.error('최신 구름자막 불러오기 실패:', freshErr);
+            });
+        }
+
         currentPlayingItem = item; 
         showSection('video'); 
         document.getElementById('player-container').style.display = 'block'; 
@@ -3509,8 +3595,9 @@
                 if (res && res.data) {
                     const blobUrl = URL.createObjectURL(res.data);
                     bindVideoEventAndPlay(blobUrl, item);
-                    /* [신규] 온라인 url이 아직 indexeddb_stored로 남아있으면(예전 업로드 실패/미완료), 이 기기에 남아있는 영상 파일로 자동 재업로드하여 온라인 url을 복구 */
-                    if (item.url === "indexeddb_stored" && typeof fbUploadVideoFile === 'function') {
+                    /* [신규] 온라인 url이 아직 indexeddb_stored로 남아있으면(예전 업로드 실패/미완료), 이 기기에 남아있는 영상 파일로 자동 재업로드하여 온라인 url을 복구 (단, 이미 업로드 진행중이면 중복 실행하지 않음 - 재생할 때마다 렉 유발되던 원인) */
+                    if (item.url === "indexeddb_stored" && typeof fbUploadVideoFile === 'function' && !videoUploadInProgress.has(item.id)) {
+                        videoUploadInProgress.add(item.id);
                         fbUploadVideoFile(item.id, res.data).then((downloadUrl) => {
                             item.url = downloadUrl;
                             const dbTarget = db.find(v => String(v.id) === String(item.id));
@@ -3519,6 +3606,8 @@
                             if (typeof fbSaveVideo === 'function') fbSaveVideo(dbTarget || item);
                         }).catch((err) => {
                             console.error('온라인 url 자동 복구 실패:', err);
+                        }).finally(() => {
+                            videoUploadInProgress.delete(item.id);
                         });
                     }
                 } else {
@@ -3589,8 +3678,7 @@
                 });
             }
         };
-        userStats.play++; updateChannel(); renderList(); if(document.getElementById('home-section').classList.contains('active')) refreshUnluckyList();
-        recordWatchHistory(item);
+        userStats.play++; updateChannel(); recordWatchHistory(item);
     }
 
     function goToUnluckySection() {
@@ -4157,6 +4245,12 @@
                 return;
             }
             if(typeof fbUploadVideoFile !== 'function') return;
+            if(videoUploadInProgress.has(Number(videoId))) {
+                showToast('이미 업로드가 진행중입니다.', 'error');
+                if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+                return;
+            }
+            videoUploadInProgress.add(Number(videoId));
             fbUploadVideoFile(videoId, res.data).then((downloadUrl) => {
                 const target = db.find(v => String(v.id) === String(videoId));
                 if(target) target.url = downloadUrl;
@@ -4168,6 +4262,8 @@
                 console.error('재업로드 실패:', err);
                 showToast('업로드에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
                 if(btn) { btn.innerText = '재시도'; btn.style.pointerEvents = ''; }
+            }).finally(() => {
+                videoUploadInProgress.delete(Number(videoId));
             });
         };
         getReq.onerror = () => {
@@ -4833,7 +4929,11 @@
     function submitCloudText(txt, clickX, clickY) {
         const pos = shoot(txt, "normal", clickX, clickY); 
         userStats.cloud++; 
-        updateChannel(); 
+        /* [수정] 자막 등록마다 채널 페이지 전체(프로필/배너/작성자 전체 영상목록/업로드 상태 등)를
+           다시 그리던 updateChannel() 호출을 제거 - 재생 화면에는 보이지도 않는 부분을 매번 다시 그려서
+           자막을 달 때마다 렉이 발생하던 원인이었음. 통계는 저장만 해두고, 채널 화면은 실제로
+           열람할 때 updateChannel()이 최신 값을 그대로 읽어가므로 문제 없음. */
+        localStorage.setItem('tvple_stats', JSON.stringify(userStats));
         
         if(currentPlayingItem) {
             if(!currentPlayingItem.savedClouds) currentPlayingItem.savedClouds = [];
@@ -5391,10 +5491,13 @@
         if (typeof fbLoadAllVideos !== 'function') return;
         fbLoadAllVideos().then((onlineVideos) => {
             if (!onlineVideos) return;
+            const onlineIds = new Set(onlineVideos.map((ov) => String(ov.id)));
             onlineVideos.forEach((ov) => {
                 const idx = db.findIndex((v) => String(v.id) === String(ov.id));
                 if (idx >= 0) { db[idx] = ov; } else { db.push(ov); }
             });
+            /* [수정] 다른 기기에서 삭제된 영상은 이 기기의 로컬 목록에서도 제거 (단, 아직 온라인 업로드가 안 된 이 기기만의 영상은 보존) */
+            db = db.filter((v) => onlineIds.has(String(v.id)) || v.url === 'indexeddb_stored');
             try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
             renderList();
         });
@@ -5424,7 +5527,8 @@
         if(typeof fbLoadSubscriptions === 'function' && user) {
             fbLoadSubscriptions(user.id).then((onlineSubs) => {
                 if(!onlineSubs) return;
-                onlineSubs.forEach(s => { if(!subscriptions.includes(s)) subscriptions.push(s); });
+                /* [수정] 다른 기기에서 구독취소한 것도 이 기기에 반영되도록, 병합이 아니라 온라인 상태를 그대로 신뢰 */
+                subscriptions = onlineSubs.slice();
                 try { localStorage.setItem('tvple_subscriptions', JSON.stringify(subscriptions)); } catch(e) {}
             });
         }
