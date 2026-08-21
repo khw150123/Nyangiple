@@ -3394,6 +3394,13 @@
         const tempVideo = document.createElement('video');
         tempVideo.src = tempUrl;
         tempVideo.muted = true;
+        tempVideo.playsInline = true;
+        tempVideo.preload = 'auto';
+        /* [수정] 화면에 붙어있지 않은(detached) video 엘리먼트는 일부 브라우저에서
+           loadeddata/seeked 이벤트가 불안정하게 동작해 업로드가 멈추는 원인이 됨.
+           보이지 않게 스타일만 주고 실제 DOM에 추가해 디코딩이 정상적으로 이뤄지게 함. */
+        tempVideo.style.cssText = 'position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; pointer-events:none;';
+        document.body.appendChild(tempVideo);
         tempVideo.onloadedmetadata = () => {
             const quality = getRealQuality(tempVideo);
             const durationText = formatVideoDuration(tempVideo.duration);
@@ -3459,6 +3466,7 @@
 
                 closeModal('upload-modal'); initUI(); showSection('video'); playImmediately(n);
                 URL.revokeObjectURL(tempUrl);
+                if(tempVideo.parentNode) tempVideo.parentNode.removeChild(tempVideo);
 
                 /* [신규] 업로드 버튼/진행률 바 상태 원복 + 완료 토스트 */
                 const btnEl = document.getElementById('upload-submit-btn');
@@ -3500,7 +3508,10 @@
                 };
 
                 const captureTime = Math.min(0.5, (tempVideo.duration || 1) / 2);
+                let seekedHandled = false;
                 const onSeeked = () => {
+                    if(seekedHandled) return;
+                    seekedHandled = true;
                     tempVideo.removeEventListener('seeked', onSeeked);
                     /* requestVideoFrameCallback이 있으면 실제 프레임 페인트 완료 후 캡처, 없으면 짧은 지연 후 캡처 */
                     if(typeof tempVideo.requestVideoFrameCallback === 'function') {
@@ -3512,6 +3523,8 @@
                 const startSeek = () => {
                     tempVideo.addEventListener('seeked', onSeeked);
                     tempVideo.currentTime = captureTime;
+                    /* [수정] 안전장치: seeked 이벤트가 일정 시간 안에 오지 않으면(브라우저별 편차) 그냥 현재 상태로 캡처 진행 - 업로드가 무한 대기하는 것을 방지 */
+                    setTimeout(onSeeked, 2000);
                 };
                 /* readyState 2(HAVE_CURRENT_DATA) 이상이면 이미 첫 프레임이 있으므로 바로 seek,
                    아니면 loadeddata를 기다렸다가 seek */
@@ -3519,8 +3532,17 @@
                     startSeek();
                 } else {
                     tempVideo.addEventListener('loadeddata', startSeek, { once: true });
+                    /* [수정] 안전장치: loadeddata 이벤트가 일정 시간 안에 오지 않으면 그냥 seek 진행 - 업로드가 무한 대기하는 것을 방지 */
+                    setTimeout(() => { tempVideo.removeEventListener('loadeddata', startSeek); startSeek(); }, 2000);
                 }
             }
+        };
+        /* [수정] 안전장치: 영상 파일 자체를 읽지 못해 onloadedmetadata가 아예 발생하지 않는 경우(손상된 파일 등)
+           업로드 버튼이 계속 비활성 상태로 멈추는 것을 방지 */
+        tempVideo.onerror = () => {
+            if(submitBtn) { submitBtn.dataset.uploading = '0'; submitBtn.style.opacity = '1'; submitBtn.style.pointerEvents = 'auto'; }
+            if(tempVideo.parentNode) tempVideo.parentNode.removeChild(tempVideo);
+            showToast("영상 파일을 읽을 수 없습니다. 다른 파일로 시도해주세요.", "error");
         };
     }
 
