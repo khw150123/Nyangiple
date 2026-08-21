@@ -3471,22 +3471,55 @@
                 reader.onload = (e) => resizeThumbDataUrl(e.target.result, 480, finalizeUpload);
                 reader.readAsDataURL(thumbFile);
             } else {
-                const captureTime = Math.min(0.5, (tempVideo.duration || 1) / 2);
-                const onSeeked = () => {
-                    tempVideo.removeEventListener('seeked', onSeeked);
+                /* [수정] onloadedmetadata 직후엔 아직 실제 프레임이 디코딩되지 않아 seek 후에도
+                   캔버스가 까맣게 캡처되는 경우가 있음. loadeddata(첫 프레임 디코딩 완료)를 먼저
+                   기다린 뒤 seek 하도록 변경. 또한 videoWidth가 0인 등 캡처 실패 시
+                   한 번 더 재시도하고, 그래도 실패하면 null로 폴백. */
+                const doCapture = (attempt) => {
                     try {
-                        const scale = Math.min(1, 480 / (tempVideo.videoWidth || 480));
+                        if(!tempVideo.videoWidth || !tempVideo.videoHeight) {
+                            if(attempt < 3) { setTimeout(() => doCapture(attempt + 1), 150); return; }
+                            finalizeUpload(null); return;
+                        }
+                        const scale = Math.min(1, 480 / tempVideo.videoWidth);
                         const canvas = document.createElement('canvas');
-                        canvas.width = Math.round((tempVideo.videoWidth || 320) * scale);
-                        canvas.height = Math.round((tempVideo.videoHeight || 180) * scale);
+                        canvas.width = Math.round(tempVideo.videoWidth * scale);
+                        canvas.height = Math.round(tempVideo.videoHeight * scale);
                         canvas.getContext('2d').drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
-                        finalizeUpload(canvas.toDataURL('image/jpeg', 0.8));
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        /* 완전히 검은 프레임(디코딩 전)일 가능성이 있으면 한 번 더 재시도 */
+                        if(dataUrl.length < 500 && attempt < 3) {
+                            setTimeout(() => doCapture(attempt + 1), 150);
+                            return;
+                        }
+                        finalizeUpload(dataUrl);
                     } catch(err) {
+                        if(attempt < 3) { setTimeout(() => doCapture(attempt + 1), 150); return; }
                         finalizeUpload(null);
                     }
                 };
-                tempVideo.addEventListener('seeked', onSeeked);
-                tempVideo.currentTime = captureTime;
+
+                const captureTime = Math.min(0.5, (tempVideo.duration || 1) / 2);
+                const onSeeked = () => {
+                    tempVideo.removeEventListener('seeked', onSeeked);
+                    /* requestVideoFrameCallback이 있으면 실제 프레임 페인트 완료 후 캡처, 없으면 짧은 지연 후 캡처 */
+                    if(typeof tempVideo.requestVideoFrameCallback === 'function') {
+                        tempVideo.requestVideoFrameCallback(() => doCapture(0));
+                    } else {
+                        setTimeout(() => doCapture(0), 100);
+                    }
+                };
+                const startSeek = () => {
+                    tempVideo.addEventListener('seeked', onSeeked);
+                    tempVideo.currentTime = captureTime;
+                };
+                /* readyState 2(HAVE_CURRENT_DATA) 이상이면 이미 첫 프레임이 있으므로 바로 seek,
+                   아니면 loadeddata를 기다렸다가 seek */
+                if(tempVideo.readyState >= 2) {
+                    startSeek();
+                } else {
+                    tempVideo.addEventListener('loadeddata', startSeek, { once: true });
+                }
             }
         };
     }
