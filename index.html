@@ -569,6 +569,12 @@
 
         /* ===== 추가 기능 스타일 (기존 스타일 변경 없음) ===== */
         #cloud-density-btn, #speed-toggle-btn { font-size: 10px !important; white-space: nowrap; padding: 4px 6px !important; }
+
+        /* ===== [신규] 구름 자막 크기 조절 ===== */
+        #cloud-layer .cloud { font-size: calc(14px * var(--cloud-size-scale, 1)); }
+        @media (max-width: 768px) { #cloud-layer .cloud { font-size: calc(11px * var(--cloud-size-scale, 1)); } }
+        #cloud-size-btn { font-size: 10px !important; white-space: nowrap; padding: 4px 6px !important; }
+        @media (max-width: 768px) { #cloud-size-btn { font-size: 11px !important; padding: 5px 7px !important; } }
         .notif-bell { user-select: none; }
         .backup-link-text { color: #53add2; font-weight: bold; text-decoration: underline; cursor: pointer; }
         .playlist-toggle-text:hover { opacity: 0.8; }
@@ -1188,6 +1194,7 @@
                         <div class="ctrl-right-group">
                             <button class="ctrl-btn" id="speed-toggle-btn" onclick="cyclePlaybackSpeed()" title="재생 속도 조절">1x</button>
                             <button class="ctrl-btn" id="cloud-density-btn" onclick="toggleCloudDensity()" title="구름 자막 밀도 조절">자막 많음</button>
+                            <button class="ctrl-btn" id="cloud-size-btn" onclick="toggleCloudSize()" title="구름 자막 크기 조절">크기 보통</button>
                             <button class="ctrl-btn" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 토글 (클릭한 위치에 자막이 달립니다)">
                                 <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
                             </button>
@@ -2171,6 +2178,28 @@
         localStorage.setItem('tvple_cloud_density', cloudDensityLevel);
         const btn = document.getElementById('cloud-density-btn');
         if(btn) btn.innerText = cloudDensityLevels[cloudDensityLevel].label;
+    }
+
+    /* [신규] 구름 자막 크기 조절 */
+    const cloudSizeLevels = [
+        { label: '크기 작게', scale: 0.75 },
+        { label: '크기 보통', scale: 1 },
+        { label: '크기 크게', scale: 1.4 },
+        { label: '크기 매우 크게', scale: 1.9 }
+    ];
+    let cloudSizeLevel = parseInt(localStorage.getItem('tvple_cloud_size') || "1");
+    if (isNaN(cloudSizeLevel) || cloudSizeLevel < 0 || cloudSizeLevel >= cloudSizeLevels.length) cloudSizeLevel = 1;
+
+    function applyCloudSize() {
+        document.documentElement.style.setProperty('--cloud-size-scale', cloudSizeLevels[cloudSizeLevel].scale);
+        const btn = document.getElementById('cloud-size-btn');
+        if(btn) btn.innerText = cloudSizeLevels[cloudSizeLevel].label;
+    }
+
+    function toggleCloudSize() {
+        cloudSizeLevel = (cloudSizeLevel + 1) % cloudSizeLevels.length;
+        localStorage.setItem('tvple_cloud_size', cloudSizeLevel);
+        applyCloudSize();
     }
 
     function cyclePlaybackSpeed() {
@@ -5660,6 +5689,7 @@
     if(initialSideList) initialSideList.classList.toggle('album-mode', currentDisplay === 'album');
     const initialDensityBtn = document.getElementById('cloud-density-btn');
     if(initialDensityBtn) initialDensityBtn.innerText = cloudDensityLevels[cloudDensityLevel].label;
+    applyCloudSize();
     checkNewSubscriptionVideos();
 
     const initialInfiniteScrollBtn = document.getElementById('infinite-scroll-toggle-text');
