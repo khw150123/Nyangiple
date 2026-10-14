@@ -433,6 +433,9 @@
         #home-channel-genre-filter-bar .filter-item, #home-channel-genre-filter-bar .filter-item.active,
         #channel-genre-filter-bar .filter-item, #channel-genre-filter-bar .filter-item.active { color: #000 !important; }
         .home-rank-tab.active { color: #000 !important; }
+        /* ===== [신규] 홈 - 이동(<, >) 버튼을 누르면 해당 방향 가장자리에 버튼 색의 반투명 띠가 1초 페이드인, 5초 뒤 사라짐 ===== */
+        .scroll-hold-overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease; z-index: 15; }
+        .scroll-hold-overlay.show { opacity: 1; transition: opacity 1s ease; }
         #side-video-list { display: flex; flex-wrap: wrap; gap: 0; } 
         .list-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; gap: 10px; background: #fff; width: 100%; box-sizing: border-box; position: relative; } 
         .list-thumb { width: 110px; height: 65px; background: #333; flex-shrink: 0; position: relative; } 
@@ -471,7 +474,7 @@
             #video-comments-section { grid-area: comments; }
             #home-section .unlucky-item { width: calc((100% - 40px) / 10); min-width: 70px; }
             #home-section #home-unlucky .unlucky-item, #home-section #home-hot-32h .unlucky-item, #home-section #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 4); min-width: 65px; }
-            #home-section .unlucky-title-text { font-size: 5.5px; padding: 2.5px 2px; }
+            #home-section .unlucky-title-text { font-size: 11px; padding: 5px 4px; } /* [수정] 가로모드 홈 영상 제목이 너무 작아서(5.5px) 기본 크기로 확대 */
         }
         /* ===== [신규] 관련동영상 제목 옆 링크(쇠사슬) 아이콘 - 동영상 정보 재생 아이콘 뱃지와 동일한 디자인 ===== */
         .related-link-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 50%; width: 18px; height: 18px; flex-shrink: 0; }
@@ -481,15 +484,15 @@
             .sidebar { display: none; } 
             header { padding: 8px; min-height: auto; display: flex; align-items: center; justify-content: space-between; } 
             .header-left { flex: initial; width: auto; display: flex; flex-direction: row; align-items: center; } 
-            .logo-img { height: 28px; } 
+            .logo-img { height: 34px; } 
             .header-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 0; gap: 5px; } 
             .search-wrapper { position: relative; display: flex; align-items: center; margin-left: auto; margin-right: auto; gap: 0; } 
             .search-bg-img { height: 43px; width: 200px; object-fit: fill; display: block; } 
             .search-btn-img { height: 28px; width: 28px; object-fit: fill; display: block; margin-left: -1px; } 
             .search-input-overlay { width: 160px; font-size: 8.5px; left: 8px; height: 43px; } 
             .menu-container { position: relative; display: flex; order: 3; margin-left: 2px; } 
-            .menu-toggle-btn { height: 28px; } 
-            .menu-loading-spinner { width: 28px; height: 28px; }
+            .menu-toggle-btn { height: 36px; } 
+            .menu-loading-spinner { width: 36px; height: 36px; }
             .sliding-menu { width: 100%; left: 0; right: 0; top: 55px; } 
             .sliding-menu.open { max-height: 400px; } 
             .nav-icon-btn, .header-upload-btn { height: 45px; font-size: 10px; padding: 0 10px; } 
@@ -1368,11 +1371,7 @@
 
         <footer>
             <p class="footer-text">
-                <span class="danger-help-wrap">
-                    <span class="backup-link-text" style="color:#437DAD;" onclick="deleteAllData()">데이터 삭제</span>
-                    <span class="danger-help-tip">모든 데이터를 삭제할 수 있습니다.</span>
-                </span>
-                &nbsp;&nbsp;<span class="blue-text top-btn" onclick="showSection('notice')">공지사항</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
+                <span class="blue-text top-btn" onclick="showSection('notice')">공지사항</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
                 <span style="color:#000;">©SINCE 2026</span> <span class="blue-text">Nyangiple.</span>
@@ -2909,7 +2908,7 @@
         } else {
             const myUploadedVideos = db.filter(v => v.author === user.nick);
             if (myUploadedVideos.length === 0) {
-                myUploadedContainer.innerHTML = "<div style='font-size:6px; color:#888; padding:20px; text-align:center; width:100%;'>올린 동영상이 없습니다.</div>";
+                myUploadedContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px; text-align:center; width:100%;'>올린 동영상이 없습니다.</div>";
             } else {
                 myUploadedContainer.innerHTML = myUploadedVideos.map(v => {
                     const timeString = v.playTime || "03:45";
@@ -3650,6 +3649,7 @@
         if(searchingIndicator) searchingIndicator.style.display = "none";
         const loadingMsgScreenInit = document.getElementById('wait-loading-msg-screen');
         if(loadingMsgScreenInit) loadingMsgScreenInit.style.display = "none";
+        cancelVideoPrefetch();
         
         if(currentPlayingItem.savedClouds) {
             currentPlayingItem.savedClouds.forEach(c => c.fired = false);
@@ -3669,12 +3669,56 @@
         updateDetail(); 
     }
     
+    /* [신규] 온라인(백엔드레스) 영상은 재생 전에 통째로 미리 내려받아 재생 → 재생 중 끊김(버퍼링) 방지.
+       실패/너무 큰 파일/시간초과 시에는 기존처럼 주소로 바로 재생 */
+    let videoPrefetch = null;
+    const VIDEO_PREFETCH_MAX_BYTES = 250 * 1024 * 1024;
+    const VIDEO_PREFETCH_TIMEOUT_MS = 30000;
+    function cancelVideoPrefetch() {
+        if(videoPrefetch) {
+            try { if(videoPrefetch.controller) videoPrefetch.controller.abort(); } catch(e) {}
+            if(videoPrefetch.blobUrl) { try { URL.revokeObjectURL(videoPrefetch.blobUrl); } catch(e) {} }
+        }
+        videoPrefetch = null;
+    }
+    function startVideoPrefetch(item) {
+        cancelVideoPrefetch();
+        if(!item || !item.url || item.url === "indexeddb_stored" || !/^https?:/i.test(item.url)) return;
+        if(typeof fetch !== 'function' || typeof AbortController === 'undefined') return;
+        const controller = new AbortController();
+        const entry = { id: item.id, controller: controller, blobUrl: null, done: false, promise: null };
+        entry.promise = fetch(item.url, { signal: controller.signal })
+            .then(res => {
+                if(!res.ok) throw new Error('http ' + res.status);
+                const len = Number(res.headers.get('content-length')) || 0;
+                if(len > VIDEO_PREFETCH_MAX_BYTES) throw new Error('too large');
+                return res.blob();
+            })
+            .then(blob => {
+                if(videoPrefetch !== entry) return null; /* 그 사이 다른 영상으로 바뀜 */
+                entry.blobUrl = URL.createObjectURL(blob);
+                entry.done = true;
+                return entry.blobUrl;
+            })
+            .catch(() => { entry.done = true; return null; });
+        videoPrefetch = entry;
+    }
+    function takePrefetchedVideoUrl(item) {
+        if(videoPrefetch && item && String(videoPrefetch.id) === String(item.id) && videoPrefetch.blobUrl) {
+            const u = videoPrefetch.blobUrl;
+            videoPrefetch = null;
+            return u;
+        }
+        return null;
+    }
+
     function startWaitAndPlay() { 
         const playBtn = document.getElementById('v-play-btn');
         const searchingIndicator = document.getElementById('wait-searching-indicator');
         
         if(playBtn.dataset.playing === '1') return;
         playBtn.dataset.playing = '1';
+        startVideoPrefetch(currentPlayingItem);
 
         playBtn.style.opacity = "0";
         playBtn.style.transform = "scale(0.8)";
@@ -3690,8 +3734,20 @@
                 if(searchingIndicator) searchingIndicator.style.display = "flex";
                 
                 setTimeout(() => { 
-                    if(searchingIndicator) searchingIndicator.style.display = "none";
-                    playImmediately(currentPlayingItem); 
+                    const finishWait = () => {
+                        if(searchingIndicator) searchingIndicator.style.display = "none";
+                        playImmediately(currentPlayingItem); 
+                    };
+                    const entry = videoPrefetch;
+                    if(entry && !entry.done) {
+                        let finished = false;
+                        let guard = null;
+                        const go = () => { if(finished) return; finished = true; clearTimeout(guard); finishWait(); };
+                        guard = setTimeout(() => { try { entry.controller.abort(); } catch(e) {} go(); }, VIDEO_PREFETCH_TIMEOUT_MS);
+                        entry.promise.then(go);
+                    } else {
+                        finishWait();
+                    }
                 }, 2000);
             }, 300);
             
@@ -3756,7 +3812,7 @@
                 errorScreen.style.display = "flex";
             };
         } else if (item.url && item.url !== "indexeddb_stored") {
-            bindVideoEventAndPlay(item.url, item);
+            bindVideoEventAndPlay(takePrefetchedVideoUrl(item) || item.url, item);
         } else {
             waitScreen.style.display = "none";
             errorScreen.style.display = "flex";
@@ -5697,6 +5753,65 @@
             });
         }
     })();
+</script>
+<script>
+/* [신규] 홈 - 이동(<, >) 버튼을 누르면 반투명 띠 1초 페이드인 → 5초 뒤 사라짐 (모바일/PC 공통, 기존 클릭 동작은 그대로) */
+(function() {
+    var SHOW_MS = 5000; /* 완전히 나타난 뒤 유지되는 시간 */
+    var FADE_IN_MS = 1000;
+    var RED_IMGS = ['4RgbLgzN', 'VcFs78XM'];
+    function colorOf(btn) {
+        var src = btn.getAttribute('src') || '';
+        for (var i = 0; i < RED_IMGS.length; i++) {
+            if (src.indexOf(RED_IMGS[i]) > -1) return 'rgba(217,82,78,0.5)';
+        }
+        return 'rgba(91,191,223,0.5)';
+    }
+    function setup(btn) {
+        var timer = null, overlay = null;
+        function place() {
+            var wrap = btn.parentElement;
+            if (!wrap) return false;
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'scroll-hold-overlay';
+                wrap.appendChild(overlay);
+            }
+            if (window.getComputedStyle(btn).position === 'static') {
+                btn.style.position = 'relative';
+                btn.style.zIndex = '21';
+            }
+            overlay.style.background = colorOf(btn);
+            var pad = 2;
+            if (btn.classList.contains('unlucky-next-btn')) {
+                overlay.style.left = Math.max(0, btn.offsetLeft - pad) + 'px';
+                overlay.style.right = '0px';
+            } else {
+                overlay.style.left = '0px';
+                overlay.style.right = Math.max(0, wrap.clientWidth - (btn.offsetLeft + btn.offsetWidth) - pad) + 'px';
+            }
+            return true;
+        }
+        function start() {
+            if (!place()) return;
+            clearTimeout(timer);
+            if (!overlay.classList.contains('show')) {
+                void overlay.offsetWidth;
+                overlay.classList.add('show');
+            }
+            timer = setTimeout(function() {
+                overlay.classList.remove('show');
+            }, FADE_IN_MS + SHOW_MS);
+        }
+        btn.addEventListener('pointerdown', start);
+    }
+    function init() {
+        var btns = document.querySelectorAll('.unlucky-next-btn, .unlucky-prev-btn');
+        for (var i = 0; i < btns.length; i++) setup(btns[i]);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
 </script>
 </body>
 </html>
