@@ -432,6 +432,8 @@
         #category-list-container .filter-item, #category-list-container .filter-item.active,
         #home-channel-genre-filter-bar .filter-item, #home-channel-genre-filter-bar .filter-item.active,
         #channel-genre-filter-bar .filter-item, #channel-genre-filter-bar .filter-item.active { color: #000 !important; }
+        #sort-filters .filter-item, #sort-filters .filter-item.active,
+        #display-filters .filter-item, #display-filters .filter-item.active { color: #000 !important; }
         .home-rank-tab.active { color: #000 !important; }
         /* ===== [신규] 홈 - 이동(<, >) 버튼을 누르면 해당 방향 가장자리에 버튼 색의 반투명 띠가 1초 페이드인, 5초 뒤 사라짐 ===== */
         .scroll-hold-overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease; z-index: 15; }
@@ -747,6 +749,42 @@
         .mypage-tab-bar { display: flex; gap: 0; margin-bottom: 12px; border-bottom: 2px solid #eee; }
         .mypage-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
         .mypage-tab.active { color: #53add2; border-bottom: 2px solid #53add2; }
+        /* [신규] 프로필 화면(마이페이지/상대 프로필) 새 UI */
+        .pf-avatar { width:100px; height:100px; border-radius:50%; object-fit:cover; border:1px solid #ddd; background:#f4f4f4; flex-shrink:0; cursor:default; }
+        .pf-avatar.me { cursor:pointer; }
+        .pf-avatar.me:hover { opacity:0.85; }
+        .pf-nick { font-size:18px; font-weight:bold; color:#222; word-break:break-all; }
+        .pf-radio-bar { display:flex; justify-content:flex-start; gap:26px; flex-wrap:wrap; border-bottom:none; margin:16px 0 12px; padding:0 4px; }
+        .pf-radio-bar .mypage-tab { flex:none; display:inline-flex; align-items:center; gap:8px; padding:0; border-bottom:none; margin-bottom:0; font-size:13px; font-weight:normal; color:#333; text-align:left; }
+        .pf-radio-bar .mypage-tab::before { content:""; width:20px; height:20px; box-sizing:border-box; border:2px solid #757575; border-radius:50%; background:#fff; flex-shrink:0; }
+        .pf-radio-bar .mypage-tab.active { color:#333; border-bottom:none; }
+        .pf-radio-bar .mypage-tab.active::before { border-color:#ec407a; background:radial-gradient(circle, #ec407a 0, #ec407a 5px, #fff 6px); }
+        .pf-refresh-btn { display:block; margin:0 auto 12px; width:36px; height:36px; border:none; background:#0d4a6b; cursor:pointer; padding:0; line-height:0; }
+        .pf-refresh-btn:hover { background:#0a3b55; }
+        .pf-refresh-btn svg { width:20px; height:20px; fill:#fff; }
+        .pf-refresh-btn.spin svg { animation:pfSpin 0.6s linear; }
+        @keyframes pfSpin { to { transform:rotate(360deg); } }
+        #my-info-detail:empty, #home-my-info-detail:empty { display:none; }
+        .pf-edit-box { margin-top:28px; padding:16px 0 4px; border-top:1px solid #e6e6e6; box-sizing:border-box; text-align:center; }
+        .pf-edit-title { font-size:14px; font-weight:bold; color:#222; margin-bottom:12px; }
+        .pf-edit-photo-row { display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+        .pf-edit-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; text-align:left; }
+        .pf-edit-row label { flex:0 0 70px; font-size:12px; font-weight:bold; color:#333; }
+        .pf-edit-row input { flex:1; min-width:0; padding:8px 10px; border:1px solid #cfd8dc; border-radius:3px; font-size:13px; box-sizing:border-box; outline:none; }
+        .pf-edit-row input:focus { border-color:#0d4a6b; }
+        .pf-edit-btn { flex:0 0 auto; height:34px; padding:0 14px; border:none; background:#0d4a6b; color:#fff; font-size:12px; font-weight:bold; cursor:pointer; }
+        .pf-edit-btn:hover { background:#0a3b55; }
+        /* [신규] 프로필 화면 - 목록 행 (썸네일 / 제목 / 시간) */
+        .pf-top { text-align:center; padding:6px 0 0; }
+        .pf-top .pf-avatar { display:block; margin:0 auto 10px; }
+        .pf-list { margin-top:4px; }
+        .pf-row { display:flex; align-items:center; gap:10px; padding:0 10px 0 0; height:35px; font-size:13px; color:#222; cursor:pointer; background:#fff; box-sizing:content-box; overflow:hidden; }
+        .pf-row:nth-child(even) { background:#f5f5f5; }
+        .pf-row:hover { background:#eef6fa; }
+        .pf-row-thumb { width:65px; height:35px; flex-shrink:0; background:#333; background-size:cover; background-position:center; }
+        .pf-row-title { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .pf-row-time { flex-shrink:0; font-size:13px; color:#222; background:#e0e0e0; padding:0 2px; }
+        .pf-empty { padding:24px 0; text-align:center; color:#888; font-size:12px; }
 
         /* ===== [신규] 대댓글 ===== */
         .reply-list { margin: 8px 0 0 20px; border-left: 2px solid #eee; padding-left: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -844,8 +882,8 @@
 
         /* ===== [신규] 댓글 정렬 탭 ===== */
         .comment-sort-tabs { display:flex; gap:10px; margin-bottom:8px; }
-        .comment-sort-tab { font-size:11px; color:#999; cursor:pointer; font-weight:bold; }
-        .comment-sort-tab.active { color:#53add2; text-decoration:underline; }
+        .comment-sort-tab { font-size:11px; color:#000; cursor:pointer; font-weight:bold; }
+        .comment-sort-tab.active { color:#000; text-decoration:underline; }
 
         /* ===== [신규] 영상 내 인기 구름 자막 하이라이트 ===== */
         .top-cloud-item { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #eee; cursor:pointer; }
@@ -1156,21 +1194,34 @@
                     </div>
 
                     <div class="home-tab-content" id="home-tab-mypage">
-                        <div class="mypage-tab-bar">
-                            <div class="mypage-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">채널 정보</div>
-                            <div class="mypage-tab" id="home-mypage-tab-btn-clouds" onclick="setHomeMyPageTab('clouds')">내가 남긴 구름 자막</div>
+                        <div id="home-my-info" class="pf-top">로그인이 필요합니다.</div>
+
+                        <div class="mypage-tab-bar pf-radio-bar">
+                            <div class="mypage-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">업로드한 영상</div>
+                            <div class="mypage-tab" id="home-mypage-tab-btn-clouds" onclick="setHomeMyPageTab('clouds')">작성한 구름</div>
                         </div>
 
+                        <button type="button" class="pf-refresh-btn" id="home-mypage-refresh-btn" title="프로필 새로고침" onclick="refreshHomeProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+
                         <div id="home-mypage-tab-content-channel">
-                            <div id="home-my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
-                            <div class="channel-video-list-title" id="home-channel-list-title-text">채널 동영상 목록</div>
-                            <div id="home-channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
-                            <div id="home-channel-internal-video-list" class="channel-internal-list"></div>
+                            <div id="home-channel-internal-video-list" class="pf-list"></div>
                         </div>
 
                         <div id="home-mypage-tab-content-clouds" style="display:none;">
-                            <div id="home-mypage-cloud-summary" style="font-size:12px; color:#666; margin-bottom:10px;"></div>
-                            <div id="home-my-clouds-list"></div>
+                            <div id="home-my-clouds-list" class="pf-list"></div>
+                        </div>
+
+                        <!-- [변경] 맨 아래: 내 프로필 수정 -->
+                        <div id="home-profile-settings" class="pf-edit-box" style="display:none;">
+                            <div class="pf-edit-title">내 프로필 수정</div>
+                            <div class="pf-edit-photo-row">
+                                <button type="button" class="pf-edit-btn" onclick="triggerProfileChanger()">프로필 사진 변경</button>
+                            </div>
+                            <div class="pf-edit-row">
+                                <label>이름/닉네임</label>
+                                <input type="text" id="home-nick-input" placeholder="닉네임">
+                                <button type="button" class="pf-edit-btn" onclick="saveMyNickname('home-nick-input')">저장</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1247,7 +1298,7 @@
                 </div>
                 <div id="cloud-live-feed-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fbfbfb;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-                        <b style="font-size:12px; color:#53add2;">실시간 구름 자막</b>
+                        <b style="font-size:12px; color:#000;">실시간 구름 자막</b>
                         <span style="display:inline-flex; align-items:center; gap:3px; color:#999; font-size:11px;">
                             <span class="cloud-help-wrap">
                                 <span style="display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border-radius:50%; background:#ccc; color:#fff; font-size:9px; font-weight:bold;">?</span>
@@ -1258,11 +1309,11 @@
                     <div id="cloud-live-feed-list" style="max-height:120px; overflow-y:auto;"></div>
                 </div>
                 <div id="related-videos-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
-                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold; display:flex; align-items:center; gap:6px;"><span class="related-link-badge"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>관련동영상</h4>
+                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold; display:flex; align-items:center; gap:6px;"><span class="related-link-badge"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>관련동영상</h4>
                     <div id="related-videos-list"></div>
                 </div>
                 <div id="popular-videos-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
-                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold;">32시간 인기동영상</h4>
+                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold;">32시간 인기동영상</h4>
                     <div id="popular-videos-list"></div>
                 </div>
                 <div id="video-comments-section" style="padding:15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;"></div>
@@ -1313,45 +1364,35 @@
         <section id="mypage-section" class="page-section">
             <div style="padding:15px;">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
-                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">마이페이지</h2>
-                <div class="mypage-tab-bar">
-                    <div class="mypage-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">채널 정보</div>
-                    <div class="mypage-tab" id="mypage-tab-btn-clouds" onclick="setMyPageTab('clouds')">내가 남긴 구름 자막</div>
+                <!-- [변경] 프로필 상단: 프사 + 닉네임 -->
+                <div id="my-info" class="pf-top">로그인이 필요합니다.</div>
+
+                <div class="mypage-tab-bar pf-radio-bar">
+                    <div class="mypage-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">업로드한 영상</div>
+                    <div class="mypage-tab" id="mypage-tab-btn-clouds" onclick="setMyPageTab('clouds')">작성한 구름</div>
                 </div>
 
+                <button type="button" class="pf-refresh-btn" id="mypage-refresh-btn" title="프로필 새로고침" onclick="refreshProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+
                 <div id="mypage-tab-content-channel">
-                    <div id="mypage-channel-quicklinks" style="display:flex; gap:15px; margin-bottom:15px;">
-                        <span class="blue-text top-btn" onclick="showSection('history')">최근 본 동영상</span>
-                    </div>
-
-                    <!-- [신규] 마이페이지 - 닉네임 / 내 링크(유튜브 채널 등) 설정 (기존 요소는 변경 없음, 추가만) -->
-                    <div id="mypage-profile-settings" style="background:#fafafa; border:1px solid #eee; padding:15px; margin-bottom:15px; box-sizing:border-box;">
-                        <div style="font-size:13px; font-weight:bold; margin-bottom:10px; color:#333;">프로필 설정</div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;">
-                            <label style="font-size:12px; font-weight:bold; color:#333; flex:0 0 70px;">이름/닉네임</label>
-                            <input type="text" id="mypage-nick-input" placeholder="닉네임" style="flex:1; min-width:120px; padding:7px 10px; border:1px solid #ccc; border-radius:3px; font-size:13px; box-sizing:border-box;">
-                            <div class="login-panel-submit-btn" style="flex:0 0 auto; padding:8px 14px; font-size:12px;" onclick="saveMyNickname()">저장</div>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                            <label style="font-size:12px; font-weight:bold; color:#333; flex:0 0 70px;">내 링크</label>
-                            <input type="text" id="mypage-link-input" placeholder="유튜브 채널 등 내 링크 주소를 입력하세요" style="flex:1; min-width:120px; padding:7px 10px; border:1px solid #ccc; border-radius:3px; font-size:13px; box-sizing:border-box;">
-                            <div class="login-panel-submit-btn" style="flex:0 0 auto; padding:8px 14px; font-size:12px;" onclick="saveMyLink()">저장</div>
-                        </div>
-                    </div>
-
-                    <div id="my-info" style="font-size:15px; text-align: left; background: #fafafa; padding:20px; border: 1px solid #eee;">로그인이 필요합니다.</div>
-
-                    <!-- [신규] 마이페이지 - 온라인 업로드 미완료 영상 상태 표시 (기존 요소는 변경 없음, 추가만) -->
-                    <div id="mypage-upload-status"></div>
-
-                    <div class="channel-video-list-title" id="channel-list-title-text">채널 동영상 목록</div>
-                    <div id="channel-genre-filter-bar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;"></div>
-                    <div id="channel-internal-video-list" class="channel-internal-list"></div>
+                    <div id="channel-internal-video-list" class="pf-list"></div>
                 </div>
 
                 <div id="mypage-tab-content-clouds" style="display:none;">
-                    <div id="mypage-cloud-summary" style="font-size:12px; color:#666; margin-bottom:10px;"></div>
-                    <div id="my-clouds-list"></div>
+                    <div id="my-clouds-list" class="pf-list"></div>
+                </div>
+
+                <!-- [변경] 맨 아래: 내 프로필 수정 (내 프로필일 때만 표시) -->
+                <div id="mypage-profile-settings" class="pf-edit-box" style="display:none;">
+                    <div class="pf-edit-title">내 프로필 수정</div>
+                    <div class="pf-edit-photo-row">
+                        <button type="button" class="pf-edit-btn" onclick="triggerProfileChanger()">프로필 사진 변경</button>
+                    </div>
+                    <div class="pf-edit-row">
+                        <label>이름/닉네임</label>
+                        <input type="text" id="mypage-nick-input" placeholder="닉네임">
+                        <button type="button" class="pf-edit-btn" onclick="saveMyNickname()">저장</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -2388,7 +2429,7 @@
                 </div>
             </div>
             <div style="margin-top:15px; padding-top:12px; border-top:1px dashed #ccc; width:100%; box-sizing:border-box;">
-                <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold;">채널 정보</h4>
+                <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold;">채널 정보</h4>
                 <div style="background:#fcfcfc; border:1px solid #e3e3e3; padding:10px; box-sizing:border-box; width:100%;">
                     ${channelBoxInVideo}
                 </div>
@@ -2454,7 +2495,7 @@
                 </div>
                 <div class="list-info">
                     <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
+                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
                     화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
                 </div>
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
@@ -2487,7 +2528,7 @@
                 </div>
                 <div class="list-info">
                     <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
+                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
                     화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
                 </div>
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
@@ -2572,7 +2613,7 @@
             }).join('');
 
         area.innerHTML = `
-            <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold;">댓글 (${comments.length})</h4>
+            <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold;">댓글 (${comments.length})</h4>
             <div class="comment-sort-tabs">
                 <span class="comment-sort-tab ${commentSortMode === 'latest' ? 'active' : ''}" onclick="setCommentSort('latest')">최신순</span>
                 <span class="comment-sort-tab ${commentSortMode === 'liked' ? 'active' : ''}" onclick="setCommentSort('liked')">공감 많은순</span>
@@ -3286,111 +3327,66 @@
         const infoEl = document.getElementById('home-my-info');
         if(!infoEl) return;
 
+        const settingsEl = document.getElementById('home-profile-settings');
         if(!user) {
             infoEl.innerHTML = "로그인이 필요합니다.";
             const listEl = document.getElementById('home-channel-internal-video-list');
             if(listEl) listEl.innerHTML = "";
-            const titleEl = document.getElementById('home-channel-list-title-text');
-            if(titleEl) titleEl.innerText = "채널 동영상 목록";
-            const filterEl = document.getElementById('home-channel-genre-filter-bar');
-            if(filterEl) filterEl.innerHTML = "";
+            if(settingsEl) settingsEl.style.display = 'none';
             return;
         }
 
-        const titleEl = document.getElementById('home-channel-list-title-text');
-        if(titleEl) titleEl.innerText = `${user.nick} 님의 동영상 목록`;
-
         const targetProfileImg = user.profileImg || "https://i.ibb.co/P36c8H4/20260620-061219.png";
-        let targetDesc = user.desc || "소개글이 없습니다.";
-        if(targetDesc.trim() === "") targetDesc = "소개글이 없습니다.";
-        const statsRowHtml = `재생: ${userStats.play}회 / 남긴 자막: ${userStats.cloud}개`;
-        const subCountText = `<span style="font-size:10px; color:#999; margin-left:6px;">구독자 ${subscriberCounts[user.nick] || 0}명</span>`;
-
-        const targetBannerImg = user.bannerImg || "";
-        const bannerEditIcon = `<div class="channel-banner-edit-hint">✏️ 배너 변경</div>`;
-        const bannerHtml = targetBannerImg
-            ? `<div class="channel-banner-wrap"><div style="width:100%; height:100px; background-image:url('${targetBannerImg}'); background-size:cover; background-position:center; margin-bottom:12px; cursor:pointer;" title="클릭하여 배너 이미지 변경" onclick="triggerBannerChanger()">${bannerEditIcon}</div></div>`
-            : `<div style="width:100%; height:50px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-size:11px; margin-bottom:12px; cursor:pointer; border:1px dashed #ccc; box-sizing:border-box;" title="클릭하여 배너 이미지 추가" onclick="triggerBannerChanger()">✏️ 배너 이미지 추가하기</div>`;
-
-        const profileEditOverlay = `<div class="channel-edit-overlay"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>`;
-
-        const channelTotalViews = db.filter(v => v.author === user.nick).reduce((sum, current) => sum + current.views, 0);
-        const channelGradeLabel = isAuthorVeteran(user.nick) ? '베테랑' : '일반';
-        const channelGradeColorStyle = isAuthorVeteran(user.nick) ? 'color:#8BC34A;' : '';
-        let channelJoinDateText = '정보 없음';
-        if(user.regDate) channelJoinDateText = formatDate(user.regDate);
-
-        const channelSummaryCardHtml = `
-            <div class="channel-summary-card">
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">총 조회수</div>
-                    <div class="channel-summary-value">${channelTotalViews}회</div>
-                </div>
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">등급</div>
-                    <div class="channel-summary-value" style="${channelGradeColorStyle}">${channelGradeLabel}</div>
-                </div>
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">가입일</div>
-                    <div class="channel-summary-value">${channelJoinDateText}</div>
-                </div>
-            </div>`;
-
         infoEl.innerHTML = `
-            ${bannerHtml}
-            <div style="display: flex; align-items: flex-start; gap: 15px; width:100%; box-sizing:border-box;">
-                <div class="channel-edit-overlay-wrap">
-                    <img src="${targetProfileImg}" class="channel-profile-interactive-img" title="클릭하여 프로필 사진 변경" onclick="triggerProfileChanger()">
-                    ${profileEditOverlay}
-                </div>
-                <div style="flex:1; min-width:0;">
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <b style="font-size: 16px; color:#111;">${escapeHtml(user.nick)} (내 채널)</b>
-                        <img src="https://i.ibb.co/JjBBV1Zv/1781695445893-1-1.png" alt="view_author_videos" class="author-vlist-btn" style="height:26px; cursor:pointer;" title="올린 동영상 모아보기" onclick="filterByAuthor('${user.nick.replace(/'/g, "\\'")}')">
-                    </div>
-                    <span style="font-size:12px; color:#666; display:inline-block; margin-top:4px; margin-bottom: 4px;">${statsRowHtml}</span><br>
-                    <div style="margin-top:10px;">${subCountText}</div>
-                    ${channelSummaryCardHtml}
-                    <div style="font-size:13px; color:#333; white-space:pre-wrap; line-height:1.4; word-break:break-all; margin-top:8px;"><b>채널 소개</b><br>${escapeHtml(targetDesc)}</div>
-                </div>
-            </div>`;
+            <img src="${targetProfileImg}" class="pf-avatar">
+            <div class="pf-nick">${escapeHtml(user.nick)}</div>`;
 
-        renderHomeChannelGenreFilter();
+        if(settingsEl) settingsEl.style.display = '';
+        const nickInputEl = document.getElementById('home-nick-input');
+        if(nickInputEl && document.activeElement !== nickInputEl) nickInputEl.value = user.nick;
+
         renderHomeChannelInternalVideos();
+    }
+
+    function renderHomeChannelInternalVideos() {
+        const targetContainer = document.getElementById('home-channel-internal-video-list');
+        if(!targetContainer) return;
+        if(!user) { targetContainer.innerHTML = ""; return; }
+
+        const myVideos = db.filter(v => v.author === user.nick);
+        if(myVideos.length === 0) {
+            targetContainer.innerHTML = "<div class='pf-empty'>업로드한 동영상이 없습니다.</div>";
+            return;
+        }
+        targetContainer.innerHTML = myVideos.map(v =>
+            pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `preparePlay(${v.id})`)
+        ).join('');
     }
 
     function renderHomeMyCloudsList() {
         const listEl = document.getElementById('home-my-clouds-list');
-        const summaryEl = document.getElementById('home-mypage-cloud-summary');
         if(!listEl) return;
-
         if(!user) {
-            listEl.innerHTML = "<div class='my-clouds-empty'>로그인이 필요합니다.</div>";
-            if(summaryEl) summaryEl.innerText = "";
+            listEl.innerHTML = "<div class='pf-empty'>로그인이 필요합니다.</div>";
             return;
         }
+        renderCloudRowsInto(listEl, user.nick);
+    }
 
-        const myClouds = myCloudLog.filter(c => c.author === user.nick);
-        if(summaryEl) summaryEl.innerText = `총 ${myClouds.length}개의 구름 자막을 남겼습니다.`;
+    /* 프로필 새로고침 버튼 (마이페이지 / 상대 프로필) */
+    function refreshProfileView(btn) {
+        if(btn) { btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin'); setTimeout(function(){ btn.classList.remove('spin'); }, 700); }
+        const cloudsOpen = document.getElementById('mypage-tab-btn-clouds') && document.getElementById('mypage-tab-btn-clouds').classList.contains('active');
+        updateChannel();
+        if(cloudsOpen) renderMyCloudsList();
+    }
 
-        if(myClouds.length === 0) {
-            listEl.innerHTML = "<div class='my-clouds-empty'>아직 남긴 구름 자막이 없습니다.</div>";
-            return;
-        }
-
-        listEl.innerHTML = myClouds.map(c => {
-            const v = db.find(video => video.id === c.videoId);
-            const thumbStyle = v && v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : '';
-            const vTitle = v ? escapeHtml(v.title) : "(삭제된 동영상)";
-            return `
-            <div class="my-clouds-item" onclick="${v ? `preparePlay(${v.id})` : ''}">
-                <div class="my-clouds-thumb" style="${thumbStyle}"></div>
-                <div class="my-clouds-info">
-                    <div class="my-clouds-text">${escapeHtml(c.text)}</div>
-                    <div class="my-clouds-meta">${vTitle} · ${formatVideoDuration(c.time)}지점 · ${getTimeAgo(c.date)}</div>
-                </div>
-            </div>`;
-        }).join('');
+    /* 프로필 새로고침 버튼 (홈 - 마이페이지 탭) */
+    function refreshHomeProfileView(btn) {
+        if(btn) { btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin'); setTimeout(function(){ btn.classList.remove('spin'); }, 700); }
+        const cloudsOpen = document.getElementById('home-mypage-tab-btn-clouds') && document.getElementById('home-mypage-tab-btn-clouds').classList.contains('active');
+        renderHomeMyPageChannelInfo();
+        if(cloudsOpen) renderHomeMyCloudsList();
     }
 
     function scrollRank36Right() {
@@ -3954,7 +3950,7 @@
                 </div>
                 <div class="list-info">
                     <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
+                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
                     화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
                 </div>
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
@@ -4405,43 +4401,65 @@
         renderChannelInternalVideos(targetAuthor);
     }
 
+    function pfRowHtml(thumb, title, timeText, onclickJs) {
+        const thumbStyle = thumb ? `background-image:url('${thumb}');` : '';
+        return `
+        <div class="pf-row" onclick="${onclickJs}">
+            <div class="pf-row-thumb" style="${thumbStyle}"></div>
+            <div class="pf-row-title">${title}</div>
+            <div class="pf-row-time">${timeText}</div>
+        </div>`;
+    }
+
+    function pfAgo(dateStr) {
+        return dateStr ? getTimeAgo(dateStr).replace(' ', '') : '';
+    }
+
     function renderChannelInternalVideos(targetAuthor) {
         const targetContainer = document.getElementById('channel-internal-video-list');
         if(!targetContainer) return;
 
-        let myVideos = db.filter(v => v.author === targetAuthor);
-        if(channelGenreFilter !== 'all') myVideos = myVideos.filter(v => v.genre === channelGenreFilter);
-
+        const myVideos = db.filter(v => v.author === targetAuthor);
         if(myVideos.length === 0) {
-            targetContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px 0;'>업로드한 동영상이 없습니다.</div>";
+            targetContainer.innerHTML = "<div class='pf-empty'>업로드한 동영상이 없습니다.</div>";
             return;
         }
 
-        const isMe = user && (user.nick === targetAuthor);
+        targetContainer.innerHTML = myVideos.map(v =>
+            pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `goBackFromChannel(); preparePlay(${v.id})`)
+        ).join('');
+    }
 
-        targetContainer.innerHTML = myVideos.map(v => {
-            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
-            const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
-            const channelItemLength = v.playTime || "03:45";
-            
-            const editBtnHtml = isMe ? `<button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button>` : '';
-            const deleteBtnHtml = isMe ? `<button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button>` : '';
+    /* 작성한 구름 목록 데이터: 이 기기 기록(날짜 있음) + 영상에 저장된 자막(작성자 일치, 기록에 없는 것) */
+    function collectCloudsOfAuthor(authorName) {
+        const out = [];
+        const seen = new Set();
+        myCloudLog.filter(c => c.author === authorName).forEach(c => {
+            seen.add(c.videoId + '|' + c.text + '|' + c.time);
+            out.push({ text: c.text, videoId: c.videoId, label: pfAgo(c.date) });
+        });
+        db.forEach(v => {
+            (v.savedClouds || []).forEach(c => {
+                if(c.author !== authorName) return;
+                const key = v.id + '|' + c.text + '|' + c.time;
+                if(seen.has(key)) return;
+                seen.add(key);
+                out.push({ text: c.text, videoId: v.id, label: formatVideoDuration(c.time) });
+            });
+        });
+        return out;
+    }
 
-            return `
-            <div class="list-item" onclick="goBackFromChannel(); preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${channelItemLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="font-weight:bold; color:#ff3300;">${channelItemLength}</span> | 조회수: ${v.views} | 장르: ${v.genre}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${formatDate(v.regDate)}
-                </div>
-                ${editBtnHtml}${deleteBtnHtml}
-            </div>`;
+    function renderCloudRowsInto(listEl, authorName) {
+        if(!listEl) return;
+        const clouds = authorName ? collectCloudsOfAuthor(authorName) : [];
+        if(clouds.length === 0) {
+            listEl.innerHTML = "<div class='pf-empty'>작성한 구름 자막이 없습니다.</div>";
+            return;
+        }
+        listEl.innerHTML = clouds.map(c => {
+            const v = db.find(video => video.id === c.videoId);
+            return pfRowHtml(v ? v.thumb : '', escapeHtml(c.text), c.label, v ? `goBackFromChannel(); preparePlay(${v.id})` : '');
         }).join('');
     }
 
@@ -4557,134 +4575,43 @@
             else {
                 document.getElementById('my-info').innerHTML = "로그인이 필요합니다.";
                 document.getElementById('channel-internal-video-list').innerHTML = "";
-                document.getElementById('channel-list-title-text').innerText = "채널 동영상 목록";
+                const stEl = document.getElementById('mypage-profile-settings');
+                if(stEl) stEl.style.display = 'none';
                 return;
             }
         }
 
-        document.getElementById('channel-list-title-text').innerText = `${activeTargetName} 님의 동영상 목록`;
-
         const isMe = user && (user.nick === activeTargetName);
-        
-        let targetProfileImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
-        let targetDesc = "소개글이 없습니다.";
-        let statsRowHtml = "";
-        let targetMyLink = ""; /* [신규] 자기 링크(유튜브 채널 등) */
 
+        let targetProfileImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
         if(isMe) {
             targetProfileImg = user.profileImg || targetProfileImg;
-            targetDesc = user.desc || targetDesc;
-            statsRowHtml = `재생: ${userStats.play}회 / 남긴 자막: ${userStats.cloud}개`;
-            targetMyLink = user.myLink || "";
         } else {
             const foundSample = db.find(v => v.author === activeTargetName);
-            if(foundSample) {
-                targetProfileImg = foundSample.authorProfile || targetProfileImg;
-                targetDesc = foundSample.authorDesc || targetDesc;
-                targetMyLink = foundSample.authorLink || "";
-            }
-            const targetViewsSum = db.filter(v => v.author === activeTargetName).reduce((sum, current) => sum + current.views, 0);
-            statsRowHtml = `총 비디오 조회수: ${targetViewsSum}회`;
+            if(foundSample) targetProfileImg = foundSample.authorProfile || targetProfileImg;
         }
-
-        if (targetDesc.trim() === "") {
-            targetDesc = "소개글이 없습니다.";
-        }
-
-        const isSubscribed = subscriptions.includes(activeTargetName);
-        const subCountText = `<span style="font-size:10px; color:#999; margin-left:6px;">구독자 ${subscriberCounts[activeTargetName] || 0}명</span>`;
-        const subButtonHtml = (!isMe) ? `
-            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
-                <span style="position: relative; display: inline-block; vertical-align: middle;">
-                    <img src="https://i.ibb.co/CKVF2vKb/lv-0-20260809130716-1.gif" alt="lv-0-20260809093357-1" border="0" class="sub-action-btn-img" style="display: block;" onclick="toggleSubscribeAction('${activeTargetName.replace(/'/g, "\\'")}')">
-                    <span style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; color: #ffffff; pointer-events: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">${subscriberCounts[activeTargetName] || 0}</span>
-                </span>
-                <span style="font-size:12px; font-weight:bold; color: ${isSubscribed ? '#ff3300' : '#666'};">
-                    ${isSubscribed ? '[ 구독 중 ]' : '[ 미구독 상태 ]'}
-                </span>
-            </div>
-        ` : `<div style="margin-top:10px;">${subCountText}</div>`;
-
-        let targetBannerImg = "";
-        if(isMe) {
-            targetBannerImg = user.bannerImg || "";
-        } else {
-            const foundBannerSample = db.find(v => v.author === activeTargetName);
-            if(foundBannerSample) targetBannerImg = foundBannerSample.authorBanner || "";
-        }
-        const bannerEditIcon = isMe ? `<div class="channel-banner-edit-hint">✏️ 배너 변경</div>` : '';
-        const bannerHtml = targetBannerImg
-            ? `<div class="channel-banner-wrap"><div style="width:100%; height:100px; background-image:url('${targetBannerImg}'); background-size:cover; background-position:center; margin-bottom:12px; cursor:${isMe ? 'pointer' : 'default'};" title="${isMe ? '클릭하여 배너 이미지 변경' : ''}" onclick="${isMe ? 'triggerBannerChanger()' : ''}">${bannerEditIcon}</div></div>`
-            : (isMe ? `<div style="width:100%; height:50px; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-size:11px; margin-bottom:12px; cursor:pointer; border:1px dashed #ccc; box-sizing:border-box;" title="클릭하여 배너 이미지 추가" onclick="triggerBannerChanger()">✏️ 배너 이미지 추가하기</div>` : '');
-
-        const profileEditOverlay = isMe ? `<div class="channel-edit-overlay"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>` : '';
-
-        /* [신규] 채널 요약 카드 - 총 조회수 / 등급 / 가입일 */
-        const channelTotalViews = db.filter(v => v.author === activeTargetName).reduce((sum, current) => sum + current.views, 0);
-        const channelGradeLabel = isAuthorVeteran(activeTargetName) ? '베테랑' : '일반';
-        const channelGradeColorStyle = isAuthorVeteran(activeTargetName) ? 'color:#8BC34A;' : '';
-        let channelJoinDateText = '정보 없음';
-        if(isMe) {
-            if(user.regDate) channelJoinDateText = formatDate(user.regDate);
-        } else {
-            const foundUserForJoin = users.find(u => u.nick === activeTargetName);
-            if(foundUserForJoin && foundUserForJoin.regDate) channelJoinDateText = formatDate(foundUserForJoin.regDate);
-        }
-        const channelSummaryCardHtml = `
-            <div class="channel-summary-card">
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">총 조회수</div>
-                    <div class="channel-summary-value">${channelTotalViews}회</div>
-                </div>
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">등급</div>
-                    <div class="channel-summary-value" style="${channelGradeColorStyle}">${channelGradeLabel}</div>
-                </div>
-                <div class="channel-summary-item">
-                    <div class="channel-summary-label">가입일</div>
-                    <div class="channel-summary-value">${channelJoinDateText}</div>
-                </div>
-            </div>`;
 
         document.getElementById('my-info').innerHTML = `
-            ${bannerHtml}
-            <div style="display: flex; align-items: flex-start; gap: 15px; width:100%; box-sizing:border-box;">
-                <div class="channel-edit-overlay-wrap">
-                    <img src="${targetProfileImg}" class="channel-profile-interactive-img" title="${isMe ? '클릭하여 프로필 사진 변경' : '상대방 프로필'}" onclick="${isMe ? 'triggerProfileChanger()' : ''}">
-                    ${profileEditOverlay}
-                </div>
-                <div style="flex:1; min-width:0;">
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                        <b style="font-size: 16px; color:#111;">${escapeHtml(activeTargetName)} ${isMe ? '(내 채널)' : '(상대 채널)'}</b>
-                        <img src="https://i.ibb.co/JjBBV1Zv/1781695445893-1-1.png" alt="view_author_videos" class="author-vlist-btn" style="height:26px; cursor:pointer;" title="올린 동영상 모아보기" onclick="goBackFromChannel(); filterByAuthor('${activeTargetName.replace(/'/g, "\\'")}')">
-                    </div>
-                    <span style="font-size:12px; color:#666; display:inline-block; margin-top:4px; margin-bottom: 4px;">${statsRowHtml}</span><br>
-                    ${subButtonHtml}
-                    ${channelSummaryCardHtml}
-                    <div style="font-size:13px; color:#333; white-space:pre-wrap; line-height:1.4; word-break:break-all; margin-top:8px;"><b>채널 소개</b><br>${escapeHtml(targetDesc)}</div>
-                    ${targetMyLink ? `<div style="margin-top:8px; font-size:12px;"><a href="${escapeHtml(targetMyLink)}" target="_blank" rel="noopener" style="color:#53add2; font-weight:bold; text-decoration:underline; word-break:break-all;">🔗 ${escapeHtml(targetMyLink)}</a></div>` : ''}
-                </div>
-            </div>`; 
+            <img src="${targetProfileImg}" class="pf-avatar">
+            <div class="pf-nick">${escapeHtml(activeTargetName)}</div>`;
 
-        /* [신규] 마이페이지 프로필 설정 입력창에 현재 값 반영 */
+        /* 맨 밑 "내 프로필 수정"은 내 프로필일 때만 보임 */
+        const settingsEl = document.getElementById('mypage-profile-settings');
+        if(settingsEl) settingsEl.style.display = isMe ? '' : 'none';
         if(isMe) {
             const nickInputEl = document.getElementById('mypage-nick-input');
-            const linkInputEl = document.getElementById('mypage-link-input');
             if(nickInputEl && document.activeElement !== nickInputEl) nickInputEl.value = user.nick;
-            if(linkInputEl && document.activeElement !== linkInputEl) linkInputEl.value = user.myLink || "";
         }
 
-        renderChannelGenreFilter(activeTargetName);
         renderChannelInternalVideos(activeTargetName);
-        renderUploadStatusList();
         if(currentPlayingItem) updateDetail();
         checkNewSubscriptionVideos();
     }
 
     /* [신규] 마이페이지 - 닉네임 변경 (기존 함수는 변경 없음, 추가만) */
-    function saveMyNickname() {
+    function saveMyNickname(inputId) {
         if(!user) { showToast("로그인이 필요합니다.", "error"); return; }
-        const inputEl = document.getElementById('mypage-nick-input');
+        const inputEl = document.getElementById(inputId || 'mypage-nick-input');
         if(!inputEl) return;
         const newNick = inputEl.value.trim();
         if(!newNick) { alert("닉네임을 입력해주세요."); return; }
@@ -4727,6 +4654,7 @@
         if(typeof fbSaveUser === 'function') fbSaveUser(user);
 
         updateChannel();
+        if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
         renderList();
         showToast("닉네임이 변경되었습니다.", "success");
     }
@@ -5349,36 +5277,13 @@
 
     function renderMyCloudsList() {
         const listEl = document.getElementById('my-clouds-list');
-        const summaryEl = document.getElementById('mypage-cloud-summary');
         if(!listEl) return;
-
-        if(!user) {
-            listEl.innerHTML = "<div class='my-clouds-empty'>로그인이 필요합니다.</div>";
-            if(summaryEl) summaryEl.innerText = "";
+        const target = currentChannelTargetName || (user ? user.nick : "");
+        if(!target) {
+            listEl.innerHTML = "<div class='pf-empty'>로그인이 필요합니다.</div>";
             return;
         }
-
-        const myClouds = myCloudLog.filter(c => c.author === user.nick);
-        if(summaryEl) summaryEl.innerText = `총 ${myClouds.length}개의 구름 자막을 남겼습니다.`;
-
-        if(myClouds.length === 0) {
-            listEl.innerHTML = "<div class='my-clouds-empty'>아직 남긴 구름 자막이 없습니다.</div>";
-            return;
-        }
-
-        listEl.innerHTML = myClouds.map(c => {
-            const v = db.find(video => video.id === c.videoId);
-            const thumbStyle = v && v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : '';
-            const vTitle = v ? escapeHtml(v.title) : "(삭제된 동영상)";
-            return `
-            <div class="my-clouds-item" onclick="${v ? `preparePlay(${v.id})` : ''}">
-                <div class="my-clouds-thumb" style="${thumbStyle}"></div>
-                <div class="my-clouds-info">
-                    <div class="my-clouds-text">${escapeHtml(c.text)}</div>
-                    <div class="my-clouds-meta">${vTitle} · ${formatVideoDuration(c.time)}지점 · ${getTimeAgo(c.date)}</div>
-                </div>
-            </div>`;
-        }).join('');
+        renderCloudRowsInto(listEl, target);
     }
 
     /* ---------- [신규 3] 대댓글 기능 ---------- */
