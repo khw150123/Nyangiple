@@ -436,6 +436,46 @@
         /* ===== [신규] 홈 - 이동(<, >) 버튼을 누르면 해당 방향 가장자리에 버튼 색의 반투명 띠가 1초 페이드인, 5초 뒤 사라짐 ===== */
         .scroll-hold-overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease; z-index: 15; }
         .scroll-hold-overlay.show { opacity: 1; transition: opacity 1s ease; }
+        /* ===== [신규] 동영상 컨트롤바 (참고 사진 스타일): 재생/정지 | 진행바 | 다시 재생 | 구름 자막 달기 | 소리 조정 ===== */
+        .cb2-bar { width: 100%; height: 40px; display: flex; align-items: stretch; background: #b3b3b3; color: #fff; user-select: none; -webkit-user-select: none; position: relative; z-index: 1005; box-sizing: border-box; font-family: sans-serif; }
+        .cb2-btn { flex: 0 0 auto; width: 40px; height: 100%; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; background: linear-gradient(#f8a612, #f5b923); box-shadow: inset 1px 0 0 rgba(255,235,170,0.6); -webkit-tap-highlight-color: transparent; }
+        .cb2-btn:hover { filter: brightness(1.07); }
+        .cb2-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+        .cb2-play { width: 48px; box-shadow: none; }
+        .cb2-replay { background: linear-gradient(#bfa067, #c2a56b); }
+        .cb2-replay.ready { background: linear-gradient(#f8a612, #f5b923); }
+        .cb2-btn.active { background: linear-gradient(#d98a00, #e3a210); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.75); }
+        .cb2-progress { position: relative; flex: 1 1 auto; min-width: 0; height: 100%; background: linear-gradient(#b3b3b3, #aeaeae); }
+        .cb2-range { -webkit-appearance: none; appearance: none; position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; padding: 0; cursor: pointer; background: linear-gradient(to right, rgba(255,255,255,0.4) var(--p, 0%), transparent var(--p, 0%)); }
+        .cb2-range::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+        .cb2-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 3px; height: 40px; background: #fff; border: none; border-radius: 0; box-shadow: 0 0 3px rgba(0,0,0,0.5); }
+        .cb2-range::-moz-range-track { height: 100%; background: transparent; }
+        .cb2-range::-moz-range-thumb { width: 3px; height: 40px; background: #fff; border: none; border-radius: 0; }
+        .cb2-time { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #fff; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.35); }
+        .cb2-vol { position: relative; display: flex; flex: 0 0 auto; }
+        .cb2-vol-pop { display: none; position: absolute; right: 0; bottom: 100%; width: 130px; height: 34px; padding: 0 12px; box-sizing: border-box; align-items: center; background: rgba(0,0,0,0.78); z-index: 1010; }
+        .cb2-vol:hover .cb2-vol-pop, .cb2-vol:focus-within .cb2-vol-pop { display: flex; }
+        .cb2-vol-pop .volume-slider { width: 100%; }
+        /* ===== [신규] 검색창 이미지 높이를 검색 버튼 높이와 똑같이 맞춤 (사이 여백 없음) ===== */
+        body .search-bg-img { height: 35px; top: 0; margin: 0; }
+        body .search-input-overlay { height: 35px; }
+        @media (max-width: 768px) {
+            body .search-bg-img { height: 28px; }
+            body .search-input-overlay { height: 28px; }
+        }
+        /* ===== [신규] 모바일(세로)에서만 맨 위(헤더) 레이아웃 크기 조정 (참고 사진 기준, PC/가로모드는 그대로) ===== */
+        @media (max-width: 768px) and (orientation: portrait) {
+            body header { padding: 3px 15px; }
+            body .header-right { gap: 0; }
+            body .search-wrapper { flex: 0 1 222px; min-width: 0; margin-left: 16px; margin-right: 0; }
+            body .search-bg-img { flex: 1 1 0%; width: auto; min-width: 0; height: 35px; margin: 0; }
+            body .search-btn-img { flex: 0 0 44px; width: 44px; height: 35px; }
+            body .search-input-overlay { left: 12px; width: calc(100% - 68px); height: 35px; font-size: 12px; }
+            body .menu-container { margin-left: 10px; }
+            body .menu-toggle-btn { height: 39px; }
+            body .menu-loading-spinner { width: 39px; height: 39px; }
+            body .sliding-menu { top: 45px; }
+        }
         #side-video-list { display: flex; flex-wrap: wrap; gap: 0; } 
         .list-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; gap: 10px; background: #fff; width: 100%; box-sizing: border-box; position: relative; } 
         .list-thumb { width: 110px; height: 65px; background: #333; flex-shrink: 0; position: relative; } 
@@ -569,12 +609,6 @@
 
         /* ===== 추가 기능 스타일 (기존 스타일 변경 없음) ===== */
         #cloud-density-btn, #speed-toggle-btn { font-size: 10px !important; white-space: nowrap; padding: 4px 6px !important; }
-
-        /* ===== [신규] 구름 자막 크기 조절 ===== */
-        #cloud-layer .cloud { font-size: calc(14px * var(--cloud-size-scale, 1)); }
-        @media (max-width: 768px) { #cloud-layer .cloud { font-size: calc(11px * var(--cloud-size-scale, 1)); } }
-        #cloud-size-btn { font-size: 10px !important; white-space: nowrap; padding: 4px 6px !important; }
-        @media (max-width: 768px) { #cloud-size-btn { font-size: 11px !important; padding: 5px 7px !important; } }
         .notif-bell { user-select: none; }
         .backup-link-text { color: #53add2; font-weight: bold; text-decoration: underline; cursor: pointer; }
         .playlist-toggle-text:hover { opacity: 0.8; }
@@ -946,8 +980,8 @@
     </div>
     <div class="header-right">
         <div class="search-wrapper">
-            <img src="https://i.ibb.co/DPh058wN/20260508-144852.jpg" class="search-bg-img">
-            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="'#태그', '닉네임', '동영상' 검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
+            <img src="https://i.ibb.co/93WQYWqX/20261015-170207.jpg" class="search-bg-img">
+            <input type="text" id="main-search-input" class="search-input-overlay" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
             <div id="search-suggest-box" class="search-suggest-box" style="display:none;"></div>
         </div>
@@ -1170,54 +1204,43 @@
                         </div>
                     </div>
                     
-                    <div class="custom-control-bar">
-                        <div class="ctrl-left-group">
-                            <button class="ctrl-btn" onclick="skipTime(-10)" title="뒤로 10초">
-                                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
-                                <span style="font-size:9px; margin-left:-2px;">10</span>
-                            </button>
-                            <button class="ctrl-btn" id="custom-play-toggle-btn" onclick="togglePlayPause()" title="재생/일시정지">
-                                <svg id="ctrl-play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                <svg id="ctrl-pause-svg" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                            </button>
-                            <button class="ctrl-btn" onclick="skipTime(10)" title="앞으로 10초">
-                                <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2z"/></svg>
-                                <span style="font-size:9px; margin-left:-2px;">10</span>
-                            </button>
-                            <div class="ctrl-time-wrapper">
-                                <span class="ctrl-time-text" id="custom-time-display">00:00 / 00:00</span>
-                                <div class="ctrl-progress-container">
-                                    <input type="range" class="video-progress-bar" id="custom-progress-bar" min="0" max="100" value="0" oninput="seekVideo(this.value)">
-                                </div>
-                            </div>
+                    <div class="cb2-bar">
+                        <button class="cb2-btn cb2-play" id="custom-play-toggle-btn" onclick="togglePlayPause()" title="재생/일시정지">
+                            <svg id="ctrl-play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="ctrl-pause-svg" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        </button>
+                        <div class="cb2-progress">
+                            <input type="range" class="cb2-range" id="custom-progress-bar" min="0" max="100" step="any" value="0" oninput="seekVideo(this.value)">
+                            <span class="cb2-time" id="custom-time-display">00:00 / 00:00</span>
                         </div>
-                        <div class="ctrl-right-group">
-                            <button class="ctrl-btn" id="speed-toggle-btn" onclick="cyclePlaybackSpeed()" title="재생 속도 조절">1x</button>
-                            <button class="ctrl-btn" id="cloud-density-btn" onclick="toggleCloudDensity()" title="구름 자막 밀도 조절">자막 많음</button>
-                            <button class="ctrl-btn" id="cloud-size-btn" onclick="toggleCloudSize()" title="구름 자막 크기 조절">크기 보통</button>
-                            <button class="ctrl-btn" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 토글 (클릭한 위치에 자막이 달립니다)">
-                                <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                        <button class="cb2-btn cb2-replay" id="replay-btn" onclick="replayVideo()" title="다시 재생">
+                            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                        </button>
+                        <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (자막 입력칸으로 이동합니다)">
+                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                        </button>
+                        <div class="cb2-vol">
+                            <button class="cb2-btn" id="volume-mute-btn" onclick="toggleMute()" title="소리 조정 / 음소거">
+                                <svg id="vol-icon-svg" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                             </button>
-                            <button class="ctrl-btn" id="random-cloud-fire-btn" onclick="fireRandomCloudManually()" title="랜덤 위치에 자막 하나 날리기">
-                                <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
-                            </button>
-                            <button class="ctrl-btn" id="autoplay-toggle-btn" onclick="toggleAutoplayNext()" title="다음 영상 자동재생 켜기/끄기">자동재생</button>
-                            <button class="ctrl-btn" id="loop-toggle-btn" onclick="toggleLoopPlay()" title="현재 영상 연속(반복) 재생 켜기/끄기">연속재생</button>
-                            <div class="volume-container">
-                                <button class="ctrl-btn" id="volume-mute-btn" onclick="toggleMute()" title="음소거">
-                                    <svg id="vol-icon-svg" style="width:16px; height:16px; fill:#fff;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                                </button>
+                            <div class="cb2-vol-pop">
                                 <input type="range" class="volume-slider" id="custom-volume-bar" min="0" max="1" step="0.05" value="1" oninput="adjustVolume(this.value)">
                             </div>
-                            <button class="ctrl-btn" onclick="toggleFullscreen()" title="전체화면">
-                                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                            </button>
                         </div>
+                        <button class="cb2-btn cb2-fullscreen" id="custom-fullscreen-btn" onclick="toggleFullscreen()" title="전체화면">
+                            <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                        </button>
                     </div>
-                    <div class="kbd-hint"><kbd>Space</kbd> 재생/정지 &#160; <kbd>←</kbd><kbd>→</kbd> 10초 이동 &#160; <kbd>↑</kbd><kbd>↓</kbd> 볼륨 조절</div>
                 </div>
 
                 <div id="v-detail-info" style="padding:15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fdfdfd; position: relative;"></div>
+                <div id="cloud-write-box" style="padding:12px 15px; border:1px solid #eee; margin-top:8px; text-align:left; background:#fff;">
+                    <div style="display:flex; gap:6px; align-items:stretch;">
+                        <input type="text" id="cloud-write-input" maxlength="60" autocomplete="off" placeholder="구름자막하기 (엔터)" style="flex:1 1 auto; min-width:0; box-sizing:border-box; font-size:12px; padding:8px 10px; border:1px solid #cfd8dc; border-radius:3px; outline:none;">
+                        <button type="button" id="cloud-write-btn" style="flex:0 0 auto; font-size:13px; font-weight:bold; padding:0 16px; border:none; border-radius:3px; background:#3a7bd5; color:#fff; cursor:pointer;">구름작성</button>
+                    </div>
+                    <div id="cloud-write-hint" style="display:inline-block; margin-top:8px; padding:4px 10px; font-size:11px; color:#666; background:#f1f1f1; border:1px solid #e0e0e0; border-radius:10px;">입력을 시작하면 구름작성 시각이 설정됩니다.</div>
+                </div>
                 <div id="top-clouds-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff; display:none;">
                     <h4 style="margin:0 0 8px 0; font-size:12px; color:#53add2; font-weight:bold;">이 영상의 인기 구름 자막</h4>
                     <div id="top-clouds-list"></div>
@@ -1791,11 +1814,11 @@
     let infiniteScrollEnabled = localStorage.getItem('tvple_infinite_scroll') === '1';
 
     /* ===== [신규] 자동재생(다음 영상) 상태 ===== */
-    let autoplayNextEnabled = localStorage.getItem('tvple_autoplay_next') !== '0';
+    let autoplayNextEnabled = false; /* [삭제] 컨트롤바에서 자동재생 기능 제거 */
     let lastVolumeBeforeMute = 1;
 
     /* ===== [신규] 연속재생(현재 영상 반복) 상태 ===== */
-    let loopPlayEnabled = localStorage.getItem('tvple_loop_play') === '1';
+    let loopPlayEnabled = false; /* [삭제] 컨트롤바에서 연속재생 기능 제거 */
 
     /* ===== [신규] 댓글 정렬 상태 ===== */
     let commentSortMode = 'latest';
@@ -2178,28 +2201,6 @@
         localStorage.setItem('tvple_cloud_density', cloudDensityLevel);
         const btn = document.getElementById('cloud-density-btn');
         if(btn) btn.innerText = cloudDensityLevels[cloudDensityLevel].label;
-    }
-
-    /* [신규] 구름 자막 크기 조절 */
-    const cloudSizeLevels = [
-        { label: '크기 작게', scale: 0.75 },
-        { label: '크기 보통', scale: 1 },
-        { label: '크기 크게', scale: 1.4 },
-        { label: '크기 매우 크게', scale: 1.9 }
-    ];
-    let cloudSizeLevel = parseInt(localStorage.getItem('tvple_cloud_size') || "1");
-    if (isNaN(cloudSizeLevel) || cloudSizeLevel < 0 || cloudSizeLevel >= cloudSizeLevels.length) cloudSizeLevel = 1;
-
-    function applyCloudSize() {
-        document.documentElement.style.setProperty('--cloud-size-scale', cloudSizeLevels[cloudSizeLevel].scale);
-        const btn = document.getElementById('cloud-size-btn');
-        if(btn) btn.innerText = cloudSizeLevels[cloudSizeLevel].label;
-    }
-
-    function toggleCloudSize() {
-        cloudSizeLevel = (cloudSizeLevel + 1) % cloudSizeLevels.length;
-        localStorage.setItem('tvple_cloud_size', cloudSizeLevel);
-        applyCloudSize();
     }
 
     function cyclePlaybackSpeed() {
@@ -5104,16 +5105,104 @@
     }
 
     function toggleCloudWritingMode() {
-        isCloudWritingModeActive = !isCloudWritingModeActive;
-        const cloudBtn = document.getElementById('custom-cloud-toggle-btn');
-        if(isCloudWritingModeActive) {
-            cloudBtn.classList.add('active');
-            showToast("구름 자막 작성 모드 ON - 화면을 클릭해 자막을 남겨보세요.", "success");
+        /* [변경] 더 이상 화면을 눌러 다는 모드가 아니라, 동영상 정보 밑 구름자막 입력칸으로 이동합니다. */
+        const doFocus = function() {
+            const box = document.getElementById('cloud-write-box');
+            const field = document.getElementById('cloud-write-input');
+            if(box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if(field) { try { field.focus({ preventScroll: true }); } catch(err) { field.focus(); } }
+        };
+        if(document.fullscreenElement && document.exitFullscreen) {
+            /* 전체화면에서는 입력칸이 보이지 않으므로 전체화면을 해제한 뒤 이동 */
+            Promise.resolve(document.exitFullscreen()).then(function(){ setTimeout(doFocus, 150); }).catch(function(){ doFocus(); });
         } else {
-            cloudBtn.classList.remove('active');
-            showToast("구름 자막 작성 모드 OFF", "success");
+            doFocus();
         }
     }
+
+    /* ---------- [신규] 구름자막 입력칸 (동영상 정보 밑) - 랜덤 위치에만 달림, 항상 동영상 창 안 ---------- */
+    let cloudWritePendingTime = null;
+    let cloudWritePendingVideoId = null;
+
+    function cloudWriteFmtTime(sec) {
+        sec = Math.max(0, Math.floor(sec || 0));
+        const m = Math.floor(sec / 60), r = sec % 60;
+        return String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
+    }
+
+    function cloudWriteResetState() {
+        cloudWritePendingTime = null;
+        cloudWritePendingVideoId = null;
+        const hint = document.getElementById('cloud-write-hint');
+        if(hint) hint.textContent = '입력을 시작하면 구름작성 시각이 설정됩니다.';
+    }
+
+    function cloudWriteOnInput() {
+        const field = document.getElementById('cloud-write-input');
+        const hint = document.getElementById('cloud-write-hint');
+        if(!field || !hint) return;
+        if(field.value.length === 0) { cloudWriteResetState(); return; }
+        if(cloudWritePendingTime === null && currentPlayingItem) {
+            cloudWritePendingTime = Math.floor(video.currentTime || 0);
+            cloudWritePendingVideoId = currentPlayingItem.id;
+            hint.textContent = '구름작성 시각이 ' + cloudWriteFmtTime(cloudWritePendingTime) + '(으)로 설정되었습니다.';
+        }
+    }
+
+    /* 자막 글자 크기를 실제로 재서, 동영상 창 안에 완전히 들어오는 랜덤 위치(%)를 만든다. 너무 길면 null */
+    function getRandomCloudPosInside(txt) {
+        const lw = cloudLayer.clientWidth, lh = cloudLayer.clientHeight;
+        if(!lw || !lh) return null;
+        const m = document.createElement('div');
+        m.className = 'cloud';
+        m.innerText = txt;
+        m.style.visibility = 'hidden';
+        m.style.left = '0px';
+        m.style.top = '0px';
+        m.style.animation = 'none';
+        cloudLayer.appendChild(m);
+        const w = m.offsetWidth, h = m.offsetHeight;
+        m.remove();
+        const wPct = (w / lw) * 100, hPct = (h / lh) * 100;
+        const margin = 3;
+        if(wPct > 100 - margin * 2) return null;
+        const maxX = 100 - wPct - margin;
+        const maxY = 100 - hPct - margin;
+        const x = margin + Math.random() * Math.max(0, maxX - margin);
+        const y = margin + Math.random() * Math.max(0, maxY - margin);
+        return { x: x.toFixed(1) + '%', y: y.toFixed(1) + '%' };
+    }
+
+    function submitCloudFromInput() {
+        const field = document.getElementById('cloud-write-input');
+        if(!field) return;
+        const txt = field.value.trim();
+        if(!txt) { showToast('구름자막 내용을 입력해 주세요.', 'error'); return; }
+        if(!currentPlayingItem) { showToast('재생 중인 영상이 없습니다.', 'error'); return; }
+
+        const pos = getRandomCloudPosInside(txt);
+        if(!pos) { showToast('자막이 너무 길어 동영상 화면 안에 들어가지 않습니다. 줄여서 입력해 주세요.', 'error'); return; }
+
+        let atTime = Math.floor(video.currentTime || 0);
+        if(cloudWritePendingTime !== null && cloudWritePendingVideoId === currentPlayingItem.id) atTime = cloudWritePendingTime;
+
+        submitCloudText(txt, pos.x, pos.y, atTime);
+        field.value = '';
+        cloudWriteResetState();
+        field.focus();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const field = document.getElementById('cloud-write-input');
+        const btn = document.getElementById('cloud-write-btn');
+        if(field) {
+            field.addEventListener('input', cloudWriteOnInput);
+            field.addEventListener('keydown', function(e) {
+                if(e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); submitCloudFromInput(); }
+            });
+        }
+        if(btn) btn.addEventListener('click', submitCloudFromInput);
+    });
 
     function toggleFullscreen() {
         const target = document.getElementById('fullscreen-player-target');
@@ -5168,7 +5257,8 @@
         pendingCloudClickInfo = null;
     }
 
-    function submitCloudText(txt, clickX, clickY) {
+    function submitCloudText(txt, clickX, clickY, atTime=null) {
+        const cloudTime = (atTime !== null && atTime !== undefined) ? atTime : Math.floor(video.currentTime);
         const pos = shoot(txt, "normal", clickX, clickY); 
         userStats.cloud++; 
         /* [수정] 자막 등록마다 채널 페이지 전체(프로필/배너/작성자 전체 영상목록/업로드 상태 등)를
@@ -5182,7 +5272,7 @@
             
             currentPlayingItem.savedClouds.push({
                 text: txt,
-                time: Math.floor(video.currentTime), 
+                time: cloudTime, 
                 x: pos ? pos.x : clickX,
                 y: pos ? pos.y : clickY,
                 fired: true,
@@ -5198,7 +5288,7 @@
             updateDetail();
 
             /* [신규] 마이페이지용 "내가 남긴 구름 자막" 별도 기록 */
-            recordMyCloud(txt, currentPlayingItem.id, Math.floor(video.currentTime));
+            recordMyCloud(txt, currentPlayingItem.id, cloudTime);
 
             /* [신규] 영상 주인에게 알림 (본인 영상이 아닐 때만) */
             if(user && currentPlayingItem.author !== user.nick) {
@@ -5655,6 +5745,8 @@
 
     /* ---------- [신규 10] 토스트 알림 ---------- */
     function showToast(msg, type) {
+        /* [변경] 토스트 알림 표시 기능 제거 - 호출은 그대로 두되 아무것도 표시하지 않음 */
+        return;
         const container = document.getElementById('toast-container');
         if(!container) { return; }
         const toast = document.createElement('div');
@@ -5689,7 +5781,6 @@
     if(initialSideList) initialSideList.classList.toggle('album-mode', currentDisplay === 'album');
     const initialDensityBtn = document.getElementById('cloud-density-btn');
     if(initialDensityBtn) initialDensityBtn.innerText = cloudDensityLevels[cloudDensityLevel].label;
-    applyCloudSize();
     checkNewSubscriptionVideos();
 
     const initialInfiniteScrollBtn = document.getElementById('infinite-scroll-toggle-text');
@@ -5841,6 +5932,49 @@
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
+})();
+</script>
+<script>
+/* [신규] 검색창을 누르면(포커스) 배경 이미지를 다른 사진으로 바꾸고, 누르지 않은 상태(블러)에서는 원래 사진으로 되돌림 */
+(function() {
+    var IMG_NORMAL = 'https://i.ibb.co/93WQYWqX/20261015-170207.jpg';
+    var IMG_FOCUS = 'https://i.ibb.co/xKHspffm/20261015-170604.jpg';
+    function init() {
+        var input = document.getElementById('main-search-input');
+        var bg = document.querySelector('.search-wrapper .search-bg-img');
+        if (!input || !bg) return;
+        var pre = new Image(); pre.src = IMG_FOCUS; /* 깜빡임 방지용 미리 불러오기 */
+        input.addEventListener('focus', function() { bg.src = IMG_FOCUS; });
+        input.addEventListener('blur', function() { bg.src = IMG_NORMAL; });
+        if (document.activeElement === input) bg.src = IMG_FOCUS;
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
+</script>
+<script>
+/* [신규] 컨트롤바: 다시 재생 / 진행바 채움 표시 */
+(function() {
+    var v = document.getElementById('main-video');
+    var bar = document.getElementById('custom-progress-bar');
+    var rp = document.getElementById('replay-btn');
+    if (!v || !bar) return;
+    function fill() { bar.style.setProperty('--p', (parseFloat(bar.value) || 0) + '%'); }
+    ['timeupdate', 'seeked', 'loadedmetadata', 'emptied'].forEach(function(e) { v.addEventListener(e, fill); });
+    bar.addEventListener('input', fill);
+    if (rp) {
+        v.addEventListener('ended', function() { rp.classList.add('ready'); });
+        ['play', 'seeking', 'emptied', 'loadstart'].forEach(function(e) { v.addEventListener(e, function() { rp.classList.remove('ready'); }); });
+    }
+    window.replayVideo = function() {
+        if (!v.currentSrc && !v.src) return;
+        try {
+            v.currentTime = 0;
+            var pr = v.play();
+            if (pr && pr.catch) pr.catch(function() {});
+        } catch (e) {}
+    };
+    fill();
 })();
 </script>
 </body>
