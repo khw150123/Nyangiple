@@ -1046,10 +1046,6 @@
                     <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg">
                     <span>업로드</span>
                 </div>
-                <div class="nav-icon-btn" onclick="handleAuthClick()">
-                    <img src="https://i.ibb.co/kkkgpvz/20260617-135134.png">
-                    <span id="menu-auth-text">로그인/회원가입</span>
-                </div>
             </div>
         </div>
 
@@ -1065,7 +1061,6 @@
         </div>
         <div class="lg-right-actions-wrap" id="lg-right-actions-wrap">
             <div class="lg-right-actions" id="lg-right-actions">
-                <div class="lg-action-btn" onclick="handleAuthClick()"><img src="https://i.ibb.co/kkkgpvz/20260617-135134.png"><span id="menu-auth-text-lg">로그인</span></div>
                 <div class="lg-action-btn" onclick="openModal('upload-modal')"><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg"><span>업로드</span></div>
             </div>
             <div class="lg-notice-row">
@@ -1194,7 +1189,7 @@
                     </div>
 
                     <div class="home-tab-content" id="home-tab-mypage">
-                        <div id="home-my-info" class="pf-top">로그인이 필요합니다.</div>
+                        <div id="home-my-info" class="pf-top"></div>
 
                         <div class="mypage-tab-bar pf-radio-bar">
                             <div class="mypage-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">업로드한 영상</div>
@@ -1267,7 +1262,7 @@
                         <button class="cb2-btn cb2-replay" id="replay-btn" onclick="replayVideo()" title="다시 재생">
                             <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
                         </button>
-                        <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (자막 입력칸으로 이동합니다)">
+                        <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (켠 뒤 동영상 화면을 누르면 원하는 곳에 달 수 있습니다)">
                             <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
                         </button>
                         <div class="cb2-vol">
@@ -1288,8 +1283,11 @@
                 <div id="cloud-write-home" style="display:none;">
                     <div id="cloud-write-box" style="text-align:left;">
                         <div style="display:flex; gap:6px; align-items:stretch;">
-                            <input type="text" id="cloud-write-input" maxlength="60" autocomplete="off" placeholder="구름자막하기 (엔터)" style="flex:1 1 auto; min-width:0; box-sizing:border-box; font-size:12px; padding:4px 8px; border:1px solid #ddd; border-radius:3px; outline:none;">
+                            <input type="text" id="cloud-write-input" maxlength="60" autocomplete="off" placeholder="구름자막 달기 (엔터)" style="flex:1 1 auto; min-width:0; box-sizing:border-box; font-size:12px; padding:4px 8px; border:1px solid #ddd; border-radius:3px; outline:none;">
                             <button type="button" id="cloud-write-btn" style="flex:0 0 auto; font-size:12px; font-weight:bold; padding:0 14px; border:none; border-radius:3px; background:#3a7bd5; color:#fff; cursor:pointer;">구름작성</button>
+                        </div>
+                        <div style="margin-top:6px;">
+                            <button type="button" id="cloud-bundle-btn" title="입력한 글자를 10개로 뭉쳐서 한 곳에 띄웁니다" style="width:100%; font-size:12px; font-weight:bold; padding:6px 14px; border:none; border-radius:3px; background:#53add2; color:#fff; cursor:pointer;">구름뭉치</button>
                         </div>
                         <div id="cloud-write-hint" style="display:none; margin-top:6px; padding:3px 10px; font-size:11px; color:#666; background:#f1f1f1; border:1px solid #e0e0e0; border-radius:10px;">입력을 시작하면 구름작성 시각이 설정됩니다.</div>
                     </div>
@@ -1367,7 +1365,7 @@
             <div style="padding:15px;">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
                 <!-- [변경] 프로필 상단: 프사 + 닉네임 -->
-                <div id="my-info" class="pf-top">로그인이 필요합니다.</div>
+                <div id="my-info" class="pf-top"></div>
 
                 <div class="mypage-tab-bar pf-radio-bar">
                     <div class="mypage-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">업로드한 영상</div>
@@ -1453,89 +1451,11 @@
     </div>
 </div>
 
-<div id="login-modal" class="modal"><div class="login-panel-wrap">
-    <div class="login-panel-content">
-        <div class="login-panel-titlebar">로그인</div>
-        <div class="login-panel-main">
-            <div class="login-panel-form">
-                <div class="login-panel-field">
-                    <label>아이디/이메일</label>
-                    <input type="text" id="l-id" placeholder="아이디 또는 이메일 주소">
-                </div>
-                <div class="login-panel-field">
-                    <label>비밀번호</label>
-                    <input type="password" id="l-pw" placeholder="비밀번호">
-                </div>
-                <div class="login-panel-checkbox-row"><label><input type="checkbox" id="l-autologin"> 자동 로그인</label></div>
-            </div>
-        </div>
-        <div class="login-panel-actions">
-            <div class="login-panel-cancel-btn" onclick="closeModal('login-modal')">✕ 취소</div>
-            <div class="login-panel-submit-btn" onclick="doLogin()">➜ 로그인</div>
-        </div>
-    </div>
-    <div class="login-panel-linkbar" onclick="closeModal('login-modal'); openModal('signup-modal'); generateSignupCaptcha()">👤➕ 아이디가 없으신가요? 지금 바로 가입하세요!</div>
-</div></div>
-
-<div id="signup-modal" class="modal"><div class="signup-panel-wrap">
-    <div class="signup-panel-content">
-        <div class="signup-panel-titlebar">회원가입</div>
-
-        <div class="signup-panel-row">
-            <label>이메일 주소</label>
-            <div class="signup-input-wrap"><input type="text" id="s-email" placeholder="이메일 주소"></div>
-            <span class="signup-required-tag">필수</span>
-        </div>
-
-        <div class="signup-panel-row">
-            <label>채널 아이디</label>
-            <div class="signup-input-wrap"><input type="text" id="s-id" placeholder="채널 아이디"></div>
-            <span class="signup-required-tag">필수</span>
-        </div>
-
-        <div class="signup-panel-row">
-            <label>비밀번호</label>
-            <div class="signup-input-wrap"><input type="password" id="s-pw" placeholder="비밀번호"></div>
-            <span class="signup-required-tag">필수</span>
-        </div>
-
-        <div class="signup-panel-row">
-            <label>닉네임</label>
-            <div class="signup-input-wrap"><input type="text" id="s-nick" placeholder="닉네임"></div>
-            <span class="signup-required-tag">필수</span>
-        </div>
-
-        <div class="signup-panel-row">
-            <label>자동 입력 방지</label>
-            <div class="signup-input-wrap"><canvas id="s-captcha-canvas" class="captcha-canvas" width="120" height="42" onclick="generateSignupCaptcha()" title="새로고침"></canvas><input type="text" id="s-captcha-answer" placeholder="문자 입력" class="signup-captcha-input"></div>
-            <span class="signup-required-tag">필수</span>
-        </div>
-
-        <div class="signup-panel-row signup-panel-row-optional">
-            <label>프로필 사진</label>
-            <div class="signup-input-wrap"><input type="file" id="s-profile" accept="image/*"></div>
-            <span class="signup-optional-tag">선택</span>
-        </div>
-
-        <div class="signup-panel-row signup-panel-row-optional signup-panel-row-last">
-            <label>소개</label>
-            <div class="signup-input-wrap"><textarea id="s-desc" placeholder="소개글을 입력해주세요"></textarea></div>
-            <span class="signup-optional-tag">선택</span>
-        </div>
-
-        <div class="signup-panel-actions">
-            <div class="login-panel-cancel-btn" onclick="closeModal('signup-modal')">✕ 취소</div>
-            <div class="login-panel-submit-btn" onclick="doSignup()">○ 확인</div>
-        </div>
-    </div>
-    <div class="login-panel-linkbar" onclick="closeModal('signup-modal'); openModal('login-modal')">이미 계정이 있으신가요? 로그인</div>
-</div></div>
-
 <div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="upload-submit-btn" onclick="doUpload()"></div></div></div>
 
 <div id="edit-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('edit-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">동영상 수정</div><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">동영상 파일 재선택 (미선택시 기존 영상 유지)</div><input type="file" id="edit-up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 기존 썸네일 유지)</div><input type="file" id="edit-up-thumb" accept="image/*"><input type="text" id="edit-up-title" placeholder="제목"><textarea id="edit-up-desc" placeholder="설명"></textarea><div id="edit-modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="edit-up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addEditTagInputField()"></div></div><select id="edit-up-genre" onchange="toggleGenreCustomInput('edit-up-genre','edit-up-genre-custom')"></select><input type="text" id="edit-up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="edit-upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="edit-upload-progress-fill"></div></div><div class="upload-progress-label" id="edit-upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="edit-upload-submit-btn" onclick="doEditVideo()"></div></div></div>
 
-<div id="cloud-info-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('cloud-info-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">구름이 뭔가요?</div><div style="font-size:12px; color:#444; line-height:1.6; text-align:left;">구름 자막이란 시청자들이 동영상 위에 남긴 자막이 구름처럼 화면 위를 떠다니며 실시간으로 나타나는 냥이플만의 자막 기능입니다.<br><br>재생 화면 아래의 자막 달기(☁) 버튼을 켠 뒤 화면을 클릭하면 원하는 위치에 나만의 구름 자막을 남길 수 있고, 다른 시청자가 남긴 구름 자막도 함께 볼 수 있습니다.<br><br>로그인하면 실시간 구름 자막 목록에서 지금까지 표시된 자막 내용을 직접 확인할 수 있습니다.</div><div style="text-align:center; font-size:12px; color:#53add2; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="closeModal('cloud-info-modal')">확인</div></div></div></div>
+<div id="cloud-info-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('cloud-info-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">구름이 뭔가요?</div><div style="font-size:12px; color:#444; line-height:1.6; text-align:left;">구름 자막이란 시청자들이 동영상 위에 남긴 자막이 구름처럼 화면 위를 떠다니며 실시간으로 나타나는 냥이플만의 자막 기능입니다.<br><br>재생 화면 아래의 자막 달기(☁) 버튼을 켠 뒤 화면을 클릭하면 원하는 위치에 나만의 구름 자막을 남길 수 있고, 다른 시청자가 남긴 구름 자막도 함께 볼 수 있습니다.<br><br>실시간 구름 자막 목록에서 지금까지 표시된 자막 내용을 직접 확인할 수 있습니다.</div><div style="text-align:center; font-size:12px; color:#53add2; font-weight:bold; cursor:pointer; text-decoration:underline;" onclick="closeModal('cloud-info-modal')">확인</div></div></div></div>
 
 <div id="report-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('report-modal')"><div class="modal-body">
     <div style="font-size:14px; font-weight:bold; text-align:center;">동영상 신고</div>
@@ -1815,6 +1735,22 @@
     let user = JSON.parse(localStorage.getItem('tvple_user') || "null");
     let users = JSON.parse(localStorage.getItem('tvple_users') || "[]");
     let subscriptions = JSON.parse(localStorage.getItem('tvple_subscriptions') || "[]");
+
+    /* [변경] 로그인 기능 제거 - 로그인 없이도 이 기기의 내 프로필이 자동으로 만들어져, 마이페이지/댓글/공감/찜/구독/업로드를 바로 쓸 수 있습니다. */
+    if(!user || !user.nick) {
+        user = {
+            id: 'me_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+            nick: '냥이' + String(Math.floor(1000 + Math.random() * 9000)),
+            desc: '소개글이 없습니다.',
+            profileImg: 'https://i.ibb.co/P36c8H4/20260620-061219.png',
+            regDate: new Date().toISOString()
+        };
+        try { localStorage.setItem('tvple_user', JSON.stringify(user)); } catch(e) {}
+    }
+    if(!users.find(u => u.id === user.id)) {
+        users.push(user);
+        try { localStorage.setItem('tvple_users', JSON.stringify(users)); } catch(e) {}
+    }
 
     let currentGenre = localStorage.getItem('tvple_current_genre') || 'all';
     let currentSort = localStorage.getItem('tvple_current_sort') || 'date';
@@ -2313,7 +2249,7 @@
         const isMe = user && (user.nick === currentPlayingItem.author);
         const isSubscribed = subscriptions.includes(currentPlayingItem.author);
         
-        let channelBoxInVideo = "로그인이 필요합니다.";
+        let channelBoxInVideo = "";
         if (user) {
             const author = currentPlayingItem.author;
             const authorPImgUrl = currentPlayingItem.authorProfile || "https://i.ibb.co/P36c8H4/20260620-061219.png";
@@ -2541,11 +2477,6 @@
         const box = document.getElementById('cloud-live-feed-list');
         if(!box || !currentPlayingItem) return;
 
-        if(!user) {
-            box.innerHTML = `<div style="color:#888;">${currentVideoCloudCount}개의 구름이 있습니다. 로그인 후 확인하실 수 있습니다.</div>`;
-            return;
-        }
-
         if(cloudFeedLog.length === 0) {
             box.innerHTML = `<div style="color:#999;">아직 표시된 구름 자막이 없습니다.</div>`;
             return;
@@ -2622,8 +2553,8 @@
                     <span class="reply-btn-text" onclick="toggleReplyInput(${idx})">답글 달기${replies.length > 0 ? ` (${replies.length})` : ''}</span>
                     ${repliesHtml}
                     <div class="reply-input-row" id="reply-input-row-${idx}" style="display:none;">
-                        <input type="text" id="reply-input-${idx}" placeholder="${user ? '답글을 입력하세요' : '로그인 후 답글을 작성할 수 있습니다'}" ${user ? '' : 'disabled'} onkeypress="if(event.keyCode==13) addReply(${idx})">
-                        <button onclick="addReply(${idx})" ${user ? '' : 'disabled'}>등록</button>
+                        <input type="text" id="reply-input-${idx}" placeholder="답글을 입력하세요" onkeypress="if(event.keyCode==13) addReply(${idx})">
+                        <button onclick="addReply(${idx})">등록</button>
                     </div>
                 </div>`;
             }).join('');
@@ -2635,15 +2566,14 @@
                 <span class="comment-sort-tab ${commentSortMode === 'liked' ? 'active' : ''}" onclick="setCommentSort('liked')">공감 많은순</span>
             </div>
             <div style="display:flex; gap:6px; margin-bottom:10px;">
-                <input type="text" id="comment-input" placeholder="${user ? '댓글을 입력하세요' : '로그인 후 댓글을 작성할 수 있습니다'}" style="flex:1; font-size:12px; padding:6px; border:1px solid #ddd; box-sizing:border-box;" ${user ? '' : 'disabled'} onkeypress="if(event.keyCode==13) addComment()">
-                <button onclick="addComment()" style="font-size:11px; font-weight:bold; padding:0 12px; border:1px solid #53add2; background:#53add2; color:#fff; cursor:pointer;" ${user ? '' : 'disabled'}>등록</button>
+                <input type="text" id="comment-input" placeholder="댓글을 입력하세요" style="flex:1; font-size:12px; padding:6px; border:1px solid #ddd; box-sizing:border-box;" onkeypress="if(event.keyCode==13) addComment()">
+                <button onclick="addComment()" style="font-size:11px; font-weight:bold; padding:0 12px; border:1px solid #53add2; background:#53add2; color:#fff; cursor:pointer;">등록</button>
             </div>
             ${listHtml}`;
     }
 
     function addComment() {
-        if(!user) { alert("로그인을 해야 댓글을 작성할 수 있습니다."); openModal('login-modal'); return; }
-        if(!currentPlayingItem) return;
+                if(!currentPlayingItem) return;
         const input = document.getElementById('comment-input');
         const text = input.value.trim();
         if(!text) return;
@@ -2676,8 +2606,7 @@
     }
 
     function toggleCommentLike(idx) {
-        if(!user) { alert("로그인을 해야 공감할 수 있습니다."); openModal('login-modal'); return; }
-        if(!currentPlayingItem || !currentPlayingItem.comments) return;
+                if(!currentPlayingItem || !currentPlayingItem.comments) return;
         const c = currentPlayingItem.comments[idx];
         if(!c) return;
         if(!c.likedBy) c.likedBy = [];
@@ -2770,8 +2699,7 @@
 
     let jjimSaveDebounceTimer = null;
     function handleJjim() {
-        if(!user) { alert("로그인을 해야 찜할 수 있습니다."); openModal('login-modal'); return; }
-
+        
         /* [수정] 기존 코드는 클릭할 때마다 무조건 jjim 카운트를 1씩 올리기만 해서,
            같은 사람이 다시 눌러도 취소가 안 되고 계속 늘어나기만 하던 버그가 있었음.
            누가 이미 찜을 눌렀는지(jjimUsers)를 기록해서, 이미 찜한 상태면 취소(카운트 -1,
@@ -2991,7 +2919,7 @@
 
         const myUploadedContainer = document.getElementById('home-my-uploaded');
         if (!user) {
-            myUploadedContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px; text-align:center; width:100%;'>로그인하시면 내가 올린 동영상 목록을 확인할 수 있습니다.</div>";
+            myUploadedContainer.innerHTML = "";
         } else {
             const myUploadedVideos = db.filter(v => v.author === user.nick);
             if (myUploadedVideos.length === 0) {
@@ -3093,11 +3021,6 @@
     }
 
     function shufflePlayMyUploaded() {
-        if(!user) {
-            alert("로그인이 필요합니다.");
-            openModal('login-modal');
-            return;
-        }
         const myList = db.filter(v => v.author === user.nick);
         if(myList.length === 0) {
             alert("내가 올린 동영상이 존재하지 않습니다.");
@@ -3345,7 +3268,7 @@
 
         const settingsEl = document.getElementById('home-profile-settings');
         if(!user) {
-            infoEl.innerHTML = "로그인이 필요합니다.";
+            infoEl.innerHTML = "";
             const listEl = document.getElementById('home-channel-internal-video-list');
             if(listEl) listEl.innerHTML = "";
             if(settingsEl) settingsEl.style.display = 'none';
@@ -3383,7 +3306,7 @@
         const listEl = document.getElementById('home-my-clouds-list');
         if(!listEl) return;
         if(!user) {
-            listEl.innerHTML = "<div class='pf-empty'>로그인이 필요합니다.</div>";
+            listEl.innerHTML = "";
             return;
         }
         renderCloudRowsInto(listEl, user.nick);
@@ -4017,123 +3940,6 @@
         renderList();
     }
 
-    async function doLogin() { 
-        const id = document.getElementById('l-id').value.trim();
-        const pw = document.getElementById('l-pw').value;
-
-        if(!id || !pw) { alert("아이디와 비밀번호를 입력해주세요."); return; }
-
-        const pwHash = await hashPassword(pw);
-        let found = users.find(u => u.id === id || u.email === id);
-
-        /* [신규] 페이지를 열자마자 바로 로그인을 시도하면 서버 계정 목록(fbLoadAllUsers) 동기화가
-           아직 안 끝나서, 다른 브라우저/기기에서 만든 계정인데도 "계정 없음"으로 뜨는 문제가 있었음.
-           로컬에서 못 찾은 경우에 한해 서버에서 한 번 더 직접 조회해서 병합 후 재시도. */
-        if(!found && typeof fbLoadAllUsers === 'function') {
-            try {
-                const onlineUsers = await fbLoadAllUsers();
-                if(onlineUsers) {
-                    onlineUsers.forEach((ou) => {
-                        const idx = users.findIndex(u => u.id === ou.id);
-                        if(idx >= 0) { users[idx] = ou; } else { users.push(ou); }
-                    });
-                    try { localStorage.setItem('tvple_users', JSON.stringify(users)); } catch(e) {}
-                    found = users.find(u => u.id === id || u.email === id);
-                }
-            } catch(e) { console.error('로그인 시 서버 계정 조회 실패:', e); }
-        }
-
-        if(!found || (found.pw !== pwHash && found.pw !== pw)) {
-            alert("아이디 또는 비밀번호가 일치하지 않습니다. 계정이 없으시면 회원가입을 먼저 진행해주세요.");
-            return;
-        }
-
-        if(found.pw === pw) {
-            found.pw = pwHash;
-            localStorage.setItem('tvple_users', JSON.stringify(users));
-        }
-
-        user = found;
-        localStorage.setItem('tvple_user', JSON.stringify(user));
-        currentChannelTargetName = user.nick;
-        closeModal('login-modal');
-        updateChannel();
-        if(currentPlayingItem) renderCloudLiveFeedBox();
-        showToast(`${user.nick}님, 환영합니다!`, "success");
-        refreshNotifBadgeAndPanel();
-
-        if(found.email && found.email === id) {
-            const loginTime = new Date().toLocaleString("ko-KR");
-            emailjs.send("service_oscefhp", "template_zz2v52n", {
-                to_email: found.email,
-                login_time: loginTime
-            }).catch(function(err) {
-                console.error("로그인 알림 메일 발송 실패:", err);
-            });
-        }
-    }
-
-    async function doSignup() {
-        const email = document.getElementById('s-email').value.trim();
-        const id = document.getElementById('s-id').value.trim();
-        const pw = document.getElementById('s-pw').value;
-        const nick = document.getElementById('s-nick').value.trim();
-        const desc = document.getElementById('s-desc').value || "소개글이 없습니다.";
-        const pFile = document.getElementById('s-profile').files[0];
-        const defaultImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
-        const captchaAnswer = document.getElementById('s-captcha-answer').value.trim();
-
-        if(!email || !id || !pw || !nick) { alert("이메일 주소, 채널 아이디, 비밀번호, 닉네임을 모두 입력해주세요."); return; }
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert("올바른 이메일 주소 형식이 아닙니다."); return; }
-        if(!captchaAnswer) { alert("자동 입력 방지 문자를 입력해주세요."); return; }
-        if(captchaAnswer.toUpperCase() !== signupCaptchaAnswer.toUpperCase()) {
-            alert("자동 입력 방지 문자가 올바르지 않습니다.");
-            generateSignupCaptcha();
-            return;
-        }
-        if(users.find(u => u.id === id)) { alert("이미 사용 중인 아이디입니다."); return; }
-        if(users.find(u => u.email === email)) { alert("이미 사용 중인 이메일 주소입니다."); return; }
-
-        const pwHash = await hashPassword(pw);
-
-        function finishSignup(profileImg) {
-            const newUser = { id: id, email: email, pw: pwHash, nick: nick, desc: desc, profileImg: profileImg, regDate: new Date().toISOString() };
-            users.push(newUser);
-            localStorage.setItem('tvple_users', JSON.stringify(users));
-            user = newUser;
-            localStorage.setItem('tvple_user', JSON.stringify(user));
-            if(typeof fbSaveUser === 'function') fbSaveUser(newUser);
-            currentChannelTargetName = user.nick;
-            document.getElementById('s-email').value = "";
-            document.getElementById('s-id').value = "";
-            document.getElementById('s-pw').value = "";
-            document.getElementById('s-nick').value = "";
-            document.getElementById('s-desc').value = "";
-            document.getElementById('s-profile').value = "";
-            document.getElementById('s-captcha-answer').value = "";
-            generateSignupCaptcha();
-            closeModal('signup-modal');
-            updateChannel();
-            showToast(`${nick}님, 냥이플 가입을 환영합니다!`, "success");
-
-            const signupTime = new Date().toLocaleString("ko-KR");
-            emailjs.send("service_oscefhp", "template_c1v91ff", {
-                to_email: email,
-                login_time: signupTime
-            }).catch(function(err) {
-                console.error("회원가입 알림 메일 발송 실패:", err);
-            });
-        }
-
-        if(pFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) { finishSignup(e.target.result); };
-            reader.readAsDataURL(pFile);
-        } else {
-            finishSignup(defaultImg);
-        }
-    }
-
     /* [신규] 자동 입력 방지 - 숫자/영어 랜덤 문자 캡차(캔버스) 공용 함수 */
     const CAPTCHA_CHARSET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"; /* 혼동되는 0,1,O,I 제외 */
     function generateCaptchaCode(len) {
@@ -4176,15 +3982,6 @@
             ctx.arc(Math.random() * w, Math.random() * h, 1, 0, Math.PI * 2);
             ctx.fill();
         }
-    }
-
-    /* [신규] 회원가입 - 자동 입력 방지(숫자/영어 랜덤 문자) */
-    let signupCaptchaAnswer = "";
-    function generateSignupCaptcha() {
-        signupCaptchaAnswer = generateCaptchaCode(5);
-        drawCaptchaCanvas('s-captcha-canvas', signupCaptchaAnswer);
-        const ansEl = document.getElementById('s-captcha-answer');
-        if(ansEl) ansEl.value = "";
     }
 
     function triggerProfileChanger() {
@@ -4546,11 +4343,6 @@
     }
 
     function toggleSubscribeAction(targetName) {
-        if(!user) {
-            alert("로그인을 해야 구독을 할 수 있습니다.");
-            openModal('login-modal');
-            return;
-        }
         
         const index = subscriptions.indexOf(targetName);
         if(index > -1) {
@@ -4576,20 +4368,16 @@
     function updateChannel() { 
         if(user) {
             document.getElementById('header-user-nick').innerText = user.nick;
-            document.getElementById('menu-auth-text').innerText = "로그아웃";
-            if(document.getElementById('menu-auth-text-lg')) document.getElementById('menu-auth-text-lg').innerText = "로그아웃";
             localStorage.setItem('tvple_stats', JSON.stringify(userStats)); 
         } else {
             document.getElementById('header-user-nick').innerText = ""; 
-            document.getElementById('menu-auth-text').innerText = "로그인/회원가입"; 
-            if(document.getElementById('menu-auth-text-lg')) document.getElementById('menu-auth-text-lg').innerText = "로그인";
         }
 
         let activeTargetName = currentChannelTargetName;
         if(!activeTargetName) {
             if(user) activeTargetName = user.nick;
             else {
-                document.getElementById('my-info').innerHTML = "로그인이 필요합니다.";
+                document.getElementById('my-info').innerHTML = "";
                 document.getElementById('channel-internal-video-list').innerHTML = "";
                 const stEl = document.getElementById('mypage-profile-settings');
                 if(stEl) stEl.style.display = 'none';
@@ -4626,7 +4414,7 @@
 
     /* [신규] 마이페이지 - 닉네임 변경 (기존 함수는 변경 없음, 추가만) */
     function saveMyNickname(inputId) {
-        if(!user) { showToast("로그인이 필요합니다.", "error"); return; }
+        if(!user) return;
         const inputEl = document.getElementById(inputId || 'mypage-nick-input');
         if(!inputEl) return;
         const newNick = inputEl.value.trim();
@@ -4677,7 +4465,7 @@
 
     /* [신규] 마이페이지 - 내 링크(유튜브 채널 등) 저장 (기존 함수는 변경 없음, 추가만) */
     function saveMyLink() {
-        if(!user) { showToast("로그인이 필요합니다.", "error"); return; }
+        if(!user) return;
         const inputEl = document.getElementById('mypage-link-input');
         if(!inputEl) return;
         const link = inputEl.value.trim();
@@ -4739,8 +4527,7 @@
 
     /* [신규] 알림센터: 구독 새 영상 + 댓글/찜 알림을 한 패널에서 확인 (기존 alert 방식 대체) */
     function openNotifications() {
-        if(!user) { openModal('login-modal'); return; }
-        const panel = document.getElementById('notif-panel');
+                const panel = document.getElementById('notif-panel');
         if(!panel) return;
         refreshNotifBadgeAndPanel();
         panel.classList.toggle('open');
@@ -4827,11 +4614,6 @@
         location.reload();
     }
     
-    function handleAuthClick() { 
-        if(user) { if(confirm("로그아웃 하시겠습니까?")) { user = null; localStorage.removeItem('tvple_user'); location.reload(); } }
-        else { openModal('login-modal'); }
-    }
-
     function openModal(id) { document.getElementById(id).style.display = 'flex'; document.getElementById('sliding-menu').classList.remove('open'); document.querySelectorAll('.padlet-embed iframe').forEach(f => { f.style.visibility = 'visible'; }); }
 
     function openReportModal() {
@@ -5049,19 +4831,12 @@
     }
 
     function toggleCloudWritingMode() {
-        /* [변경] 더 이상 화면을 눌러 다는 모드가 아니라, 동영상 정보 밑 구름자막 입력칸으로 이동합니다. */
-        const doFocus = function() {
-            const box = document.getElementById('cloud-write-box');
-            const field = document.getElementById('cloud-write-input');
-            if(box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            if(field) { try { field.focus({ preventScroll: true }); } catch(err) { field.focus(); } }
-        };
-        if(document.fullscreenElement && document.exitFullscreen) {
-            /* 전체화면에서는 입력칸이 보이지 않으므로 전체화면을 해제한 뒤 이동 */
-            Promise.resolve(document.exitFullscreen()).then(function(){ setTimeout(doFocus, 150); }).catch(function(){ doFocus(); });
-        } else {
-            doFocus();
-        }
+        /* [변경] 구름 자막 달기 버튼: 켜면 동영상 화면을 눌러 원하는 위치에 직접 달 수 있고, 다시 누르면 꺼집니다.
+           (동영상 정보 밑 입력칸은 이전처럼 랜덤한 곳에 달립니다) */
+        const btn = document.getElementById('custom-cloud-toggle-btn');
+        isCloudWritingModeActive = !isCloudWritingModeActive;
+        if(btn) btn.classList.toggle('active', isCloudWritingModeActive);
+        if(!isCloudWritingModeActive) cancelCloudTextInput();
     }
 
     /* ---------- [신규] 구름자막 입력칸 (동영상 정보 밑) - 랜덤 위치에만 달림, 항상 동영상 창 안 ---------- */
@@ -5159,6 +4934,90 @@
             });
         }
         if(btn) btn.addEventListener('click', submitCloudFromInput);
+    });
+
+    /* ---------- [신규] 구름뭉치 - 입력한 글자를 10개로 뭉쳐서 동영상 창 안 한 곳에 띄움 ---------- */
+    function submitCloudBundle() {
+        const field = document.getElementById('cloud-write-input');
+        if(!field) return;
+        const txt = field.value.trim();
+        if(!txt) { showToast('구름자막 내용을 입력해 주세요.', 'error'); return; }
+        if(!currentPlayingItem) { showToast('재생 중인 영상이 없습니다.', 'error'); return; }
+
+        const lw = cloudLayer.clientWidth, lh = cloudLayer.clientHeight;
+        if(!lw || !lh) return;
+        const m = document.createElement('div');
+        m.className = 'cloud';
+        m.innerText = txt;
+        m.style.visibility = 'hidden';
+        m.style.left = '0px';
+        m.style.top = '0px';
+        m.style.animation = 'none';
+        cloudLayer.appendChild(m);
+        const wPct = (m.offsetWidth / lw) * 100, hPct = (m.offsetHeight / lh) * 100;
+        m.remove();
+        const margin = 3;
+        if(wPct > 100 - margin * 2) { showToast('자막이 너무 길어 동영상 화면 안에 들어가지 않습니다. 줄여서 입력해 주세요.', 'error'); return; }
+
+        /* 뭉치가 동영상 창 밖으로 나가지 않도록, 퍼지는 범위를 남는 공간 안으로 제한 */
+        const freeW = 100 - wPct - margin * 2;
+        const freeH = Math.max(0, 100 - hPct - margin * 2);
+        const spreadX = Math.min(6, freeW / 2);
+        const spreadY = Math.min(8, freeH / 2);
+        const cx = margin + spreadX + Math.random() * Math.max(0, freeW - spreadX * 2);
+        const cy = margin + spreadY + Math.random() * Math.max(0, freeH - spreadY * 2);
+
+        let atTime = Math.floor(video.currentTime || 0);
+        if(cloudWritePendingTime !== null && cloudWritePendingVideoId === currentPlayingItem.id) atTime = cloudWritePendingTime;
+
+        if(!currentPlayingItem.savedClouds) currentPlayingItem.savedClouds = [];
+        const BUNDLE_COUNT = 10;
+        for(let i = 0; i < BUNDLE_COUNT; i++) {
+            const bx = (cx + (Math.random() * 2 - 1) * spreadX).toFixed(1) + '%';
+            const by = (cy + (Math.random() * 2 - 1) * spreadY).toFixed(1) + '%';
+            shoot(txt, "normal", bx, by, true);
+            currentPlayingItem.savedClouds.push({
+                text: txt,
+                time: atTime,
+                x: bx,
+                y: by,
+                fired: true,
+                author: user ? user.nick : '익명'
+            });
+        }
+        renderCloudLiveFeedBox();
+
+        userStats.cloud += BUNDLE_COUNT;
+        localStorage.setItem('tvple_stats', JSON.stringify(userStats));
+
+        const target = db.find(v => v.id === currentPlayingItem.id);
+        if(target) {
+            target.savedClouds = currentPlayingItem.savedClouds;
+            localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+        }
+        updateDetail();
+
+        recordMyCloud(txt, currentPlayingItem.id, atTime);
+
+        if(user && currentPlayingItem.author !== user.nick) {
+            pushNotification(currentPlayingItem.author, {
+                type: 'cloud',
+                icon: '☁️',
+                text: `${user.nick}님이 "${currentPlayingItem.title}"에 구름 자막을 남겼습니다: "${txt.slice(0,20)}"`,
+                videoId: currentPlayingItem.id,
+                date: new Date().toISOString()
+            });
+        }
+
+        const f2 = document.getElementById('cloud-write-input');
+        if(f2) { f2.value = ''; f2.focus(); }
+        cloudWriteResetState();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const bundleBtn = document.getElementById('cloud-bundle-btn');
+        if(bundleBtn) bundleBtn.addEventListener('click', submitCloudBundle);
     });
 
     function toggleFullscreen() {
@@ -5296,7 +5155,7 @@
     }
 
     function openMyPage() {
-        if(!user) { showToast("로그인이 필요합니다.", "error"); openModal('login-modal'); return; }
+        if(!user) return;
         if(currentChannelTargetName !== user.nick) channelGenreFilter = 'all';
         currentChannelTargetName = user.nick;
         setMyPageTab('channel');
@@ -5309,7 +5168,7 @@
         if(!listEl) return;
         const target = currentChannelTargetName || (user ? user.nick : "");
         if(!target) {
-            listEl.innerHTML = "<div class='pf-empty'>로그인이 필요합니다.</div>";
+            listEl.innerHTML = "";
             return;
         }
         renderCloudRowsInto(listEl, target);
@@ -5327,7 +5186,7 @@
     }
 
     function addReply(commentIdx) {
-        if(!user) { showToast("로그인 후 답글을 작성할 수 있습니다.", "error"); openModal('login-modal'); return; }
+        if(!user) return;
         if(!currentPlayingItem || !currentPlayingItem.comments) return;
         const input = document.getElementById(`reply-input-${commentIdx}`);
         if(!input) return;
@@ -5369,7 +5228,7 @@
 
     /* ---------- [신규] 대댓글에도 좋아요 추가 ---------- */
     function toggleReplyLike(commentIdx, replyIdx) {
-        if(!user) { showToast("로그인을 해야 공감할 수 있습니다.", "error"); openModal('login-modal'); return; }
+        if(!user) return;
         if(!currentPlayingItem || !currentPlayingItem.comments) return;
         const comment = currentPlayingItem.comments[commentIdx];
         if(!comment || !comment.replies) return;
@@ -5706,8 +5565,6 @@
 
     /* [신규] 최초 알림 패널/배지 상태 반영 */
     refreshNotifBadgeAndPanel();
-    generateSignupCaptcha();
-
     initUI(); showSection('home');
     document.querySelectorAll('#sort-filters .filter-item').forEach(i => i.classList.toggle('active', i.dataset.sort === currentSort));
     document.querySelectorAll('#display-filters .filter-item').forEach(i => i.classList.toggle('active', i.dataset.display === currentDisplay));

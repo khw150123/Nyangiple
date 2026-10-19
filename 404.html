@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>냥이플</title>
+<script>
+/* https://khw150123.github.io/Nyangiple/000001 처럼 없는 주소로 들어오면 냥이플 메인으로 보내면서 번호를 넘겨줍니다. */
+(function() {
+    var base = '/Nyangiple/';
+    var p = location.pathname;
+    var rest = (p.indexOf(base) === 0) ? p.slice(base.length) : p.replace(/^\//, '');
+    location.replace(location.origin + base + '?/' + rest.replace(/&/g, '~and~') + location.hash);
+})();
+</script>
+</head>
+<body></body>
+</html>
