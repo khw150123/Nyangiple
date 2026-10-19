@@ -2351,7 +2351,7 @@
                         </div>
                         <div style="margin-bottom: 5px; position:relative; display:inline-flex; align-items:flex-start;">
                             <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                                <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = (video && video.src && video.src !== 'indexeddb_stored') ? video.src : ((currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : null); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
+                                <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = (currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : ((video && video.src && video.src !== 'indexeddb_stored') ? video.src : null); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
                                 <div class="report-hover-wrap" onclick="openReportModal()">
                                     <span class="report-btn-text"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a6 6 0 0 0-6 6c0 4.5-2 5.5-2 7 0 .55.45 1 1 1h14c.55 0 1-.45 1-1 0-1.5-2-2.5-2-7a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 21z"/></svg>신고</span>
                                     <span class="report-hover-tip">이 동영상을 신고합니다.</span>
@@ -2660,7 +2660,7 @@
     }
 
     function shareNyangiple() {
-        const videoUrl = (video && video.src && video.src !== 'indexeddb_stored') ? video.src : ((currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : 'https://khw150123.github.io/Nyangiple.com/');
+        const videoUrl = (currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : ((video && video.src && video.src !== 'indexeddb_stored') ? video.src : 'https://khw150123.github.io/Nyangiple.com/');
         const videoTitle = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : '재밌는 UCC 세상 냥이플';
         if (navigator.share) {
             navigator.share({ title: videoTitle, text: '냥이플에서 재밌는 영상을 확인해보세요!', url: videoUrl }).catch((err) => console.log('공유 실패:', err));
