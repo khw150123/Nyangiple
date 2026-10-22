@@ -4238,9 +4238,15 @@
             return;
         }
 
-        targetContainer.innerHTML = myVideos.map(v =>
-            pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `goBackFromChannel(); preparePlay(${v.id})`)
-        ).join('');
+        /* [변경] 내 마이페이지(내가 올린 영상)에서는 각 영상에 수정/삭제 버튼 표시 */
+        const isMyOwnList = !!(user && targetAuthor === user.nick);
+        targetContainer.innerHTML = myVideos.map(v => {
+            let rowHtml = pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `goBackFromChannel(); preparePlay(${v.id})`);
+            if(isMyOwnList) {
+                rowHtml = rowHtml.replace(/\s*<\/div>\s*$/, `<button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>`);
+            }
+            return rowHtml;
+        }).join('');
     }
 
     /* 작성한 구름 목록 데이터: 이 기기 기록(날짜 있음) + 영상에 저장된 자막(작성자 일치, 기록에 없는 것) */
