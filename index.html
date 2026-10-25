@@ -2351,13 +2351,13 @@
                         </div>
                         <div style="margin-bottom: 5px; position:relative; display:inline-flex; align-items:flex-start;">
                             <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                                <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = (currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : ((video && video.src && video.src !== 'indexeddb_stored') ? video.src : null); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
+                                <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
                                 <div class="report-hover-wrap" onclick="openReportModal()">
                                     <span class="report-btn-text"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a6 6 0 0 0-6 6c0 4.5-2 5.5-2 7 0 .55.45 1 1 1h14c.55 0 1-.45 1-1 0-1.5-2-2.5-2-7a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 21z"/></svg>신고</span>
                                     <span class="report-hover-tip">이 동영상을 신고합니다.</span>
                                 </div>
                             </div>
-                            <span class="share-hover-wrap" style="margin-left:-6px;"><img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="shareNyangiple()"/><span class="share-hover-tip">카카오톡으로 공유하기</span></span><span class="share-hover-wrap"><a href="https://imgbb.com/" onclick="event.preventDefault(); (function(){ var url = (video && video.src && video.src !== 'indexeddb_stored') ? video.src : ((currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : null); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.'); } return; } var dlA = document.createElement('a'); dlA.href = url; dlA.download = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : 'video'; document.body.appendChild(dlA); dlA.click(); document.body.removeChild(dlA); })();" style="display:block;"><img src="https://i.ibb.co/mrj8Z2b9/vfff.png" alt="vfff" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" border="0" /></a><span class="share-hover-tip">퍼가기</span></span>
+                            <span class="share-hover-wrap" style="margin-left:-6px;"><img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="shareNyangiple()"/><span class="share-hover-tip">카카오톡으로 공유하기</span></span><span class="share-hover-wrap"><a href="https://imgbb.com/" onclick="event.preventDefault(); (function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.'); } return; } var dlA = document.createElement('a'); dlA.href = url; dlA.download = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : 'video'; document.body.appendChild(dlA); dlA.click(); document.body.removeChild(dlA); })();" style="display:block;"><img src="https://i.ibb.co/mrj8Z2b9/vfff.png" alt="vfff" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" border="0" /></a><span class="share-hover-tip">퍼가기</span></span>
                         </div>
                         ${tagsHtml}
                         <div style="color: #999; font-size: 11px; margin-top: 5px;">업로드됨: ${formatDate(currentPlayingItem.regDate)}${currentPlayingItem.editDate ? `<br>수정됨: ${formatDate(currentPlayingItem.editDate)}` : ''}</div>
@@ -2659,8 +2659,20 @@
         }).join('');
     }
 
+    /* [신규] 공유/퍼가기/구름 자막 없이 보기 공통 - 항상 온라인(백엔드레스) 영상 파일 주소만 사용. blob:/indexeddb_stored 주소는 절대 사용하지 않음 */
+    function getOnlineVideoUrl() {
+        var isOnline = function(u) { return typeof u === 'string' && /^https?:/i.test(u); };
+        if (currentPlayingItem && isOnline(currentPlayingItem.url)) return currentPlayingItem.url;
+        if (currentPlayingItem && Array.isArray(db)) {
+            var d = db.find(function(v) { return String(v.id) === String(currentPlayingItem.id); });
+            if (d && isOnline(d.url)) return d.url;
+        }
+        if (video && isOnline(video.src)) return video.src;
+        return null;
+    }
+
     function shareNyangiple() {
-        const videoUrl = (currentPlayingItem && currentPlayingItem.url && currentPlayingItem.url !== 'indexeddb_stored') ? currentPlayingItem.url : ((video && video.src && video.src !== 'indexeddb_stored') ? video.src : 'https://khw150123.github.io/Nyangiple.com/');
+        const videoUrl = getOnlineVideoUrl() || 'https://khw150123.github.io/Nyangiple.com/';
         const videoTitle = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : '재밌는 UCC 세상 냥이플';
         if (navigator.share) {
             navigator.share({ title: videoTitle, text: '냥이플에서 재밌는 영상을 확인해보세요!', url: videoUrl }).catch((err) => console.log('공유 실패:', err));
@@ -3444,6 +3456,7 @@
                    n.url을 실제 주소로 바꾼다. 둘 중 하나라도 실패하면 url은 계속 'indexeddb_stored'로 남아
                    1) 새로고침 시 목록에서 사라지지 않고(5536번 줄 필터), 2) 다음 재생 시 자동 재시도된다(3618번 줄). */
                 if(typeof fbUploadVideoFile === 'function') {
+                    videoUploadInProgress.add(videoId); /* [수정] 재생 직후 자동 복구가 같은 영상을 동시에 또 업로드(파일 덮어쓰기 충돌)하지 않도록 진행중 등록 */
                     fbUploadVideoFile(videoId, f).then((downloadUrl) => {
                         if(typeof fbSaveVideo !== 'function') { n.url = downloadUrl; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {} return; }
                         return fbSaveVideo(Object.assign({}, n, { url: downloadUrl })).then(() => {
@@ -3452,6 +3465,9 @@
                         });
                     }).catch((err) => {
                         console.error('온라인 업로드 실패 - 이 기기에서만 재생 가능 (다음 재생 시 자동 재시도됩니다):', err);
+                        try { alert('온라인 업로드 실패 - 다른 기기에선 안 보입니다.\n사유: ' + ((err && (err.message || err.toString())) || '알 수 없는 오류')); } catch(e3) {}
+                    }).finally(() => {
+                        videoUploadInProgress.delete(videoId);
                     });
                 }
                 
@@ -3517,7 +3533,11 @@
                     tempVideo.removeEventListener('seeked', onSeeked);
                     /* requestVideoFrameCallback이 있으면 실제 프레임 페인트 완료 후 캡처, 없으면 짧은 지연 후 캡처 */
                     if(typeof tempVideo.requestVideoFrameCallback === 'function') {
-                        tempVideo.requestVideoFrameCallback(() => doCapture(0));
+                        /* [수정] 화면 밖에 숨겨둔 video는 브라우저에 따라 프레임 콜백이 아예 오지 않아 업로드가 영원히 멈출 수 있음 → 일정 시간 안에 안 오면 그냥 캡처 진행 (먼저 오는 쪽 한 번만 실행) */
+                        let frameCaptured = false;
+                        const goCapture = () => { if(frameCaptured) return; frameCaptured = true; doCapture(0); };
+                        tempVideo.requestVideoFrameCallback(goCapture);
+                        setTimeout(goCapture, 800);
                     } else {
                         setTimeout(() => doCapture(0), 100);
                     }
@@ -3545,6 +3565,7 @@
             if(submitBtn) { submitBtn.dataset.uploading = '0'; submitBtn.style.opacity = '1'; submitBtn.style.pointerEvents = 'auto'; }
             if(tempVideo.parentNode) tempVideo.parentNode.removeChild(tempVideo);
             showToast("영상 파일을 읽을 수 없습니다. 다른 파일로 시도해주세요.", "error");
+            try { alert("영상 파일을 읽을 수 없습니다. (이 브라우저가 지원하지 않는 영상 형식일 수 있어요)\n다른 파일로 시도해주세요."); } catch(e4) {}
         };
     }
 
@@ -4329,11 +4350,13 @@
             videoUploadInProgress.add(Number(videoId));
             fbUploadVideoFile(videoId, res.data).then((downloadUrl) => {
                 const target = db.find(v => String(v.id) === String(videoId));
-                if(target) target.url = downloadUrl;
-                try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e2) {}
-                if(typeof fbSaveVideo === 'function') fbSaveVideo(target || { id: videoId, url: downloadUrl });
-                showToast('온라인 업로드에 성공했습니다!', 'success');
-                renderUploadStatusList();
+                const savePromise = (typeof fbSaveVideo === 'function') ? fbSaveVideo(Object.assign({}, target || { id: videoId }, { url: downloadUrl })) : Promise.resolve();
+                return savePromise.then(() => {
+                    if(target) target.url = downloadUrl;
+                    try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e2) {}
+                    showToast('온라인 업로드에 성공했습니다!', 'success');
+                    renderUploadStatusList();
+                });
             }).catch((err) => {
                 console.error('재업로드 실패:', err);
                 showToast('업로드에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
