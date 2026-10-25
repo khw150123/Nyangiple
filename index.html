@@ -535,7 +535,16 @@
         }
         /* ===== [신규] PC/모바일 가로모드 - 영상 재생 화면 크기 축소 (전체화면은 제외) ===== */
         @media (orientation: landscape) {
-            #fullscreen-player-target:not(:fullscreen) { width: 80%; }
+            #fullscreen-player-target:not(:fullscreen) { width: 60%; }
+        }
+        /* ===== [신규] PC/모바일 가로모드 - 영상 오른쪽 빈 공간에 구름자막 입력칸 + 관련 영상 목록 배치 (세로모드에서는 래퍼가 투명해서 변화 없음) ===== */
+        #player-row, #player-side-panel, #player-side-inner { display: contents; }
+        @media (orientation: landscape) {
+            #player-row { display: flex; align-items: stretch; grid-area: player; }
+            #player-side-panel { display: block; position: relative; flex: 1 1 0; min-width: 0; margin-left: 15px; }
+            #player-side-inner { display: block; position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow-y: auto; }
+            #side-cloud-write-slot:not(:empty) { box-sizing: border-box; padding: 8px; border: 1px solid #eee; background: #fff; }
+            #side-cloud-write-slot #cloud-write-box > div:first-child { flex-wrap: wrap; }
         }
         /* ===== [신규] 관련동영상 제목 옆 링크(쇠사슬) 아이콘 - 동영상 정보 재생 아이콘 뱃지와 동일한 디자인 ===== */
         .related-link-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 50%; width: 18px; height: 18px; flex-shrink: 0; }
@@ -1244,6 +1253,7 @@
 
         <section id="video-section" class="page-section">
             <main id="player-container" style="width:100%; display:none; margin-bottom: 20px;">
+                <div id="player-row">
                 <div id="fullscreen-player-target">
                     <div class="player-wrapper">
                         <video id="main-video" playsinline></video>
@@ -1296,6 +1306,11 @@
                             <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
                     </div>
+                </div>
+                <div id="player-side-panel"><div id="player-side-inner">
+                    <div id="side-cloud-write-slot"></div>
+                    <div id="side-related-slot"></div>
+                </div></div>
                 </div>
 
                 <div id="v-detail-info" style="padding:15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fdfdfd; position: relative;"></div>
@@ -4899,9 +4914,37 @@
     }
     function placeCloudWriteBox() {
         const box = document.getElementById('cloud-write-box');
-        const slot = document.getElementById('cloud-write-slot');
+        /* [변경] 가로모드면 영상 오른쪽 빈 공간 칸에, 세로모드면 기존처럼 동영상 정보 안 칸에 넣는다 */
+        const isLand = !!(window.matchMedia && window.matchMedia('(orientation: landscape)').matches);
+        const slot = document.getElementById(isLand ? 'side-cloud-write-slot' : 'cloud-write-slot');
         if(box && slot) slot.appendChild(box);
     }
+
+    /* [신규] 가로모드: 관련 영상 목록을 영상 오른쪽 빈 공간으로 옮기고, 세로모드로 돌아가면 원래 자리(인기동영상 위)로 되돌린다 */
+    function layoutPlayerSideRelated() {
+        const isLand = !!(window.matchMedia && window.matchMedia('(orientation: landscape)').matches);
+        const related = document.getElementById('related-videos-box');
+        const popular = document.getElementById('popular-videos-box');
+        const rSlot = document.getElementById('side-related-slot');
+        if(!related || !popular || !rSlot) return;
+        if(isLand) { if(related.parentNode !== rSlot) rSlot.appendChild(related); }
+        else if(related.parentNode === rSlot) popular.parentNode.insertBefore(related, popular);
+    }
+    function initPlayerSidePanelLayout() {
+        layoutPlayerSideRelated();
+        if(!window.matchMedia) return;
+        const mq = window.matchMedia('(orientation: landscape)');
+        const onChange = () => {
+            layoutPlayerSideRelated();
+            const box = document.getElementById('cloud-write-box');
+            const home = document.getElementById('cloud-write-home');
+            if(box && home && box.parentNode !== home) placeCloudWriteBox();
+        };
+        if(mq.addEventListener) mq.addEventListener('change', onChange);
+        else if(mq.addListener) mq.addListener(onChange);
+    }
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPlayerSidePanelLayout);
+    else initPlayerSidePanelLayout();
 
     function cloudWriteFmtTime(sec) {
         sec = Math.max(0, Math.floor(sec || 0));
