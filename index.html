@@ -425,7 +425,7 @@
         #category-toggle-btn { cursor: pointer; color: #333; font-weight: bold; border: 1px solid #ddd; padding: 2px 8px; background: #eee; font-size: 10px; } 
         /* ===== [글자색 검정 변경] 검색창 / 장르 선택 / 랭킹 선택 ===== */
         #main-search-input, .search-input-overlay { color: #000 !important; }
-        #main-search-input::placeholder, .search-input-overlay::placeholder { color: #000 !important; opacity: 1 !important; }
+        #main-search-input::placeholder, .search-input-overlay::placeholder { color: #999 !important; opacity: 1 !important; }
         .search-suggest-header, .search-suggest-clear, .search-suggest-item { color: #000 !important; }
         .sidebar-item, .sidebar-item.active { color: #000 !important; }
         #category-toggle-btn { color: #000 !important; }
@@ -502,6 +502,9 @@
         .list-author-mini { display:flex; align-items:center; gap:4px; margin-top:4px; overflow:hidden; }
         .list-author-mini img { width:16px; height:16px; border-radius:50%; object-fit:cover; flex-shrink:0; -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none; }
         .list-author-mini span { font-size:10px; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .list-author-mini .author-vf-wrap { position:relative; width:16px; height:16px; flex-shrink:0; }
+        .list-author-mini .author-vf-check { position:absolute; right:0; bottom:0; width:9px; height:9px; border-radius:50%; background:#4caf50; border:1px solid #fff; box-sizing:border-box; display:flex; align-items:center; justify-content:center; }
+        .list-author-mini .author-vf-check svg { width:7px; height:7px; fill:#fff; display:block; }
         .list-title-mini { font-size:10px; color:#888; margin-top:2px; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .list-title-mini { font-size:10px; color:#333; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .channel-video-delete-btn { background: #ff3300; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; } .channel-video-delete-btn:hover { background: #cc0000; } .channel-video-edit-btn { background: #53add2; color: #fff; border: none; padding: 4px 8px; font-size: 10px; font-weight: bold; cursor: pointer; height: fit-content; align-self: center; flex-shrink: 0; margin-right: 4px; } .channel-video-edit-btn:hover { background: #3d8bb0; } #side-video-list.album-mode { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; } #side-video-list.album-mode .list-item { flex-direction: column; padding: 0; border-bottom: none; border: 1px solid #ddd; } #side-video-list.album-mode .list-thumb { width: 100%; aspect-ratio: 16/9; height: auto; } #side-video-list.album-mode .list-info { padding: 8px; } .desc-tooltip { opacity: 0; visibility: hidden; position: absolute; bottom: 110%; left: 50%; margin-left: -90px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 3px; font-size: 11px; white-space: normal; z-index: 5000; width: 180px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); pointer-events: none; transition: opacity 0.2s ease-out, visibility 0.2s; } .desc-tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: rgba(87,138,182,0.85) transparent transparent transparent; } .unlucky-item:hover .desc-tooltip, .list-item:hover .desc-tooltip { opacity: 1; visibility: visible; } .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; } .modal-content { background: #fff; width: 90%; max-width: 320px; box-sizing: border-box; } .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 10px; } .modal-btn-img { width: 110px; cursor: pointer; align-self: center; margin-top: 5px; } .v-info-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; } .v-info-right-wrapper { display: flex; align-items: center; gap: 15px; flex-shrink: 0; } .jjim-container { display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 5px; } .jjim-btn-img { height: 35px; } .jjim-count { font-size: 14px; font-weight: bold; color: #ff4444; } .share-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .share-btn-img:active { transform: scale(0.9); } .extra-btn-img { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .extra-btn-img:active { transform: scale(0.9); } .share-hover-wrap { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; } .share-hover-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: rgba(87,138,182,0.9); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; } .share-hover-wrap:hover .share-hover-tip { opacity: 1; visibility: visible; } .report-hover-wrap { position: relative; display: inline-flex; align-items: center; cursor: pointer; margin-top: 6px; user-select: none; } .report-btn-text { display: flex; align-items: center; gap: 3px; font-size: 11px; font-weight: bold; color: #666; } .report-btn-text svg { width: 13px; height: 13px; fill: #666; flex-shrink: 0; } .report-hover-wrap:hover .report-btn-text, .report-hover-wrap:hover .report-btn-text svg { color: #578ab6; fill: #578ab6; } .report-hover-tip { opacity: 0; visibility: hidden; position: absolute; bottom: calc(100% + 6px); left: 0; background: rgba(87,138,182,0.9); color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: opacity 0.2s ease-out, visibility 0.2s; } .report-hover-wrap:hover .report-hover-tip { opacity: 1; visibility: visible; } .report-reason-label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #333; text-align: left; padding: 6px 4px; border-bottom: 1px solid #f0f0f0; cursor: pointer; } .report-reason-label:last-of-type { border-bottom: none; } .report-reason-label input[type="radio"] { flex-shrink: 0; cursor: pointer; } #report-other-text { display: none; margin-top: -3px; } .author-vlist-btn { height: 32px; cursor: pointer; transition: transform 0.2s; vertical-align: middle; } .author-vlist-btn:active { transform: scale(0.9); } .tag-image-container { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 24px; width: max-content; } .tag-image-container img { display: block; width: 100%; height: 24px; object-fit: fill; position: absolute; top: 0; left: 0; z-index: 1; } .tag-text-overlay { position: relative; z-index: 2; color: #fff; font-size: 11px; white-space: nowrap; pointer-events: none; font-weight: bold; padding: 0 16px; line-height: 24px; text-align: right; } .tag-list-wrapper .tag-image-container { height: 28px; } .tag-list-wrapper .tag-image-container img { height: 28px; } .tag-list-wrapper .tag-text-overlay { font-size: 12px; line-height: 28px; padding: 0 16px; text-align: right; } .v-capsule-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; } .v-capsule-item { display: flex; align-items: center; gap: 8px; } .v-capsule-badge { display: inline-flex; align-items: center; justify-content: center; background: #757575; border-radius: 12px; width: 42px; height: 20px; flex-shrink: 0; } .v-capsule-badge svg { width: 13px; height: 13px; fill: #fff; } .v-capsule-text { font-size: 13px; font-family: sans-serif; font-weight: normal; color: #333; line-height: 20px; } .modal-tag-row { display: flex; align-items: center; gap: 5px; width: 100%; } .modal-tag-row input { flex: 1; } .tag-add-btn-img { height: 24px; cursor: pointer; flex-shrink: 0; } .channel-profile-interactive-img { width: 70px; height: 70px; object-fit: cover; border: 1px solid #ccc; cursor: pointer; flex-shrink:0; transition: opacity 0.2s; } .channel-profile-interactive-img:hover { opacity: 0.8; } .sub-action-btn-img { height: 30px; cursor: pointer; display: inline-block; vertical-align: middle; transition: transform 0.2s; } .sub-action-btn-img:active { transform: scale(0.95); } .channel-summary-card { display: flex; margin-top: 10px; border: 1px solid #e3e3e3; border-radius: 6px; overflow: hidden; background: #fafafa; } .channel-summary-item { flex: 1; text-align: center; padding: 8px 4px; border-right: 1px solid #e3e3e3; } .channel-summary-item:last-child { border-right: none; } .channel-summary-label { font-size: 10px; color: #999; margin-bottom: 3px; } .channel-summary-value { font-size: 13px; font-weight: bold; color: #333; } footer { padding: 20px 10px; text-align: left; border-top: 1px solid #eee; background: #EFEFEF; } .footer-text { font-size: 12px; color: #999; line-height: 1.6; } .blue-text { color: #437DAD; font-weight: bold; } .top-btn { cursor: pointer; text-decoration: none; } 
@@ -734,6 +737,16 @@
         .home-lg-notice-btn { display: none; position: absolute; top: 14px; right: 14px; height: 36px; cursor: pointer; z-index: 50; transition: transform 0.15s; }
         .home-lg-notice-btn:hover { transform: scale(1.1); }
 
+        /* ===== [신규] 채널 순위 표 UI (30위까지, 1~10위는 초록색 + 별) ===== */
+        .ch-rank-table { width: 100%; border-collapse: collapse; table-layout: fixed; text-align: left; }
+        .ch-rank-table th { font-size: 16px; font-weight: bold; color: #333; text-align: center; padding: 12px 4px; border-bottom: 2px solid #ddd; }
+        .ch-rank-table td { padding: 12px 8px; border-top: 1px solid #ddd; font-size: 14px; line-height: 1.4; color: #333; vertical-align: middle; word-break: break-all; cursor: pointer; }
+        .ch-rank-table .ch-rank-col { width: 80px; text-align: center; }
+        .ch-rank-table .ch-rank-name { color: #337ab7; }
+        .ch-rank-table tbody tr:nth-child(odd) { background: #f9f9f9; }
+        .ch-rank-table tbody tr.ch-rank-top10 { background: #def0d8; }
+        .ch-rank-table tbody tr.ch-rank-top10 td { font-size: 16px; font-weight: bold; border-top-color: #d0e9c6; }
+
         /* ===== [신규] PC/가로모드 - 맨 왼쪽 냥이플 메뉴 (세로모드에서는 보이지 않음) + 헤더 업로드 버튼은 이 메뉴의 업로드 버튼으로 대체 ===== */
         .nyang-left-nav { display: none; }
         @media (orientation: landscape) {
@@ -867,6 +880,48 @@
         .pf-row-title { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .pf-row-time { flex-shrink:0; font-size:13px; color:#222; background:#e0e0e0; padding:0 2px; }
         .pf-empty { padding:24px 0; text-align:center; color:#888; font-size:12px; }
+
+        /* [신규] 채널 화면 UI (○○님의 채널 / 인증마크 / 구독 / 프로필 카드 / 정렬 / 3열 영상 목록) */
+        .ch-head { position:relative; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.18); margin-bottom:14px; text-align:left; }
+        .ch-head-title { padding:14px 14px 12px; font-size:16px; font-weight:bold; color:#222; background:linear-gradient(#fafafa,#efefef); word-break:break-all; padding-right:52px; }
+        .ch-head .pf-refresh-btn { position:absolute; right:8px; top:8px; width:30px; height:30px; margin:0; }
+        .ch-head .pf-refresh-btn svg { width:18px; height:18px; }
+        .ch-badge { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#4caf50; vertical-align:middle; flex-shrink:0; }
+        .ch-badge svg { width:14px; height:14px; fill:#fff; }
+        .ch-badge.big { width:38px; height:24px; border-radius:12px; margin-top:6px; display:flex; }
+        .ch-badge.big svg { width:16px; height:16px; }
+        .ch-tabs { display:flex; flex-direction:column; }
+        .ch-tab { padding:13px 14px; font-size:14px; color:#555; cursor:pointer; background:#fff; border-top:1px solid #f0f0f0; }
+        .ch-tab.active { background:#2f6aa5; color:#fff; border-top:none; }
+        .ch-sub-btn { display:flex; align-items:center; justify-content:center; gap:6px; width:100%; height:46px; border:1px solid #3e8e41; border-radius:3px; background:linear-gradient(#66bb6a,#4caf50); color:#fff; font-size:15px; cursor:pointer; margin:0 0 14px; box-sizing:border-box; }
+        .ch-sub-btn svg { width:17px; height:17px; fill:none; stroke:#fff; stroke-width:2; }
+        .ch-sub-btn.on { background:linear-gradient(#9e9e9e,#757575); border-color:#616161; }
+        .ch-sub-count { background:#2e7d32; color:#fff; border-radius:11px; padding:0 9px; height:22px; line-height:22px; font-size:13px; }
+        .ch-sub-btn.on .ch-sub-count { background:#555; }
+        .ch-profile-card { display:flex; flex-direction:column; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.12); padding:14px; margin-bottom:14px; min-height:150px; box-sizing:border-box; text-align:left; }
+        .ch-profile-img { width:100px; height:100px; border-radius:50%; object-fit:cover; border:1px solid #ddd; background:#f4f4f4; align-self:flex-end; flex-shrink:0; }
+        .ch-profile-desc { margin-top:10px; font-size:13px; color:#333; white-space:pre-wrap; word-break:break-all; line-height:1.5; }
+        .ch-filter-row { display:flex; border:1px solid #d5d5d5; border-radius:3px; background:linear-gradient(#fafafa,#efefef); margin-bottom:14px; overflow:hidden; }
+        .ch-filter-row select { flex:1; min-width:0; height:46px; border:none; border-right:1px solid #d5d5d5; background:transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0h10L5 6z' fill='%23444'/></svg>") no-repeat right 10px center; -webkit-appearance:none; appearance:none; padding:0 26px 0 10px; font-size:14px; color:#333; outline:none; cursor:pointer; }
+        .ch-filter-row select:last-child { border-right:none; }
+        .ch-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px 10px; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; }
+        @media (min-width:700px) { .ch-grid { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); } }
+        .ch-grid .pf-empty { grid-column:1 / -1; }
+        .ch-card { cursor:pointer; min-width:0; }
+        .ch-card-thumb { position:relative; width:100%; aspect-ratio:16/9; background:#eee; background-size:cover; background-position:center; border:1px solid #6c9a58; box-sizing:border-box; }
+        .ch-card-dur { position:absolute; right:3px; bottom:3px; background:rgba(0,0,0,0.65); color:#fff; font-size:11px; padding:0 4px; line-height:16px; }
+        .ch-card-title { margin-top:6px; font-size:13px; line-height:1.35; color:#1565c0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-break:break-all; }
+        .ch-card-author { display:flex; align-items:center; gap:5px; margin-top:6px; font-size:12px; font-weight:bold; color:#2e9e3a; min-width:0; }
+        .ch-card-author .ch-badge { width:20px; height:18px; border-radius:4px; }
+        .ch-card-author .ch-badge svg { width:12px; height:12px; }
+        .ch-card-author span.nm { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .ch-card-views { display:flex; align-items:center; gap:5px; margin-top:5px; font-size:12px; color:#333; }
+        .ch-card-views i { display:inline-block; width:20px; height:16px; background:#ccc; border-radius:2px; flex-shrink:0; position:relative; }
+        .ch-card-views i::after { content:""; position:absolute; left:5px; bottom:3px; width:2px; height:6px; background:#fff; box-shadow:4px -3px 0 #fff, 8px -1px 0 #fff; }
+        .ch-card-btns { margin-top:5px; display:flex; gap:4px; }
+        .ch-pager { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:14px 0 4px; }
+        .ch-pager span { min-width:30px; height:30px; line-height:30px; text-align:center; border:1px solid #d5d5d5; background:#fff; font-size:13px; color:#333; cursor:pointer; padding:0 6px; box-sizing:border-box; }
+        .ch-pager span.active { background:#2f6aa5; color:#fff; border-color:#2f6aa5; cursor:default; }
 
         /* ===== [신규] 대댓글 ===== */
         .reply-list { margin: 8px 0 0 20px; border-left: 2px solid #eee; padding-left: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -1101,7 +1156,7 @@
     <div class="header-right">
         <div class="search-wrapper">
             <img src="https://i.ibb.co/93WQYWqX/20261015-170207.jpg" class="search-bg-img">
-            <input type="text" id="main-search-input" class="search-input-overlay" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
+            <input type="text" id="main-search-input" class="search-input-overlay" placeholder="검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
             <button type="button" class="search-btn-css" onclick="executeSearch()" aria-label="검색" title="검색"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button>
             <button type="button" class="lg-upload-icon-btn" onclick="openModal('upload-modal')" aria-label="업로드" title="업로드"><svg viewBox="0 0 24 24" width="26" height="26" fill="#7a7a7a"><path d="M12 2.5l-7 8h4.5v6h5v-6H19z"/><path d="M3 18.5h18V22H3z"/><circle cx="17.6" cy="20.25" r="0.9" fill="#fff"/></svg></button>
@@ -1285,24 +1340,19 @@
                     </div>
 
                     <div class="home-tab-content" id="home-tab-mypage">
-                        <div id="home-my-info" class="pf-top"></div>
-
-                        <div class="mypage-tab-bar pf-radio-bar">
-                            <div class="mypage-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">업로드한 영상</div>
-                            <div class="mypage-tab" id="home-mypage-tab-btn-clouds" onclick="setHomeMyPageTab('clouds')">작성한 구름</div>
+                        <div class="ch-head">
+                            <div id="home-my-info" class="ch-head-title"></div>
+                            <button type="button" class="pf-refresh-btn" id="home-mypage-refresh-btn" title="프로필 새로고침" onclick="refreshHomeProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+                            <div class="ch-tabs">
+                                <div class="ch-tab active" id="home-mypage-tab-btn-channel" onclick="setHomeMyPageTab('channel')">동영상</div>
+                                <div class="ch-tab" id="home-mypage-tab-btn-clouds" onclick="setHomeMyPageTab('clouds')">구름자막</div>
+                            </div>
                         </div>
 
-                        <button type="button" class="pf-refresh-btn" id="home-mypage-refresh-btn" title="프로필 새로고침" onclick="refreshHomeProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+                        <div id="home-subscribe-area"></div>
 
-                        <div id="home-mypage-tab-content-channel">
-                            <div id="home-channel-internal-video-list" class="pf-list"></div>
-                        </div>
+                        <div id="home-my-info-detail" class="ch-profile-card"></div>
 
-                        <div id="home-mypage-tab-content-clouds" style="display:none;">
-                            <div id="home-my-clouds-list" class="pf-list"></div>
-                        </div>
-
-                        <!-- [변경] 맨 아래: 내 프로필 수정 -->
                         <div id="home-profile-settings" class="pf-edit-box" style="display:none;">
                             <div class="pf-edit-title">내 프로필 수정</div>
                             <div class="pf-edit-photo-row">
@@ -1313,6 +1363,21 @@
                                 <input type="text" id="home-nick-input" placeholder="닉네임">
                                 <button type="button" class="pf-edit-btn" onclick="saveMyNickname('home-nick-input')">저장</button>
                             </div>
+                            <div class="pf-edit-row">
+                                <label>소개글</label>
+                                <input type="text" id="home-desc-input" placeholder="소개글" maxlength="200">
+                                <button type="button" class="pf-edit-btn" onclick="saveMyDesc('home-desc-input')">저장</button>
+                            </div>
+                        </div>
+
+                        <div id="home-mypage-tab-content-channel">
+                            <div id="home-filter-row" class="ch-filter-row"></div>
+                            <div id="home-channel-internal-video-list" class="ch-grid"></div>
+                            <div id="home-pager" class="ch-pager"></div>
+                        </div>
+
+                        <div id="home-mypage-tab-content-clouds" style="display:none;">
+                            <div id="home-my-clouds-list" class="pf-list"></div>
                         </div>
                     </div>
                 </div>
@@ -1451,7 +1516,7 @@
             <div class="channel-fullscreen-container">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
                 <h2 style="font-size:18px; text-align: left; margin-bottom:15px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">채널 순위</h2>
-                <div style="font-size:12px; color:#888; margin-bottom:12px;">구름 자막과 영상 재생수를 기준으로 산정된 순위입니다. (최대 1000위)</div>
+                <div style="font-size:12px; color:#888; margin-bottom:12px;">구름 자막과 영상 재생수를 기준으로 산정된 순위입니다. (최대 30위)</div>
                 <div id="channel-rank-list" class="channel-internal-list"></div>
             </div>
         </section>
@@ -1466,25 +1531,20 @@
         <section id="mypage-section" class="page-section">
             <div style="padding:15px;">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
-                <!-- [변경] 프로필 상단: 프사 + 닉네임 -->
-                <div id="my-info" class="pf-top"></div>
-
-                <div class="mypage-tab-bar pf-radio-bar">
-                    <div class="mypage-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">업로드한 영상</div>
-                    <div class="mypage-tab" id="mypage-tab-btn-clouds" onclick="setMyPageTab('clouds')">작성한 구름</div>
+                <!-- [변경] 채널 UI: ○○님의 채널(+인증마크) / 탭 / 구독 / 프로필 카드 / 내 프로필 수정 / 정렬 / 영상 목록 -->
+                <div class="ch-head">
+                    <div id="my-info" class="ch-head-title"></div>
+                    <button type="button" class="pf-refresh-btn" id="mypage-refresh-btn" title="프로필 새로고침" onclick="refreshProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+                    <div class="ch-tabs">
+                        <div class="ch-tab active" id="mypage-tab-btn-channel" onclick="setMyPageTab('channel')">동영상</div>
+                        <div class="ch-tab" id="mypage-tab-btn-clouds" onclick="setMyPageTab('clouds')">구름자막</div>
+                    </div>
                 </div>
 
-                <button type="button" class="pf-refresh-btn" id="mypage-refresh-btn" title="프로필 새로고침" onclick="refreshProfileView(this)"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+                <div id="mypage-subscribe-area"></div>
 
-                <div id="mypage-tab-content-channel">
-                    <div id="channel-internal-video-list" class="pf-list"></div>
-                </div>
+                <div id="my-info-detail" class="ch-profile-card"></div>
 
-                <div id="mypage-tab-content-clouds" style="display:none;">
-                    <div id="my-clouds-list" class="pf-list"></div>
-                </div>
-
-                <!-- [변경] 맨 아래: 내 프로필 수정 (내 프로필일 때만 표시) -->
                 <div id="mypage-profile-settings" class="pf-edit-box" style="display:none;">
                     <div class="pf-edit-title">내 프로필 수정</div>
                     <div class="pf-edit-photo-row">
@@ -1495,6 +1555,21 @@
                         <input type="text" id="mypage-nick-input" placeholder="닉네임">
                         <button type="button" class="pf-edit-btn" onclick="saveMyNickname()">저장</button>
                     </div>
+                    <div class="pf-edit-row">
+                        <label>소개글</label>
+                        <input type="text" id="mypage-desc-input" placeholder="소개글" maxlength="200">
+                        <button type="button" class="pf-edit-btn" onclick="saveMyDesc()">저장</button>
+                    </div>
+                </div>
+
+                <div id="mypage-tab-content-channel">
+                    <div id="mypage-filter-row" class="ch-filter-row"></div>
+                    <div id="channel-internal-video-list" class="ch-grid"></div>
+                    <div id="mypage-pager" class="ch-pager"></div>
+                </div>
+
+                <div id="mypage-tab-content-clouds" style="display:none;">
+                    <div id="my-clouds-list" class="pf-list"></div>
                 </div>
             </div>
         </section>
@@ -1799,7 +1874,7 @@
     const cloudLayer = document.getElementById('cloud-layer');
     const waitScreen = document.getElementById('wait-screen');
     const errorScreen = document.getElementById('error-screen');
-    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "애니/매드무비", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "테크", "패러디"];
+    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "테크", "패러디"];
 
     const kkk11 = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ\n".repeat(11);
     const garigi = "가리기\n".repeat(30);
@@ -2057,6 +2132,13 @@
 
     function getAuthorBadgeImg(authorName) {
         return isAuthorVeteran(authorName) ? AUTHOR_BADGE_IMG_VETERAN : AUTHOR_BADGE_IMG_DEFAULT;
+    }
+
+    /* [신규] 인증마크(영상 3개 이상)가 생긴 올린이는 홈 영상 목록의 프로필도 인증 프로필(초록 체크 표시)로 표시 */
+    function getAuthorAvatarHtml(authorName) {
+        const imgHtml = `<img src="${getAuthorBadgeImg(authorName)}" alt="author">`;
+        if(!chIsVerified(authorName)) return imgHtml;
+        return `<div class="author-vf-wrap">${imgHtml}<div class="author-vf-check"><svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div></div>`;
     }
 
     function getAuthorNameColorStyle(authorName) {
@@ -2557,7 +2639,7 @@
         const box = document.getElementById('popular-videos-list');
         if(!box) return;
 
-        const popular = [...db].sort((a,b) => b.views - a.views).slice(0, 5);
+        const popular = [...db].filter(v => v.views >= 10).sort((a,b) => b.views - a.views).slice(0, 5);
 
         if(popular.length === 0) {
             box.innerHTML = `<div style="color:#999; padding:10px 0;">인기동영상이 없습니다.</div>`;
@@ -2940,7 +3022,7 @@
         }
     }
 
-    /* [신규] 채널 순위 - 구름 자막 수 + 영상 재생수 기준, 최대 1000위 */
+    /* [신규] 채널 순위 - 구름 자막 수 + 영상 재생수 기준, 최대 30위 */
     function computeChannelRanking() {
         const statsByAuthor = {};
         db.forEach(v => {
@@ -2956,7 +3038,7 @@
             views: statsByAuthor[author].views,
             clouds: statsByAuthor[author].clouds,
             score: statsByAuthor[author].views + statsByAuthor[author].clouds
-        })).sort((a, b) => b.score - a.score).slice(0, 1000);
+        })).sort((a, b) => b.score - a.score).slice(0, 30);
     }
 
     function renderChannelRankList() {
@@ -2969,18 +3051,16 @@
             return;
         }
 
-        container.innerHTML = ranking.map((item, idx) => {
+        container.innerHTML = '<table class="ch-rank-table"><thead><tr><th class="ch-rank-col">Top</th><th>채널</th></tr></thead><tbody>' + ranking.map((item, idx) => {
             const rank = idx + 1;
+            const isTop10 = rank <= 10;
             const safeAuthor = item.author.replace(/'/g, "\\'");
             return `
-            <div class="list-item" onclick="showUserChannel('${safeAuthor}')">
-                <div style="width:34px; flex-shrink:0; font-size:13px; font-weight:bold; color:#53add2; text-align:center; align-self:center;">${rank}</div>
-                <div class="list-info">
-                    <b>${escapeHtml(item.author)}님의 채널</b><br>
-                    <span style="font-size:12px; color:#666;">영상 재생수: ${item.views} | 구름 자막: ${item.clouds}</span>
-                </div>
-            </div>`;
-        }).join('');
+            <tr class="${isTop10 ? 'ch-rank-top10' : ''}" onclick="showUserChannel('${safeAuthor}')">
+                <td class="ch-rank-col">${rank}${isTop10 ? ' ★' : ''}</td>
+                <td class="ch-rank-name">${escapeHtml(item.author)}님의 채널</td>
+            </tr>`;
+        }).join('') + '</tbody></table>';
     }
 
     function openTargetUserChannel() {
@@ -3011,7 +3091,7 @@
                     <div class="unlucky-duration-badge">${timeString}</div>
                 </div>
                 <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
+                <div class="list-author-mini" style="padding:4px 4px 0 4px;">${getAuthorAvatarHtml(v.author)}<span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -3020,7 +3100,7 @@
         const hot32hVideos = db.filter(v => {
             const regDate = new Date(v.regDate);
             const diffHours = Math.floor((now - regDate) / (1000 * 60 * 60));
-            return diffHours <= 32 && v.views >= 1000;
+            return diffHours <= 32 && v.views >= 10;
         });
 
         const hotContainer = document.getElementById('home-hot-32h');
@@ -3037,7 +3117,7 @@
                         <div class="unlucky-duration-badge">${timeString}</div>
                     </div>
                     <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                    <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
+                    <div class="list-author-mini" style="padding:4px 4px 0 4px;">${getAuthorAvatarHtml(v.author)}<span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                     <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                 </div>`;
             }).join('');
@@ -3061,7 +3141,7 @@
                             <div class="unlucky-duration-badge">${timeString}</div>
                         </div>
                         <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                        <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
+                        <div class="list-author-mini" style="padding:4px 4px 0 4px;">${getAuthorAvatarHtml(v.author)}<span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
                         <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                     </div>`;
                 }).join('');
@@ -3135,7 +3215,7 @@
         const hotList = db.filter(v => {
             const regDate = new Date(v.regDate);
             const diffHours = Math.floor((now - regDate) / (1000 * 60 * 60));
-            return diffHours <= 32 && v.views >= 1000;
+            return diffHours <= 32 && v.views >= 10;
         });
         if(hotList.length === 0) {
             alert("재생할 인기 동영상이 존재하지 않습니다.");
@@ -3402,13 +3482,13 @@
         }
 
         const targetProfileImg = user.profileImg || "https://i.ibb.co/P36c8H4/20260620-061219.png";
-        infoEl.innerHTML = `
-            <img src="${targetProfileImg}" class="pf-avatar">
-            <div class="pf-nick">${escapeHtml(user.nick)}</div>`;
+        renderChannelHead('home', user.nick, true, targetProfileImg);
 
         if(settingsEl) settingsEl.style.display = '';
         const nickInputEl = document.getElementById('home-nick-input');
         if(nickInputEl && document.activeElement !== nickInputEl) nickInputEl.value = user.nick;
+        const homeDescInputEl = document.getElementById('home-desc-input');
+        if(homeDescInputEl && document.activeElement !== homeDescInputEl) homeDescInputEl.value = (user.desc && user.desc !== '소개글이 없습니다.') ? user.desc : '';
 
         renderHomeChannelInternalVideos();
     }
@@ -3417,15 +3497,7 @@
         const targetContainer = document.getElementById('home-channel-internal-video-list');
         if(!targetContainer) return;
         if(!user) { targetContainer.innerHTML = ""; return; }
-
-        const myVideos = db.filter(v => v.author === user.nick);
-        if(myVideos.length === 0) {
-            targetContainer.innerHTML = "<div class='pf-empty'>업로드한 동영상이 없습니다.</div>";
-            return;
-        }
-        targetContainer.innerHTML = myVideos.map(v =>
-            pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `preparePlay(${v.id})`)
-        ).join('');
+        renderChannelVideoGrid('home', user.nick, false);
     }
 
     function renderHomeMyCloudsList() {
@@ -4363,25 +4435,152 @@
         return dateStr ? getTimeAgo(dateStr).replace(' ', '') : '';
     }
 
-    function renderChannelInternalVideos(targetAuthor) {
-        const targetContainer = document.getElementById('channel-internal-video-list');
-        if(!targetContainer) return;
+    /* [신규] 채널 화면 UI 공통 함수 (p = 'mypage' 또는 'home') */
+    const chState = {
+        mypage: { target: '', genre: 'all', sort: 'date', size: 20, page: 1 },
+        home:   { target: '', genre: 'all', sort: 'date', size: 20, page: 1 }
+    };
+    const CH_CHECK_SVG = '<svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>';
+    const CH_STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>';
 
-        const myVideos = db.filter(v => v.author === targetAuthor);
-        if(myVideos.length === 0) {
-            targetContainer.innerHTML = "<div class='pf-empty'>업로드한 동영상이 없습니다.</div>";
+    /* 영상이 3개 이상이면 인증 마크 */
+    function chIsVerified(name) {
+        return db.filter(v => v.author === name).length >= 3;
+    }
+
+    function chBadgeHtml(big) {
+        return `<span class="ch-badge${big ? ' big' : ''}">${CH_CHECK_SVG}</span>`;
+    }
+
+    function chGetDesc(name, isMe) {
+        let d = '';
+        if(isMe && user) d = user.desc || '';
+        else {
+            const u = users.find(x => x.nick === name);
+            if(u && u.desc) d = u.desc;
+            if(!d) {
+                const vv = db.find(v => v.author === name && v.authorDesc && v.authorDesc.trim() !== '' && v.authorDesc !== '소개글이 없습니다.');
+                if(vv) d = vv.authorDesc;
+            }
+        }
+        if(!d || d.trim() === '') d = '소개글이 없습니다.';
+        return d;
+    }
+
+    function renderChannelHead(p, name, isMe, profileImg) {
+        const st = chState[p];
+        if(st.target !== name) { st.target = name; st.genre = 'all'; st.page = 1; }
+
+        const headId = (p === 'home') ? 'home-my-info' : 'my-info';
+        const headEl = document.getElementById(headId);
+        if(headEl) {
+            headEl.innerHTML = `${escapeHtml(name)}님의 채널` + (chIsVerified(name) ? chBadgeHtml(true) : '');
+        }
+
+        const subEl = document.getElementById(p + '-subscribe-area');
+        if(subEl) {
+            const subscribed = subscriptions.indexOf(name) > -1;
+            subEl.innerHTML = `<button type="button" class="ch-sub-btn${subscribed ? ' on' : ''}" onclick="chToggleSubscribe('${p}')">${CH_STAR_SVG}<span>${subscribed ? '구독중' : '구독하기'}</span><span class="ch-sub-count">${subscriberCounts[name] || 0}</span></button>`;
+        }
+
+        const detailEl = document.getElementById(p === 'home' ? 'home-my-info-detail' : 'my-info-detail');
+        if(detailEl) {
+            detailEl.innerHTML = `<img src="${escapeHtml(profileImg)}" class="ch-profile-img" alt="프로필"><div class="ch-profile-desc">${escapeHtml(chGetDesc(name, isMe))}</div>`;
+        }
+    }
+
+    function chToggleSubscribe(p) {
+        if(!user) return;
+        const name = (p === 'home') ? user.nick : (currentChannelTargetName || user.nick);
+        if(name === user.nick) { showToast("내 채널은 구독할 수 없습니다.", "error"); return; }
+        toggleSubscribeAction(name);
+        if(document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
+    }
+
+    function chSetFilter(p, key, val) {
+        const st = chState[p];
+        if(key === 'size') st.size = Number(val) || 20;
+        else st[key] = val;
+        st.page = 1;
+        if(p === 'home') renderHomeChannelInternalVideos();
+        else renderChannelInternalVideos(st.target);
+    }
+
+    function chGoPage(p, n) {
+        chState[p].page = n;
+        if(p === 'home') renderHomeChannelInternalVideos();
+        else renderChannelInternalVideos(chState[p].target);
+    }
+
+    function renderChannelVideoGrid(p, targetAuthor, isMe) {
+        const st = chState[p];
+        const container = document.getElementById(p === 'home' ? 'home-channel-internal-video-list' : 'channel-internal-video-list');
+        const filterEl = document.getElementById(p + '-filter-row');
+        const pagerEl = document.getElementById(p + '-pager');
+        if(!container) return;
+
+        if(filterEl) {
+            const genreOpts = ['<option value="all"' + (st.genre === 'all' ? ' selected' : '') + '>전체</option>']
+                .concat(genres.map(g => `<option value="${escapeHtml(g)}"${st.genre === g ? ' selected' : ''}>${escapeHtml(g)}</option>`)).join('');
+            const sortList = [['date', '최신'], ['views', '재생'], ['clouds', '자막'], ['comments', '댓글']];
+            const sortOpts = sortList.map(x => `<option value="${x[0]}"${st.sort === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('');
+            const sizeOpts = [20, 40, 60].map(n => `<option value="${n}"${st.size === n ? ' selected' : ''}>${n}개씩 표시</option>`).join('');
+            filterEl.innerHTML = `
+                <select onchange="chSetFilter('${p}','genre',this.value)">${genreOpts}</select>
+                <select onchange="chSetFilter('${p}','sort',this.value)">${sortOpts}</select>
+                <select onchange="chSetFilter('${p}','size',this.value)">${sizeOpts}</select>`;
+        }
+
+        let list = db.filter(v => v.author === targetAuthor);
+        if(st.genre !== 'all') list = list.filter(v => v.genre === st.genre);
+        if(st.sort === 'views') list.sort((a, b) => (b.views || 0) - (a.views || 0));
+        else if(st.sort === 'clouds') list.sort((a, b) => (b.savedClouds ? b.savedClouds.length : 0) - (a.savedClouds ? a.savedClouds.length : 0));
+        else if(st.sort === 'comments') list.sort((a, b) => (b.comments ? b.comments.length : 0) - (a.comments ? a.comments.length : 0));
+        else list.sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0));
+
+        if(list.length === 0) {
+            container.innerHTML = "<div class='pf-empty'>업로드한 동영상이 없습니다.</div>";
+            if(pagerEl) pagerEl.innerHTML = '';
             return;
         }
 
-        /* [변경] 내 마이페이지(내가 올린 영상)에서는 각 영상에 수정/삭제 버튼 표시 */
-        const isMyOwnList = !!(user && targetAuthor === user.nick);
-        targetContainer.innerHTML = myVideos.map(v => {
-            let rowHtml = pfRowHtml(v.thumb, escapeHtml(v.title), pfAgo(v.regDate), `goBackFromChannel(); preparePlay(${v.id})`);
-            if(isMyOwnList) {
-                rowHtml = rowHtml.replace(/\s*<\/div>\s*$/, `<button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>`);
-            }
-            return rowHtml;
+        const totalPages = Math.max(1, Math.ceil(list.length / st.size));
+        if(st.page > totalPages) st.page = totalPages;
+        const pageList = list.slice((st.page - 1) * st.size, st.page * st.size);
+        const verified = chIsVerified(targetAuthor);
+        const goBack = (p === 'home') ? '' : 'goBackFromChannel(); ';
+
+        container.innerHTML = pageList.map(v => {
+            const thumbStyle = v.thumb ? `background-image:url('${v.thumb}');` : '';
+            const btns = isMe ? `<div class="ch-card-btns"><button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>` : '';
+            return `
+            <div class="ch-card" onclick="${goBack}preparePlay(${v.id})">
+                <div class="ch-card-thumb" style="${thumbStyle}"><div class="ch-card-dur">${v.playTime || '03:45'}</div></div>
+                <div class="ch-card-title">${escapeHtml(v.title)}</div>
+                <div class="ch-card-author">${verified ? chBadgeHtml(false) : ''}<span class="nm">${escapeHtml(v.author)}</span></div>
+                <div class="ch-card-views"><i></i>${(v.views || 0).toLocaleString()}p</div>
+                ${btns}
+            </div>`;
         }).join('');
+
+        if(pagerEl) {
+            if(totalPages <= 1) pagerEl.innerHTML = '';
+            else {
+                let h = '';
+                for(let i = 1; i <= totalPages; i++) {
+                    h += `<span class="${i === st.page ? 'active' : ''}" onclick="${i === st.page ? '' : `chGoPage('${p}', ${i})`}">${i}</span>`;
+                }
+                pagerEl.innerHTML = h;
+            }
+        }
+    }
+
+    function renderChannelInternalVideos(targetAuthor) {
+        const targetContainer = document.getElementById('channel-internal-video-list');
+        if(!targetContainer) return;
+        /* [변경] 새 채널 UI(3열 영상 목록 + 정렬) - 내 채널에서는 각 영상에 수정/삭제 버튼 표시 */
+        const isMyOwnList = !!(user && targetAuthor === user.nick);
+        renderChannelVideoGrid('mypage', targetAuthor, isMyOwnList);
     }
 
     /* 작성한 구름 목록 데이터: 이 기기 기록(날짜 있음) + 영상에 저장된 자막(작성자 일치, 기록에 없는 것) */
@@ -4522,6 +4721,8 @@
             else {
                 document.getElementById('my-info').innerHTML = "";
                 document.getElementById('channel-internal-video-list').innerHTML = "";
+                const subE = document.getElementById('mypage-subscribe-area'); if(subE) subE.innerHTML = "";
+                const detE = document.getElementById('my-info-detail'); if(detE) detE.innerHTML = "";
                 const stEl = document.getElementById('mypage-profile-settings');
                 if(stEl) stEl.style.display = 'none';
                 return;
@@ -4538,9 +4739,7 @@
             if(foundSample) targetProfileImg = foundSample.authorProfile || targetProfileImg;
         }
 
-        document.getElementById('my-info').innerHTML = `
-            <img src="${targetProfileImg}" class="pf-avatar">
-            <div class="pf-nick">${escapeHtml(activeTargetName)}</div>`;
+        renderChannelHead('mypage', activeTargetName, isMe, targetProfileImg);
 
         /* 맨 밑 "내 프로필 수정"은 내 프로필일 때만 보임 */
         const settingsEl = document.getElementById('mypage-profile-settings');
@@ -4548,6 +4747,8 @@
         if(isMe) {
             const nickInputEl = document.getElementById('mypage-nick-input');
             if(nickInputEl && document.activeElement !== nickInputEl) nickInputEl.value = user.nick;
+            const descInputEl = document.getElementById('mypage-desc-input');
+            if(descInputEl && document.activeElement !== descInputEl) descInputEl.value = (user.desc && user.desc !== '소개글이 없습니다.') ? user.desc : '';
         }
 
         renderChannelInternalVideos(activeTargetName);
@@ -4604,6 +4805,30 @@
         if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
         renderList();
         showToast("닉네임이 변경되었습니다.", "success");
+    }
+
+    /* [신규] 마이페이지 - 소개글 저장 (추가만) */
+    function saveMyDesc(inputId) {
+        if(!user) return;
+        const inputEl = document.getElementById(inputId || 'mypage-desc-input');
+        if(!inputEl) return;
+        const newDesc = inputEl.value.trim();
+        const oldDesc = (user.desc && user.desc !== '소개글이 없습니다.') ? user.desc : '';
+        if(newDesc === oldDesc) { showToast("변경된 내용이 없습니다.", "success"); return; }
+
+        user.desc = newDesc;
+
+        const uIdx = users.findIndex(u => u.id === user.id);
+        if(uIdx >= 0) users[uIdx].desc = newDesc;
+
+        localStorage.setItem('tvple_user', JSON.stringify(user));
+        localStorage.setItem('tvple_users', JSON.stringify(users));
+
+        if(typeof fbSaveUser === 'function') fbSaveUser(user);
+
+        updateChannel();
+        if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
+        showToast("소개글이 저장되었습니다.", "success");
     }
 
     /* [신규] 마이페이지 - 내 링크(유튜브 채널 등) 저장 (기존 함수는 변경 없음, 추가만) */
