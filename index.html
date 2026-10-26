@@ -734,6 +734,26 @@
         .home-lg-notice-btn { display: none; position: absolute; top: 14px; right: 14px; height: 36px; cursor: pointer; z-index: 50; transition: transform 0.15s; }
         .home-lg-notice-btn:hover { transform: scale(1.1); }
 
+        /* ===== [신규] PC/가로모드 - 맨 왼쪽 냥이플 메뉴 (세로모드에서는 보이지 않음) + 헤더 업로드 버튼은 이 메뉴의 업로드 버튼으로 대체 ===== */
+        .nyang-left-nav { display: none; }
+        @media (orientation: landscape) {
+            .nyang-left-nav { display: block; width: 170px; flex-shrink: 0; align-self: flex-start; box-sizing: border-box; margin: 10px 0 10px 10px; padding: 14px 12px; background: #f4f4f4; border: 1px solid #e6e6e6; border-radius: 4px; text-align: left; }
+            .nyang-left-nav .nln-title { font-size: 12px; font-weight: bold; color: #999; padding: 6px 14px 8px; }
+            .nyang-left-nav .nln-title.nln-small { font-size: 11px; margin-top: 14px; }
+            .nyang-left-nav .nln-item { font-size: 15px; color: #0a7bc4; padding: 8px 14px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+            .nyang-left-nav .nln-item:hover { color: #065a8f; }
+            .nyang-left-nav .nln-item.active { background: #0a84c9; color: #fff; }
+            .nyang-left-nav .nln-divider { height: 1px; background: #ddd; margin: 14px 14px; }
+            .nyang-left-nav .nln-upload { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 6px; background: linear-gradient(#62b95f, #4a9f48); border: 1px solid #3f8a3d; border-radius: 4px; color: #fff; font-size: 15px; cursor: pointer; white-space: nowrap; text-shadow: 0 1px 1px rgba(0,0,0,0.25); user-select: none; -webkit-user-select: none; }
+            .nyang-left-nav .nln-upload:hover { opacity: 0.9; }
+            #lg-right-actions { display: none !important; }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+            .nyang-left-nav { width: 140px; padding: 10px 8px; }
+            .nyang-left-nav .nln-item { font-size: 13px; padding: 6px 10px; }
+            .nyang-left-nav .nln-upload { font-size: 13px; }
+        }
+
         /* ===== [신규] PC/가로모드 - 홈 화면 공지사항 버튼 밑 로딩 스피너 ===== */
         .home-lg-loading-spinner { display: none; position: absolute; top: 56px; right: 14px; width: 36px; height: 36px; box-sizing: border-box; border: 3px solid rgba(87,138,182,0.25); border-top-color: rgba(87,138,182,0.85); border-radius: 50%; animation: menu-spin 0.7s linear infinite; pointer-events: none; z-index: 50; }
 
@@ -747,6 +767,40 @@
             .search-wrapper { margin-left: auto !important; margin-right: auto !important; }
             .home-lg-notice-btn { display: block !important; }
             .home-lg-loading-spinner.active { display: block; }
+        }
+
+        /* ===== [신규] PC/가로모드 - 맨 위(헤더) 레이아웃을 참고 사진처럼: 로고 + 탭 메뉴 + CSS 검색창/검색버튼 + 업로드 아이콘 (세로모드는 그대로) ===== */
+        .search-btn-css, .lg-upload-icon-btn { display: none; }
+        @media (orientation: landscape) {
+            header { align-items: stretch; padding-top: 0; padding-bottom: 0; border-top: 12px solid #53add0; background: linear-gradient(#fff 0%, #fff 55%, #f5f5f5 100%); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+            header .header-left { flex-direction: row; align-items: stretch; gap: 0; }
+            header .logo-wrap { align-self: center; margin-right: 18px; }
+            header .lg-nav { margin-left: 0; gap: 0; align-items: stretch; }
+            header .lg-nav-item { display: flex; align-items: center; padding: 0 24px; font-size: 14px; font-weight: normal; color: #555; }
+            header .lg-nav-item.active { background: linear-gradient(#d4d0d1, #e0e0e0); color: #333; }
+            header .lg-channel-dropdown { top: 100%; }
+            header .header-right { align-items: center; }
+            header .search-wrapper { margin-left: 22px !important; margin-right: 0 !important; }
+            header .search-bg-img, header .search-btn-img { display: none !important; }
+            header .search-wrapper .search-input-overlay { position: static; transform: none; width: 290px; height: 38px; box-sizing: border-box; padding: 0 12px; font-size: 13px; background: #fff; border: 1px solid #d3d3d3; border-right: none; border-radius: 6px 0 0 6px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+            header .search-btn-css { display: flex; align-items: center; justify-content: center; width: 52px; height: 38px; padding: 0; border: 1px solid #2a9fc4; border-radius: 0 6px 6px 0; background: linear-gradient(#53bcd9, #2caed2); cursor: pointer; }
+            header .search-btn-css:hover { filter: brightness(1.06); }
+            header .lg-upload-icon-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 38px; margin-left: 20px; padding: 0; border: none; background: none; cursor: pointer; }
+            header .lg-upload-icon-btn:hover { opacity: 0.75; }
+            header .lg-right-actions-wrap { margin-left: auto; }
+        }
+        @media (max-width: 1000px) and (orientation: landscape) {
+            header .lg-nav-item { padding: 0 12px; font-size: 12px; }
+            header .search-wrapper { margin-left: 10px !important; }
+            header .search-wrapper .search-input-overlay { width: 170px; font-size: 12px; }
+            header .lg-upload-icon-btn { margin-left: 8px; }
+        }
+
+        /* ===== [신규] 모바일(세로모드) - 검색창/검색버튼도 이미지 대신 CSS로 ===== */
+        @media (orientation: portrait) {
+            header .search-bg-img, header .search-btn-img { display: none !important; }
+            header .search-wrapper .search-input-overlay { position: static; transform: none; flex: 1 1 auto; width: 220px; min-width: 0; height: 35px; box-sizing: border-box; padding: 0 10px; font-size: 12px; background: #fff; border: 1px solid #d3d3d3; border-right: none; border-radius: 6px 0 0 6px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.06); }
+            header .search-btn-css { display: flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 35px; padding: 0; border: 1px solid #2a9fc4; border-radius: 0 6px 6px 0; background: linear-gradient(#53bcd9, #2caed2); cursor: pointer; }
         }
 
         @media (max-width: 768px) and (orientation: landscape) {
@@ -1049,6 +1103,8 @@
             <img src="https://i.ibb.co/93WQYWqX/20261015-170207.jpg" class="search-bg-img">
             <input type="text" id="main-search-input" class="search-input-overlay" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
+            <button type="button" class="search-btn-css" onclick="executeSearch()" aria-label="검색" title="검색"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button>
+            <button type="button" class="lg-upload-icon-btn" onclick="openModal('upload-modal')" aria-label="업로드" title="업로드"><svg viewBox="0 0 24 24" width="26" height="26" fill="#7a7a7a"><path d="M12 2.5l-7 8h4.5v6h5v-6H19z"/><path d="M3 18.5h18V22H3z"/><circle cx="17.6" cy="20.25" r="0.9" fill="#fff"/></svg></button>
             <div id="search-suggest-box" class="search-suggest-box" style="display:none;"></div>
         </div>
         
@@ -1106,6 +1162,18 @@
 </header>
 
 <div class="container">
+    <!-- [신규] PC/가로모드 전용 - 맨 왼쪽 냥이플 메뉴 (세로모드에서는 숨김) -->
+    <aside class="nyang-left-nav" id="nyang-left-nav">
+        <div class="nln-title">냥이플</div>
+        <div class="nln-item active" data-sec="home" onclick="showSection('home')">홈</div>
+        <div class="nln-item" data-sec="video" onclick="showSection('video')">동영상</div>
+        <div class="nln-item" data-sec="channel" onclick="openTargetUserChannel()">채널</div>
+        <div class="nln-item" onclick="openSuggestModal()">운영정책(건의)</div>
+        <div class="nln-title nln-small">광장</div>
+        <div class="nln-item" data-sec="notice" onclick="showSection('notice')">공지</div>
+        <div class="nln-divider"></div>
+        <div class="nln-upload" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
+    </aside>
     <aside class="sidebar" id="genre-sidebar"></aside>
 
     <div class="content-area">
@@ -1505,6 +1573,17 @@
     </div>
     <textarea id="report-other-text" placeholder="신고 사유를 직접 입력해주세요."></textarea>
     <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" onclick="submitReport()">
+</div></div></div>
+
+<div id="suggest-modal" class="modal"><div class="modal-content"><div class="modal-body">
+    <div style="font-size:14px; font-weight:bold; text-align:center;">운영정책 건의 / 문의</div>
+    <div style="font-size:11px; color:#888; text-align:left; margin-top:-5px;">건의하거나 문의할 내용을 적어주세요.</div>
+    <input type="text" id="suggest-title" maxlength="60" placeholder="제목 (선택)" autocomplete="off" style="width:100%; box-sizing:border-box; border:1px solid #ddd; border-radius:3px; font-family:inherit;">
+    <textarea id="suggest-text" placeholder="내용을 입력해주세요." style="width:100%; box-sizing:border-box; min-height:120px; resize:vertical; border:1px solid #ddd; border-radius:3px; font-family:inherit;"></textarea>
+    <div style="display:flex; gap:6px;">
+        <button type="button" id="suggest-send-btn" onclick="submitSuggest()" style="flex:1; padding:8px 14px; border:none; border-radius:3px; background:#3a7bd5; color:#fff; font-size:13px; font-weight:bold; cursor:pointer;">보내기</button>
+        <button type="button" onclick="closeSuggestModal()" style="flex:0 0 auto; padding:8px 14px; border:none; border-radius:3px; background:#999; color:#fff; font-size:13px; font-weight:bold; cursor:pointer;">닫기</button>
+    </div>
 </div></div></div>
 
 <div id="toast-container"></div>
@@ -2818,6 +2897,7 @@
         }
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
+        if(typeof updateNyangLeftNavActive === 'function') updateNyangLeftNavActive(s);
         const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '재생목록', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
@@ -4734,6 +4814,56 @@
             console.error("신고 메일 발송 실패:", err);
             if(typeof showToast==='function'){ showToast('신고 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error'); } else { alert('신고 접수 중 오류가 발생했습니다.'); }
         });
+    }
+    /* [신규] 맨 왼쪽 메뉴 - 운영정책(건의) 문의 보내기 / 현재 섹션 표시 */
+    function openSuggestModal() {
+        const t = document.getElementById('suggest-title');
+        const x = document.getElementById('suggest-text');
+        if(t) t.value = '';
+        if(x) x.value = '';
+        openModal('suggest-modal');
+    }
+    function closeSuggestModal() { document.getElementById('suggest-modal').style.display = 'none'; }
+    function submitSuggest() {
+        const title = (document.getElementById('suggest-title').value || '').trim();
+        const text = (document.getElementById('suggest-text').value || '').trim();
+        if(!text) { if(typeof showToast==='function'){ showToast('건의/문의 내용을 입력해주세요.', 'error'); } else { alert('건의/문의 내용을 입력해주세요.'); } return; }
+        const nick = (user && user.nick) ? user.nick : '비로그인 사용자';
+        const sendTime = new Date().toLocaleString("ko-KR");
+        const btn = document.getElementById('suggest-send-btn');
+        if(btn) btn.disabled = true;
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+                access_key: "d1fa0c76-b4c1-4260-a25c-ac4b3f509dfb",
+                subject: "[냥이플 건의/문의] " + (title || "운영정책"),
+                to: "khw150123@naver.com",
+                suggest_title: title || "(제목 없음)",
+                message: text,
+                sent_by: nick,
+                sent_time: sendTime
+            })
+        }).then(function(res) { return res.json(); }).then(function(data) {
+            if(!data.success) {
+                console.error("건의 전송 실패:", data);
+                if(typeof showToast==='function'){ showToast('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error'); } else { alert('전송 중 오류가 발생했습니다.'); }
+                return;
+            }
+            if(typeof showToast==='function'){ showToast('건의가 접수되었습니다. 감사합니다.', 'success'); }
+            closeSuggestModal();
+        }).catch(function(err) {
+            console.error("건의 전송 오류:", err);
+            if(typeof showToast==='function'){ showToast('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error'); } else { alert('전송 중 오류가 발생했습니다.'); }
+        }).then(function() { if(btn) btn.disabled = false; });
+    }
+    function updateNyangLeftNavActive(s) {
+        document.querySelectorAll('#nyang-left-nav .nln-item[data-sec]').forEach(function(el) {
+            el.classList.toggle('active', el.getAttribute('data-sec') === s);
+        });
+        /* 맨 위 탭 메뉴(동영상/재생목록/채널/마이페이지)도 지금 보는 곳을 표시 */
+        const lgIdx = { video: 0, playlist: 1, channel: 2, mypage: 3 };
+        document.querySelectorAll('#lg-nav > .lg-nav-item').forEach(function(el, i) { el.classList.toggle('active', lgIdx[s] === i); });
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; showSection(lastSection); }
     
