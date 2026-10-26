@@ -173,10 +173,44 @@
         .unlucky-shuffle-wrapper a { display: inline-block; } 
         .unlucky-shuffle-wrapper img { width: 32px; height: auto; display: block; cursor: pointer; animation: rotateShuffleBtn 8s linear infinite; } 
         @keyframes rotateShuffleBtn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } 
+        /* ===== [신규] 홈 3개 섹션 이동(<, >)/랜덤재생 버튼 + 업로드 버튼 - 이미지 대신 CSS로 표현 ===== */
+        .css-arrow-btn { width: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: linear-gradient(180deg, #7fd0ea 0%, #4fb4d6 100%); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.45); user-select: none; -webkit-tap-highlight-color: transparent; }
+        .css-arrow-btn[data-tone="red"] { background: linear-gradient(180deg, #ea7773 0%, #d9524e 100%); }
+        .css-arrow-btn svg { width: 56%; height: 56%; display: block; filter: drop-shadow(0 1px 0 rgba(0,0,0,0.25)); pointer-events: none; }
+        .css-arrow-btn:hover { filter: brightness(1.08); }
+        .css-shuffle-btn { width: 32px; height: 32px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: linear-gradient(180deg, #7fd0ea 0%, #4fb4d6 100%); color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.45); cursor: pointer; animation: rotateShuffleBtn 8s linear infinite; }
+        .css-shuffle-btn svg { width: 62%; height: 62%; display: block; pointer-events: none; }
+        .upload-css-icon { width: 28px; height: 28px; box-sizing: border-box; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: linear-gradient(180deg, #7fd0ea 0%, #4fb4d6 100%); border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.45); font-style: normal; }
+        .upload-css-icon svg { width: 66%; height: 66%; display: block; }
+        .modal-btn-css { width: 110px; height: 36px; align-self: center; margin-top: 5px; box-sizing: border-box; cursor: pointer; border: 2px solid #fff; border-radius: 18px; background: linear-gradient(180deg, #7fd0ea 0%, #4fb4d6 100%); color: #fff; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 1px 0 rgba(0,0,0,0.25); box-shadow: 0 1px 4px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.45); -webkit-tap-highlight-color: transparent; }
+        .modal-btn-css:active { transform: scale(0.95); }
+        /* ===== [신규] 이미지 → CSS 변환: 공지사항 확인하기 / 앱 받기 / 안드로이드 / 구름자막 없이 보기·카카오톡·퍼가기 / 동영상 / 장르·자작 ===== */
+        .home-lg-notice-btn.css-notice-btn { display: flex !important; align-items: center; gap: 6px; padding: 0 14px; box-sizing: border-box; border-radius: 6px; border: 1px solid #2796bc; background: linear-gradient(180deg, #5fc0de 0%, #3fb3d6 50%, #2eaad0 100%); color: #fff; font-size: 13px; font-weight: bold; white-space: nowrap; text-shadow: 0 1px 0 rgba(0,0,0,0.25); box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.45); user-select: none; -webkit-tap-highlight-color: transparent; }
+        .home-lg-notice-btn.css-notice-btn svg { width: 18px; height: 18px; flex-shrink: 0; display: block; }
+        .home-lg-notice-btn.css-notice-btn b { font-size: 15px; line-height: 1; }
+        /* [신규] 모바일(세로모드)에서는 홈 공지사항 확인하기 버튼 숨김 - PC/가로모드에서만 표시 */
+        @media (orientation: portrait) { .home-lg-notice-btn.css-notice-btn { display: none !important; } }
+        .lg-apk-trigger-img.css-apk-trigger { display: flex; align-items: center; gap: 8px; padding: 0 14px; box-sizing: border-box; border: 1px solid #cfcfcf; border-radius: 5px; background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 55%, #e6e6e6 100%); color: #6f6f6f; font-size: 14px; font-weight: bold; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.15), inset 0 1px 0 #fff; user-select: none; }
+        .css-caret { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #666; display: block; }
+        .lg-apk-dropdown a.css-apk-item { display: flex; align-items: center; gap: 6px; width: 120px; padding: 2px 4px; box-sizing: border-box; text-decoration: none; color: #333; font-size: 14px; font-weight: bold; white-space: nowrap; }
+        .lg-apk-dropdown a.css-apk-item svg { width: 22px; height: 22px; flex-shrink: 0; display: block; }
+        .css-menu-ico { width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-style: normal; }
+        .css-menu-ico svg { width: 22px; height: 22px; display: block; }
+        .css-sq-btn { height: 32px; width: 58px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .css-sq-btn:active { transform: scale(0.9); }
+        .css-sq-btn svg { width: 22px; height: 22px; display: block; pointer-events: none; }
+        .css-sq-blue { background: linear-gradient(180deg, #3d6fa5 0%, #31598a 50%, #2b4c77 100%); border: 1px solid #234468; border-radius: 4px 0 0 4px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.28); }
+        .css-sq-yellow { background: linear-gradient(180deg, #fddd3c 0%, #f7c600 55%, #e5a800 100%); border-top: 1px solid #d99e00; border-bottom: 1px solid #d99e00; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55); }
+        .css-sq-white { background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%); border: 1px solid #cfcfcf; border-radius: 0 4px 4px 0; }
+        .author-vlist-btn.css-vlist-btn { height: 22px; padding: 0 12px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; border-radius: 3px; border: 1px solid #25598b; background: linear-gradient(180deg, #3b80bd 0%, #2e6fa7 50%, #2a659a 100%); color: #fff; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; text-shadow: 0 1px 0 rgba(0,0,0,0.25); box-shadow: inset 0 1px 0 rgba(255,255,255,0.3); user-select: none; }
+        .css-pill { display: inline-flex; align-items: center; justify-content: center; height: 28px; padding: 0 18px; box-sizing: border-box; border-radius: 999px; color: #fff; font-size: 12px; font-weight: bold; white-space: nowrap; vertical-align: middle; text-shadow: 0 1px 0 rgba(0,0,0,0.25); box-shadow: 0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.4); }
+        .css-pill-blue { background: linear-gradient(180deg, #62c8e8 0%, #46b6de 55%, #34a6d2 100%); }
+        .css-pill-green { background: linear-gradient(180deg, #6fc46f 0%, #4caf50 55%, #3f9a43 100%); border: 2px solid #fff; }
 
         /* ===== [신규] 홈 - 추천 탭 박스/그리드 레이아웃 (정렬·위치·간격·크기만 조정, 기존 클래스/색상/기능 변경 없음) ===== */
         .home-reco-box { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 15px; box-sizing: border-box; overflow: visible; }
         .home-reco-box .unlucky-title-img { margin-bottom: 10px; }
+        .home-reco-title { font-size: 16px; font-weight: bold; color: #333; line-height: 1.2; margin: 0 0 10px 0; padding: 2px 0 2px 8px; border-left: 4px solid #4caf50; text-align: left; }
         .home-reco-outer .unlucky-prev-btn { position: absolute; left: 4px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 20; }
         .home-reco-outer .unlucky-next-btn { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); margin: 0; z-index: 20; }
         .home-reco-outer .unlucky-prev-btn:active { transform: translateY(-50%) scale(0.9); }
@@ -575,6 +609,7 @@
             .unlucky-item { width: calc((100% - 10px) / 2); min-width: 130px; } 
             .unlucky-next-btn { height: 32px; margin-left: 5px; } 
             .unlucky-prev-btn { height: 32px; margin-right: 5px; } 
+            .css-arrow-btn { width: 32px; } 
             .cloud { font-size: 11px; } 
             .v-info-flex { flex-direction: column; gap: 12px; } 
             .v-info-right-wrapper { width: 100%; justify-content: flex-start; border-top: 1px dashed #ddd; padding-top: 10px; border-bottom: none; flex-direction: column; align-items: flex-start; } 
@@ -692,6 +727,9 @@
             .sliding-menu.open { max-height: calc(100vh - 56px); }
             .nav-icon-btn, .header-upload-btn { height: 32px; font-size: 10px; }
             .nav-icon-btn img, .header-upload-btn img { height: 20px; }
+            .header-upload-btn .upload-css-icon { width: 20px; height: 20px; }
+            .nav-icon-btn .css-menu-ico { width: 20px; height: 20px; }
+            .nav-icon-btn .css-menu-ico svg { width: 16px; height: 16px; }
         }
 
         /* ===== 구름이 뭔가요 호버 설명 (기존 스타일 변경 없음, 추가만) ===== */
@@ -722,6 +760,7 @@
         .lg-right-actions { display: none; align-items: center; gap: 8px; flex-shrink: 0; }
         .lg-action-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: bold; color: #333; cursor: pointer; padding: 0; border: none; background: none; white-space: nowrap; user-select: none; box-sizing: border-box; }
         .lg-action-btn img { height: 32px; object-fit: contain; }
+        .lg-action-btn .upload-css-icon { width: 32px; height: 32px; }
         .lg-action-btn span { display: none; }
         .lg-action-btn:hover { opacity: 0.75; }
 
@@ -821,6 +860,7 @@
             .lg-nav-item { font-size: 11px; }
             .lg-notice-btn { height: 26px; }
             .lg-action-btn img { height: 24px; }
+            .lg-action-btn .upload-css-icon { width: 24px; height: 24px; }
             .lg-channel-dropdown-item { font-size: 11px; padding: 8px 10px; }
             .lg-apk-trigger-img { height: 30px; }
             .lg-apk-dropdown img { width: 100px; }
@@ -1170,11 +1210,11 @@
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
                 <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
                 <div class="nav-icon-btn" onclick="toggleMobileApkSection()">
-                    <img src="https://i.ibb.co/PsbVpwmL/20260810-071211.png" alt="20260810-071211">
+                    <i class="css-menu-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#7a7a7a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.6"/><path d="M12 7.5v6M9.2 11l2.8 2.8 2.8-2.8M10.5 18.2h3"/></svg></i>
                     <span>앱 받기</span>
                 </div>
                 <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener" id="mobile-apk-subitem" class="nav-icon-btn" style="text-decoration:none; color:#000; display:none; padding-left:35px;">
-                    <img src="https://i.ibb.co/zWyBJxGy/20260810-072317.jpg" alt="20260810-072317">
+                    <i class="css-menu-ico"><svg viewBox="0 0 24 24" fill="#8bc34a"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67c-.19-.29-.58-.38-.87-.2-.28.18-.37.54-.22.83L6.4 9.48A10.78 10.78 0 0 0 1 18h22a10.78 10.78 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z" /></svg></i>
                     <span>안드로이드</span>
                 </a>
                 <div class="nav-icon-btn" onclick="openTargetUserChannel()"><span>채널</span></div>
@@ -1182,7 +1222,7 @@
                 <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
                 <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
                 <div class="header-upload-btn" onclick="openModal('upload-modal')">
-                    <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg">
+                    <i class="upload-css-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3l-6.5 7.5h4.2V16h4.6v-5.5h4.2z"/><path d="M5 18h14v2.6H5z"/></svg></i>
                     <span>업로드</span>
                 </div>
             </div>
@@ -1200,15 +1240,13 @@
         </div>
         <div class="lg-right-actions-wrap" id="lg-right-actions-wrap">
             <div class="lg-right-actions" id="lg-right-actions">
-                <div class="lg-action-btn" onclick="openModal('upload-modal')"><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg"><span>업로드</span></div>
+                <div class="lg-action-btn" onclick="openModal('upload-modal')"><i class="upload-css-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3l-6.5 7.5h4.2V16h4.6v-5.5h4.2z"/><path d="M5 18h14v2.6H5z"/></svg></i><span>업로드</span></div>
             </div>
             <div class="lg-notice-row">
                 <div class="lg-apk-dropdown-wrap" id="lg-apk-dropdown-wrap">
-                    <img src="https://i.ibb.co/PsbVpwmL/20260810-071211.png" alt="20260810-071211" class="lg-apk-trigger-img" id="lg-apk-trigger" onclick="toggleLgApkDropdown(event)">
+                    <div class="lg-apk-trigger-img css-apk-trigger" id="lg-apk-trigger" role="button" onclick="toggleLgApkDropdown(event)"><span>앱 받기</span><i class="css-caret"></i></div>
                     <div class="lg-apk-dropdown" id="lg-apk-dropdown">
-                        <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener">
-                            <img src="https://i.ibb.co/zWyBJxGy/20260810-072317.jpg" alt="20260810-072317">
-                        </a>
+                        <a href="https://drive.google.com/file/d/156QBYJcn1XYY0fKNXVPUBXJW992qsSK9/view?usp=drivesdk" target="_blank" rel="noopener" class="css-apk-item"><svg viewBox="0 0 24 24" fill="#8bc34a"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.43 11.43 0 0 0-8.94 0L5.65 5.67c-.19-.29-.58-.38-.87-.2-.28.18-.37.54-.22.83L6.4 9.48A10.78 10.78 0 0 0 1 18h22a10.78 10.78 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z" /></svg><span>안드로이드</span></a>
                     </div>
                 </div>
             </div>
@@ -1234,7 +1272,7 @@
     <div class="content-area">
         <section id="home-section" class="page-section active">
             <div class="frame-wrapper">
-                <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="home-lg-notice-btn" onclick="showSection('notice')" title="공지사항">
+                <div class="home-lg-notice-btn css-notice-btn" role="button" onclick="showSection('notice')" title="공지사항"><svg viewBox="0 0 24 24" fill="#fff"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1v4h2v-4h1l5 3V6L8 9H4zm11.5 3c0-1.33-.58-2.53-1.5-3.35v6.69c.92-.81 1.5-2.01 1.5-3.34z"/></svg><span>공지사항 확인하기</span><b>»</b></div>
                 <div id="home-lg-loading-spinner" class="home-lg-loading-spinner"></div>
                 <div class="frame-bg">
                     <div class="home-rank-tabs" id="home-rank-tabs">
@@ -1249,43 +1287,43 @@
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
                     <div class="home-reco-box">
-                        <img src="https://i.ibb.co/MxRGNnrM/Screenshot-20260620-125318-Samsung-Browser-1.png" alt="Screenshot-20260620-125318-Samsung-Browser-1" class="unlucky-title-img">
+                        <div class="home-reco-title">불운의 동영상</div>
                         <div class="unlucky-outer-container home-reco-outer">
-                            <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollUnluckyLeft()">
+                            <div class="unlucky-prev-btn css-arrow-btn" role="button" aria-label="이전" onclick="scrollUnluckyLeft()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
                             <div id="home-unlucky" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollUnluckyRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollUnluckyRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                         <div class="unlucky-shuffle-wrapper">
                             <a href="https://ibb.co/F4NFMwmD" onclick="event.preventDefault(); shufflePlayUnlucky();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Screenshot-20260628-092011-Samsung-Browser-1" border="0">
+                                <span class="css-shuffle-btn" role="img" aria-label="랜덤 재생"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="M18 2l4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="M18 14l4 4-4 4"/></svg></span>
                             </a>
                         </div>
                     </div>
 
                     <div class="home-reco-box">
-                        <img src="https://i.ibb.co/tph1Q2fn/Screenshot-20260630-164342-Samsung-Browser-1.png" alt="Screenshot-20260630-164342-Samsung-Browser-1" class="unlucky-title-img">
+                        <div class="home-reco-title">32시간 인기동영상</div>
                         <div class="unlucky-outer-container home-reco-outer">
-                            <img src="https://i.ibb.co/VcFs78XM/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollHotLeft()">
+                            <div class="unlucky-prev-btn css-arrow-btn" data-tone="red" role="button" aria-label="이전" onclick="scrollHotLeft()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
                             <div id="home-hot-32h" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/4RgbLgzN/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="Screenshot-20260630-164342-Samsung-Browser-2" class="unlucky-next-btn" onclick="scrollHotRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" data-tone="red" role="button" aria-label="다음" onclick="scrollHotRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                         <div class="unlucky-shuffle-wrapper">
                             <a href="#" onclick="event.preventDefault(); shufflePlayHot();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle Hot Videos" border="0">
+                                <span class="css-shuffle-btn" role="img" aria-label="랜덤 재생"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="M18 2l4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="M18 14l4 4-4 4"/></svg></span>
                             </a>
                         </div>
                     </div>
 
                     <div class="home-reco-box">
-                        <img src="https://i.ibb.co/CpHP1dc4/1783060875685.png" alt="1783060875685" class="unlucky-title-img">
+                        <div class="home-reco-title">창작영상</div>
                         <div class="unlucky-outer-container home-reco-outer" style="margin-top:10px;">
-                            <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollMyUploadedLeft()">
+                            <div class="unlucky-prev-btn css-arrow-btn" role="button" aria-label="이전" onclick="scrollMyUploadedLeft()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
                             <div id="home-my-uploaded" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollMyUploadedRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollMyUploadedRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                         <div class="unlucky-shuffle-wrapper">
                             <a href="#" onclick="event.preventDefault(); shufflePlayMyUploaded();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle My Videos" border="0">
+                                <span class="css-shuffle-btn" role="img" aria-label="랜덤 재생"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="M18 2l4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="M18 14l4 4-4 4"/></svg></span>
                             </a>
                         </div>
                     </div>
@@ -1295,7 +1333,7 @@
                         <div class="rank-section-title">36시간 인기 동영상 랭킹 (조회수)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank36-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRank36Right()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollRank36Right()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1303,7 +1341,7 @@
                         <div class="rank-section-title">일간 인기 동영상 랭킹 (조회수)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankday-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankDayRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollRankDayRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1311,7 +1349,7 @@
                         <div class="rank-section-title">월간 인기 동영상 랭킹 (조회수)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankmonth-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankMonthRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollRankMonthRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1319,7 +1357,7 @@
                         <div class="rank-section-title">찜 랭킹 (찜을 가장 많이 받은 순)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankjjim-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankJjimRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollRankJjimRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1327,7 +1365,7 @@
                         <div class="rank-section-title">댓글왕 랭킹 (댓글을 가장 많이 남긴 순)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank-commentking-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCommentKingRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollCommentKingRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1335,7 +1373,7 @@
                         <div class="rank-section-title">자막왕 랭킹 (구름 자막을 가장 많이 남긴 순)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
+                            <div class="unlucky-next-btn css-arrow-btn" role="button" aria-label="다음" onclick="scrollCloudKingRight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
                         </div>
                     </div>
 
@@ -1628,7 +1666,7 @@
     </div>
 </div>
 
-<div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="upload-submit-btn" onclick="doUpload()"></div></div></div>
+<div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><button type="button" class="modal-btn-css" id="upload-submit-btn" onclick="doUpload()">업로드</button></div></div></div>
 
 <div id="edit-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('edit-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">동영상 수정</div><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">동영상 파일 재선택 (미선택시 기존 영상 유지)</div><input type="file" id="edit-up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 기존 썸네일 유지)</div><input type="file" id="edit-up-thumb" accept="image/*"><input type="text" id="edit-up-title" placeholder="제목"><textarea id="edit-up-desc" placeholder="설명"></textarea><div id="edit-modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="edit-up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addEditTagInputField()"></div></div><select id="edit-up-genre" onchange="toggleGenreCustomInput('edit-up-genre','edit-up-genre-custom')"></select><input type="text" id="edit-up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="edit-upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="edit-upload-progress-fill"></div></div><div class="upload-progress-label" id="edit-upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="edit-upload-submit-btn" onclick="doEditVideo()"></div></div></div>
 
@@ -1874,6 +1912,9 @@
     const cloudLayer = document.getElementById('cloud-layer');
     const waitScreen = document.getElementById('wait-screen');
     const errorScreen = document.getElementById('error-screen');
+    /* [신규] 기본 프로필(토끼 로고)을 이미지 대신 코드(SVG)로 표시 - 예전에 저장된 기본 프로필 주소도 자동으로 새 기본 프로필로 표시 */
+    var DEFAULT_PROFILE_IMG = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id=%22g%22%20x1=%220%22%20y1=%220%22%20x2=%221%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%23b6e3f4%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%2378bcdb%22/%3E%3C/linearGradient%3E%3ClinearGradient%20id=%22e%22%20x1=%220%22%20y1=%220%22%20x2=%220%22%20y2=%221%22%3E%3Cstop%20offset=%220%22%20stop-color=%22%239fd5ec%22/%3E%3Cstop%20offset=%221%22%20stop-color=%22%236db4d6%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle%20cx=%2250%22%20cy=%2250%22%20r=%2249.2%22%20fill=%22%23fff%22%20stroke=%22%23dcdcdc%22%20stroke-width=%221%22/%3E%3Cg%20transform=%22rotate(-11%2050%2056)%22%3E%3Cpath%20d=%22M29%2038L31%2017Q31.6%2012.6%2036%2014.4L46%2032Z%22%20fill=%22url(%23e)%22/%3E%3Cpath%20d=%22M71%2038L70%2018Q69.6%2013.6%2065.4%2015.2L55%2032Z%22%20fill=%22url(%23e)%22/%3E%3Cpath%20d=%22M31.4%2020.5L33.2%2015.6Q34.4%2013.8%2036%2014.4L38%2018.6Z%22%20fill=%22%236aa9cc%22/%3E%3Cpath%20d=%22M69.8%2020.8L68.6%2016Q67.8%2014%2065.4%2015.2L63.6%2019Z%22%20fill=%22%236aa9cc%22/%3E%3Crect%20x=%2224%22%20y=%2229%22%20width=%2252%22%20height=%2253%22%20rx=%2213%22%20fill=%22url(%23g)%22/%3E%3Crect%20x=%2233%22%20y=%2238%22%20width=%2234%22%20height=%2235%22%20rx=%2210%22%20fill=%22%23fcffff%22/%3E%3Crect%20x=%2239.5%22%20y=%2248%22%20width=%226.5%22%20height=%225.5%22%20rx=%221.2%22%20fill=%22%23aadcf0%22/%3E%3Crect%20x=%2254%22%20y=%2248%22%20width=%226.5%22%20height=%225.5%22%20rx=%221.2%22%20fill=%22%23aadcf0%22/%3E%3Cpath%20d=%22M42.5%2062.5q2.4%203.6%204.8%200q2.4%203.6%204.8%200%22%20fill=%22none%22%20stroke=%22%238ecde6%22%20stroke-width=%221.7%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E";
+    function fixProfileImg(u) { return (!u || u === "https://i.ibb.co/P36c8H4/20260620-061219.png") ? DEFAULT_PROFILE_IMG : u; }
     const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "테크", "패러디"];
 
     const kkk11 = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ\n".repeat(11);
@@ -2118,7 +2159,7 @@
     }
 
     /* ---------- [신규] 올린이 뱃지 프로필/이름 색상 (동영상 100개 업로드시 변경) ---------- */
-    const AUTHOR_BADGE_IMG_DEFAULT = "https://i.ibb.co/B5rSjwPT/Screenshot-20260722-171755-Samsung-Browser-1.png";
+    const AUTHOR_BADGE_IMG_DEFAULT = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22%3E%3Cdefs%3E%3CclipPath%20id=%22c%22%3E%3Ccircle%20cx=%2250%22%20cy=%2250%22%20r=%2250%22/%3E%3C/clipPath%3E%3C/defs%3E%3Ccircle%20cx=%2250%22%20cy=%2250%22%20r=%2250%22%20fill=%22%23d9d9d9%22/%3E%3Cg%20clip-path=%22url(%23c)%22%3E%3Ccircle%20cx=%2250%22%20cy=%2238%22%20r=%2217%22%20fill=%22%23f7f7f7%22/%3E%3Cpath%20d=%22M14%20100Q14%2062%2050%2062Q86%2062%2086%20100Z%22%20fill=%22%23f7f7f7%22/%3E%3C/g%3E%3C/svg%3E";
     const AUTHOR_BADGE_IMG_VETERAN = "https://i.ibb.co/LzbBJVb0/Screenshot-20260722-172338-Gallery-1.png";
     const AUTHOR_VETERAN_THRESHOLD = 100;
 
@@ -2413,7 +2454,7 @@
         const totalClouds = currentVideoCloudCount;
         const widthText = currentPlayingItem.vWidth || '1280';
         const heightText = currentPlayingItem.vHeight || '720';
-        const authorProfileImg = currentPlayingItem.authorProfile || "https://i.ibb.co/P36c8H4/20260620-061219.png";
+        const authorProfileImg = fixProfileImg(currentPlayingItem.authorProfile);
         const currentPlayLength = currentPlayingItem.playTime || "03:45";
         
         let checkedAuthorDesc = currentPlayingItem.authorDesc;
@@ -2447,7 +2488,7 @@
         let channelBoxInVideo = "";
         if (user) {
             const author = currentPlayingItem.author;
-            const authorPImgUrl = currentPlayingItem.authorProfile || "https://i.ibb.co/P36c8H4/20260620-061219.png";
+            const authorPImgUrl = fixProfileImg(currentPlayingItem.authorProfile);
             
             const subButtonHtml = (!isMe) ? `
                 <div style="margin-top: 8px; cursor: pointer;" onclick="toggleSubscribeAction('${author.replace(/'/g, "\\'")}')">
@@ -2467,7 +2508,7 @@
                     <div style="flex:1; min-width:0;">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <b class="vgray" style="font-size: 13px; color:#111; cursor:pointer;" title="채널 보기" onclick="showUserChannel('${author.replace(/'/g, "\\'")}')">${escapeHtml(author)}</b>
-                            <img src="https://i.ibb.co/JjBBV1Zv/1781695445893-1-1.png" alt="view_author_videos" class="author-vlist-btn" style="height:22px; cursor:pointer;" title="채널 동영상 보기" onclick="filterByAuthor('${author.replace(/'/g, "\\'")}')">
+                            <span class="author-vlist-btn css-vlist-btn" role="button" title="채널 동영상 보기" onclick="filterByAuthor('${author.replace(/'/g, "\\'")}')">동영상</span>
                         </div>
                         ${subButtonHtml}
                         <div class="vgray" style="font-size:11px; color:#444; white-space:pre-wrap; background:#fff; padding:6px; border:1px solid #ddd; margin-top:3px; word-break:break-all; max-height:60px; overflow-y:auto;">${escapeHtml(checkedAuthorDesc)}</div>
@@ -2479,7 +2520,7 @@
         if (isMe) {
             myVideoBadgeHtml = `
                 <div style="margin-top: 4px;">
-                    <img src="https://i.ibb.co/B2dwcWYM/1783059202610-2.png" alt="1783059202610-2" border="0" style="height: 20px; width: auto; vertical-align: middle; cursor: default;" />
+                    <span class="css-pill css-pill-green" style="height:22px; padding:0 12px; font-size:11px; cursor:default;">자작</span>
                 </div>`;
         }
 
@@ -2522,10 +2563,7 @@
                 <div style="flex:1; min-width:0;">
                     <div style="margin-top:12px; color:#555; line-height:1.5;">
                         <span style="display:inline-flex; align-items:center; gap:4px; vertical-align:middle;"><img src="${getAuthorBadgeImg(currentPlayingItem.author)}" alt="author" style="width:18px; height:18px; border-radius:50%; object-fit:cover; vertical-align:middle;"><span style="${getAuthorNameColorStyle(currentPlayingItem.author)}">${escapeHtml(currentPlayingItem.author)}</span></span> | 장르: 
-                        <div class="tag-image-container" style="margin-left: 5px;">
-                            <img src="https://i.ibb.co/gFbQw0YF/1783320114401.png" alt="1783320114401" style="border:none;">
-                            <div class="tag-text-overlay">${currentPlayingItem.genre}</div>
-                        </div>
+                        <span class="css-pill css-pill-blue" style="margin-left:5px;">${currentPlayingItem.genre}</span>
                         ${myVideoBadgeHtml}
                         <br>자막 수: <span id="cloud-count-live">${totalClouds}</span> | 화질 등급: ${currentPlayingItem.quality || '감지 중...'}
                     </div>
@@ -2546,13 +2584,13 @@
                         </div>
                         <div style="margin-bottom: 5px; position:relative; display:inline-flex; align-items:flex-start;">
                             <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                                <span class="share-hover-wrap"><img src="https://i.ibb.co/NdwJbygM/20260805-071537.png" alt="share_link" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="(function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
+                                <span class="share-hover-wrap"><span class="css-sq-btn css-sq-blue" role="button" aria-label="동영상 구름 자막 없이 보기" onclick="(function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 새 창에서 열 수 없습니다.'); } return; } window.open(url, '_blank'); })()"><svg viewBox="0 0 24 24"><path fill="#fff" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/><path d="M3.5 2.8L21 21.2" stroke="#e53935" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="share-hover-tip">동영상 구름 자막 없이 보기</span></span>
                                 <div class="report-hover-wrap" onclick="openReportModal()">
                                     <span class="report-btn-text"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a6 6 0 0 0-6 6c0 4.5-2 5.5-2 7 0 .55.45 1 1 1h14c.55 0 1-.45 1-1 0-1.5-2-2.5-2-7a6 6 0 0 0-6-6zm0 19a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 21z"/></svg>신고</span>
                                     <span class="report-hover-tip">이 동영상을 신고합니다.</span>
                                 </div>
                             </div>
-                            <span class="share-hover-wrap" style="margin-left:-6px;"><img src="https://i.ibb.co/LznJQTjT/20260617-134817.png" alt="20260617-134817" class="extra-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" onclick="shareNyangiple()"/><span class="share-hover-tip">카카오톡으로 공유하기</span></span><span class="share-hover-wrap"><a href="https://imgbb.com/" onclick="event.preventDefault(); (function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.'); } return; } var dlA = document.createElement('a'); dlA.href = url; dlA.download = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : 'video'; document.body.appendChild(dlA); dlA.click(); document.body.removeChild(dlA); })();" style="display:block;"><img src="https://i.ibb.co/mrj8Z2b9/vfff.png" alt="vfff" class="share-btn-img" style="margin:0; padding:0; display:block; flex-shrink:0;" border="0" /></a><span class="share-hover-tip">퍼가기</span></span>
+                            <span class="share-hover-wrap" style="margin-left:0;"><span class="css-sq-btn css-sq-yellow" role="button" aria-label="카카오톡으로 공유하기" onclick="shareNyangiple()"><svg viewBox="0 0 36 30" style="width:30px;height:25px"><path d="M18 2C9 2 1.8 7.8 1.8 15c0 4.6 3 8.6 7.5 10.9l-1.6 5.2c-.1.4.3.6.6.4l6-4c1.2.2 2.4.3 3.7.3 9 0 16.2-5.8 16.2-13S27 2 18 2z" fill="#3b1e1e"/><text x="18" y="18.5" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="9.6" fill="#ffe812">TALK</text></svg></span><span class="share-hover-tip">카카오톡으로 공유하기</span></span><span class="share-hover-wrap"><a href="https://imgbb.com/" onclick="event.preventDefault(); (function(){ var url = getOnlineVideoUrl(); if(!url){ if(typeof showToast==='function'){ showToast('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.', 'error'); } else { alert('이 영상은 아직 온라인 업로드가 완료되지 않아 다운로드할 수 없습니다.'); } return; } var dlA = document.createElement('a'); dlA.href = url; dlA.download = (currentPlayingItem && currentPlayingItem.title) ? currentPlayingItem.title : 'video'; document.body.appendChild(dlA); dlA.click(); document.body.removeChild(dlA); })();" style="display:block;"><span class="css-sq-btn css-sq-white" role="img" aria-label="퍼가기"><svg viewBox="0 0 24 24" fill="#333"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg></span></a><span class="share-hover-tip">퍼가기</span></span>
                         </div>
                         ${tagsHtml}
                         <div style="color: #999; font-size: 11px; margin-top: 5px;">업로드됨: ${formatDate(currentPlayingItem.regDate)}${currentPlayingItem.editDate ? `<br>수정됨: ${formatDate(currentPlayingItem.editDate)}` : ''}</div>
@@ -3080,7 +3118,7 @@
     }
 
     function refreshUnluckyList() {
-        const unlucky = db.filter(v => v.views < 500);
+        const unlucky = db.filter(v => v.views < 3);
         document.getElementById('home-unlucky').innerHTML = unlucky.map(v => {
             const timeString = v.playTime || "03:45";
             const safeTitle = escapeHtml(v.title);
@@ -3200,7 +3238,7 @@
     }
 
     function shufflePlayUnlucky() {
-        const unluckyList = db.filter(v => v.views < 500);
+        const unluckyList = db.filter(v => v.views < 3);
         if(unluckyList.length === 0) {
             alert("재생할 불운의 동영상이 존재하지 않습니다.");
             return;
@@ -3316,12 +3354,12 @@
     }
 
     function getUserProfileImgByNick(nick) {
-        const defaultImg = "https://i.ibb.co/P36c8H4/20260620-061219.png";
-        if(user && user.nick === nick) return user.profileImg || defaultImg;
+        const defaultImg = DEFAULT_PROFILE_IMG;
+        if(user && user.nick === nick) return fixProfileImg(user.profileImg);
         const foundUser = users.find(u => u.nick === nick);
-        if(foundUser) return foundUser.profileImg || defaultImg;
+        if(foundUser) return fixProfileImg(foundUser.profileImg);
         const foundSample = db.find(v => v.author === nick);
-        if(foundSample) return foundSample.authorProfile || defaultImg;
+        if(foundSample) return fixProfileImg(foundSample.authorProfile);
         return defaultImg;
     }
 
@@ -3481,7 +3519,7 @@
             return;
         }
 
-        const targetProfileImg = user.profileImg || "https://i.ibb.co/P36c8H4/20260620-061219.png";
+        const targetProfileImg = fixProfileImg(user.profileImg);
         renderChannelHead('home', user.nick, true, targetProfileImg);
 
         if(settingsEl) settingsEl.style.display = '';
@@ -4485,7 +4523,7 @@
 
         const detailEl = document.getElementById(p === 'home' ? 'home-my-info-detail' : 'my-info-detail');
         if(detailEl) {
-            detailEl.innerHTML = `<img src="${escapeHtml(profileImg)}" class="ch-profile-img" alt="프로필"><div class="ch-profile-desc">${escapeHtml(chGetDesc(name, isMe))}</div>`;
+            detailEl.innerHTML = `<img src="${escapeHtml(fixProfileImg(profileImg))}" class="ch-profile-img" alt="프로필"><div class="ch-profile-desc">${escapeHtml(chGetDesc(name, isMe))}</div>`;
         }
     }
 
@@ -6119,6 +6157,7 @@
     var FADE_IN_MS = 1000;
     var RED_IMGS = ['4RgbLgzN', 'VcFs78XM'];
     function colorOf(btn) {
+        if (btn.getAttribute('data-tone') === 'red') return 'rgba(217,82,78,0.5)';
         var src = btn.getAttribute('src') || '';
         for (var i = 0; i < RED_IMGS.length; i++) {
             if (src.indexOf(RED_IMGS[i]) > -1) return 'rgba(217,82,78,0.5)';
