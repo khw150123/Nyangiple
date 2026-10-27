@@ -909,6 +909,12 @@
         .ch-card:hover .ch-card-thumb { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
         .ch-card.ch-verified .ch-card-thumb { border:2px solid #4caf50; }
         .ch-card.ch-verified:hover .ch-card-thumb { box-shadow:0 4px 14px rgba(76,175,80,0.75); }
+        .list-item, .unlucky-item { transition:box-shadow 0.2s ease; }
+        .list-item:hover, .unlucky-item:hover { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
+        .list-item.ch-verified { box-shadow:inset 0 0 0 2px #4caf50; }
+        .list-item.ch-verified:hover { box-shadow:inset 0 0 0 2px #4caf50, 0 4px 14px rgba(76,175,80,0.75); }
+        .unlucky-item.ch-verified { border-color:#4caf50; box-shadow:inset 0 0 0 1px #4caf50; }
+        .unlucky-item.ch-verified:hover { box-shadow:inset 0 0 0 1px #4caf50, 0 0 10px rgba(76,175,80,0.8); }
         .ch-card-dur { position:absolute; right:3px; bottom:3px; background:rgba(0,0,0,0.65); color:#fff; font-size:11px; padding:0 4px; line-height:16px; }
         .ch-card-title { margin-top:6px; font-size:13px; line-height:1.35; color:#1565c0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-break:break-all; }
         .ch-card-author { display:flex; align-items:center; gap:5px; margin-top:6px; font-size:12px; font-weight:bold; color:#2e9e3a; min-width:0; }
@@ -2442,17 +2448,7 @@
             const author = currentPlayingItem.author;
             const authorPImgUrl = currentPlayingItem.authorProfile || "https://i.ibb.co/P36c8H4/20260620-061219.png";
             
-            const subButtonHtml = (!isMe) ? `
-                <div style="margin-top: 8px; cursor: pointer;" onclick="toggleSubscribeAction('${author.replace(/'/g, "\\'")}')">
-                    <span style="position: relative; display: inline-block; vertical-align: middle;">
-                        <img src="https://i.ibb.co/CKVF2vKb/lv-0-20260809130716-1.gif" alt="lv-0-20260809093357-1" border="0" class="sub-action-btn-img" style="display: block;" />
-                        <span style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: bold; color: #ffffff; pointer-events: none; text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">${subscriberCounts[author] || 0}</span>
-                    </span>
-                    <span style="font-size:11px; font-weight:bold; color: ${isSubscribed ? '#ff3300' : '#666'};">
-                        ${isSubscribed ? '[ 구독 중 ]' : '[ 구독 하기 ]'}
-                    </span>
-                </div>
-            ` : `<span style="font-size:11px; color:#999;">[ 본인 채널 ] 구독자 ${subscriberCounts[author] || 0}명</span>`;
+            const subButtonHtml = (!isMe) ? `<button type="button" class="ch-sub-btn${isSubscribed ? ' on' : ''}" style="margin:8px 0 0;" onclick="toggleSubscribeAction('${author.replace(/'/g, "\\'")}')">${CH_STAR_SVG}<span>${isSubscribed ? '구독중' : '구독하기'}</span><span class="ch-sub-count">${subscriberCounts[author] || 0}</span></button>` : `<span style="font-size:11px; color:#999;">[ 본인 채널 ] 구독자 ${subscriberCounts[author] || 0}명</span>`;
 
             channelBoxInVideo = `
                 <div style="display: flex; align-items: flex-start; gap: 12px; width:100%;">
@@ -2611,7 +2607,7 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
@@ -2644,7 +2640,7 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
@@ -2830,7 +2826,7 @@
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
@@ -3079,7 +3075,7 @@
             const safeTitle = escapeHtml(v.title);
             const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
             return `
-            <div class="unlucky-item" onclick="preparePlay(${v.id})">
+            <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                     <div class="unlucky-duration-badge">${timeString}</div>
                 </div>
@@ -3105,7 +3101,7 @@
                 const safeTitle = escapeHtml(v.title);
             const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
                 return `
-                <div class="unlucky-item" onclick="preparePlay(${v.id})">
+                <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                     <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="unlucky-duration-badge">${timeString}</div>
                     </div>
@@ -3129,7 +3125,7 @@
                     const safeTitle = escapeHtml(v.title);
             const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
                     return `
-                    <div class="unlucky-item" onclick="preparePlay(${v.id})">
+                    <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                         <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                             <div class="unlucky-duration-badge">${timeString}</div>
                         </div>
@@ -3235,7 +3231,7 @@
         const safeTitle = escapeHtml(v.title);
             const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
         return `
-        <div class="unlucky-item" onclick="preparePlay(${v.id})">
+        <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
             <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                 <div class="rank-badge-wrap">
                     <img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge">
@@ -3444,7 +3440,7 @@
             const channelItemLength = v.playTime || "03:45";
 
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${channelItemLength}</div>
@@ -4080,7 +4076,7 @@
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
@@ -5811,7 +5807,7 @@
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
@@ -5880,7 +5876,7 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item" onclick="preparePlay(${v.id})">
+            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
                 <div class="list-thumb-col">
                     <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
                         <div class="list-duration-badge">${listPlayLength}</div>
