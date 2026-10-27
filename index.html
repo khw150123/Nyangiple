@@ -915,6 +915,12 @@
         .list-item.ch-verified:hover { box-shadow:inset 0 0 0 2px #4caf50, 0 4px 14px rgba(76,175,80,0.75); }
         .unlucky-item.ch-verified { border-color:#4caf50; box-shadow:inset 0 0 0 1px #4caf50; }
         .unlucky-item.ch-verified:hover { box-shadow:inset 0 0 0 1px #4caf50, 0 0 10px rgba(76,175,80,0.8); }
+        /* [추가] 설명창(desc-tooltip) 호버 - 채널 영상 카드(ch-card)에도 표시 + 스크롤 영역에 잘리지 않게 고정 배치 */
+        .ch-card { position: relative; }
+        .ch-card:hover .desc-tooltip { opacity: 1; visibility: visible; }
+        .desc-tooltip.fx { position: fixed; margin-left: 0; bottom: auto; }
+        .desc-tooltip.fx::after { left: var(--arrow-x, 50%); }
+        .desc-tooltip.fx.below::after { top: auto; bottom: 100%; border-color: transparent transparent rgba(87,138,182,0.85) transparent; }
         .ch-card-dur { position:absolute; right:3px; bottom:3px; background:rgba(0,0,0,0.65); color:#fff; font-size:11px; padding:0 4px; line-height:16px; }
         .ch-card-title { margin-top:6px; font-size:13px; line-height:1.35; color:#1565c0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-break:break-all; }
         .ch-card-author { display:flex; align-items:center; gap:5px; margin-top:6px; font-size:12px; font-weight:bold; color:#2e9e3a; min-width:0; }
@@ -2838,6 +2844,7 @@
                     길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
                     화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
                 </div>
+                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                 <button class="channel-video-delete-btn" onclick="event.stopPropagation(); togglePlaylistAction(${v.id}); renderPlaylist();">제거</button>
             </div>`;
         }).join('');
@@ -3452,6 +3459,7 @@
                     길이: <span style="font-weight:bold; color:#ff3300;">${channelItemLength}</span> | 조회수: ${v.views} | 장르: ${v.genre}<br>
                     화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${formatDate(v.regDate)}
                 </div>
+                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
                 <button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button>
             </div>`;
         }).join('');
@@ -4549,6 +4557,7 @@
                 <div class="ch-card-author">${verified ? chBadgeHtml(false) : ''}<span class="nm">${escapeHtml(v.author)}</span></div>
                 <div class="ch-card-views"><i></i>${(v.views || 0).toLocaleString()}p</div>
                 ${btns}
+                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
 
@@ -5888,6 +5897,7 @@
                     길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
                     자막 수: ${Math.floor(v.views/3) + savedCount} | 시청: ${getTimeAgo(date)}
                 </div>
+                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
     }
@@ -6201,6 +6211,59 @@
         } catch (e) {}
     };
     fill();
+})();
+</script>
+
+<script>
+/* [추가] 설명창(desc-tooltip): 홈/채널/검색/재생목록/시청기록 등 다른 화면에서도 호버 시 표시.
+   스크롤 영역(overflow)에 잘리지 않도록 화면 기준(fixed)으로 위치 계산. 영상 화면의 기존 목록은 건드리지 않음 */
+(function() {
+    var SKIP = '#side-video-list, #related-videos-list, #popular-videos-list';
+    var cur = null;
+    function place(item) {
+        if (!item || item.closest(SKIP)) return;
+        var tip = null;
+        for (var i = 0; i < item.children.length; i++) {
+            if (item.children[i].classList && item.children[i].classList.contains('desc-tooltip')) { tip = item.children[i]; break; }
+        }
+        if (!tip) return;
+        tip.classList.add('fx');
+        tip.classList.remove('below');
+        var r = item.getBoundingClientRect();
+        var w = tip.offsetWidth || 180;
+        var h = tip.offsetHeight || 0;
+        var vw = document.documentElement.clientWidth || window.innerWidth;
+        var center = r.left + r.width / 2;
+        var left = center - w / 2;
+        var maxLeft = vw - w - 4;
+        if (left > maxLeft) left = maxLeft;
+        if (left < 4) left = 4;
+        var top;
+        if (r.top >= h + 14) {
+            top = r.top - h - 10;
+        } else {
+            top = r.bottom + 10;
+            tip.classList.add('below');
+        }
+        var ax = Math.max(12, Math.min(w - 12, center - left));
+        tip.style.left = left + 'px';
+        tip.style.top = top + 'px';
+        tip.style.setProperty('--arrow-x', ax + 'px');
+    }
+    document.addEventListener('mouseover', function(e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var item = t.closest('.unlucky-item, .list-item, .ch-card');
+        if (!item || item === cur) return;
+        cur = item;
+        place(item);
+    });
+    document.addEventListener('mouseout', function(e) {
+        if (!cur) return;
+        var to = e.relatedTarget;
+        if (!to || !to.closest || to.closest('.unlucky-item, .list-item, .ch-card') !== cur) cur = null;
+    });
+    window.addEventListener('scroll', function() { if (cur && document.body.contains(cur)) place(cur); }, true);
 })();
 </script>
 </body>
