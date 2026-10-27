@@ -2701,7 +2701,8 @@
 
     function toggleCommentsPanel() {
         if(!currentPlayingItem) return;
-        commentsOpenVideoId = (commentsOpenVideoId === currentPlayingItem.id) ? null : currentPlayingItem.id;
+        /* [변경] 댓글창은 항상 보이므로, 버튼은 댓글창 위치로 스크롤만 함 */
+        commentsOpenVideoId = currentPlayingItem.id;
         renderComments();
         const area = document.getElementById('video-comments-section');
         if(area && commentsOpenVideoId === currentPlayingItem.id && area.scrollIntoView) {
@@ -2713,7 +2714,8 @@
         const area = document.getElementById('video-comments-section');
         if(!area || !currentPlayingItem) return;
         const comments = currentPlayingItem.comments || [];
-        area.style.display = (commentsOpenVideoId === currentPlayingItem.id) ? '' : 'none';
+        /* [변경] 댓글창은 버튼을 누르지 않아도 항상 보이게 함 */
+        area.style.display = '';
         const commentCountEl = document.getElementById('comment-toggle-count');
         if(commentCountEl) commentCountEl.textContent = comments.length;
         const order = getSortedCommentIndices(comments);
