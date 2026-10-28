@@ -1591,7 +1591,7 @@
             <div class="channel-fullscreen-container">
                 <div class="channel-back-text-btn" onclick="goBackFromChannel()">[ ◀ 돌아가기 ]</div>
                 <h2 style="font-size:18px; text-align: left; margin-bottom:15px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">채널 순위</h2>
-                <div style="font-size:12px; color:#888; margin-bottom:12px;">구름 자막과 영상 재생수를 기준으로 산정된 순위입니다. (최대 30위)</div>
+                <div style="font-size:12px; color:#888; margin-bottom:12px;">채널 인기도(영상 재생수 합계)를 기준으로 산정된 순위입니다. (최대 30위)</div>
                 <div id="channel-rank-list" class="channel-internal-list"></div>
             </div>
         </section>
@@ -3133,7 +3133,7 @@
             views: statsByAuthor[author].views,
             clouds: statsByAuthor[author].clouds,
             score: statsByAuthor[author].views + statsByAuthor[author].clouds
-        })).sort((a, b) => b.score - a.score).slice(0, 30);
+        })).sort((a, b) => (b.views - a.views) || (b.clouds - a.clouds)).slice(0, 30);
     }
 
     function renderChannelRankList() {
@@ -3829,7 +3829,7 @@
                         currentPlayingItem.savedClouds = freshData.savedClouds;
                     }
                     if(freshData.comments) currentPlayingItem.comments = freshData.comments;
-                    if(freshData.views !== undefined) currentPlayingItem.views = freshData.views;
+                    if(freshData.views !== undefined) currentPlayingItem.views = Math.max(currentPlayingItem.views || 0, freshData.views || 0);
                     if(freshData.jjim !== undefined) currentPlayingItem.jjim = freshData.jjim;
                     if(freshData.jjimUsers) currentPlayingItem.jjimUsers = freshData.jjimUsers;
                     updateDetail();
@@ -4065,8 +4065,11 @@
                 target.vWidth = video.videoWidth;
                 target.vHeight = video.videoHeight;
                 target.playTime = durationText;
-                target.views++; 
+                target.views = (target.views || 0) + 1; 
+                if(target !== item) item.views = target.views;
                 localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); 
+                /* [수정] 조회수가 이 기기에만 저장되고 서버에 저장되지 않아 카운트가 안 되던 문제 - 서버에도 저장 */
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(() => {});
             }
             updateDetail();
 
@@ -4175,7 +4178,9 @@
         const tagBox = document.getElementById('vs-tag-section');
         if(tagBox) {
             let html = '';
-            if(!filterTagName && !filterAuthorName) {
+            /* [변경] 동영상 섹션의 #태그 구역은 표시하지 않음 (다시 보이게 하려면 false 를 true 로) */
+            const VS_SHOW_TAG_SECTION = false;
+            if(VS_SHOW_TAG_SECTION && !filterTagName && !filterAuthorName) {
                 const cnt = {}; const latest = {};
                 list.forEach(v => {
                     const ts = new Date(v.regDate || 0).getTime();
