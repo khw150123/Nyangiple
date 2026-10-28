@@ -740,6 +740,8 @@
         .ch-rank-table td { padding: 12px 8px; border-top: 1px solid #ddd; font-size: 14px; line-height: 1.4; color: #333; vertical-align: middle; word-break: break-all; cursor: pointer; }
         .ch-rank-table .ch-rank-col { width: 80px; text-align: center; }
         .ch-rank-table .ch-rank-name { color: #337ab7; }
+        .ch-rank-table .ch-rank-pop { width: 110px; text-align: center; white-space: nowrap; }
+        .ch-pop-line { margin-top: 4px; font-size: 12px; font-weight: normal; color: #666; }
         .ch-rank-table tbody tr:nth-child(odd) { background: #f9f9f9; }
         .ch-rank-table tbody tr.ch-rank-top10 { background: #def0d8; }
         .ch-rank-table tbody tr.ch-rank-top10 td { font-size: 16px; font-weight: bold; border-top-color: #d0e9c6; }
@@ -934,6 +936,43 @@
         .ch-pager { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:14px 0 4px; }
         .ch-pager span { min-width:30px; height:30px; line-height:30px; text-align:center; border:1px solid #d5d5d5; background:#fff; font-size:13px; color:#333; cursor:pointer; padding:0 6px; box-sizing:border-box; }
         .ch-pager span.active { background:#2f6aa5; color:#fff; border-color:#2f6aa5; cursor:default; }
+
+        /* ===== [추가] 동영상 섹션 목록 UI - 전체 헤더 / 3칸 필터 / 태그 캐러셀 / 2열 카드 (기존 분류·정렬·표시 막대는 숨김만 하고 코드는 그대로 둠) ===== */
+        #video-section .list-filter-bar { display:none; }
+        .vs-head { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px; background:linear-gradient(#fafafa,#efefef); border:1px solid #d5d5d5; border-radius:3px; margin:0 0 8px; text-align:left; box-sizing:border-box; }
+        .vs-head-title { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:bold; color:#333; min-width:0; }
+        .vs-head-title span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .vs-head svg { width:24px; height:24px; fill:#555; flex-shrink:0; }
+        .vs-filter-row { display:flex; gap:4px; margin:0 0 12px; }
+        .vs-sel { position:relative; flex:1; min-width:0; border:1px solid #d5d5d5; border-radius:3px; background:linear-gradient(#fafafa,#efefef); box-sizing:border-box; }
+        .vs-sel svg.ic { position:absolute; left:9px; top:50%; transform:translateY(-50%); width:18px; height:18px; fill:#444; pointer-events:none; }
+        .vs-sel select { width:100%; height:44px; border:none; background:transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0h10L5 6z' fill='%23444'/></svg>") no-repeat right 8px center; -webkit-appearance:none; appearance:none; padding:0 22px 0 33px; font-size:14px; color:#333; outline:none; cursor:pointer; }
+        .vs-tag-box { position:relative; border:1px solid #b9d9ee; background:#fff; margin:0 0 12px; text-align:left; box-sizing:border-box; }
+        .vs-tag-head { display:flex; align-items:center; gap:8px; padding:10px 12px; background:#d6ecfa; font-size:18px; color:#2f6aa5; cursor:pointer; }
+        .vs-tag-pill { background:#1f6f8b; color:#fff; font-size:13px; font-weight:bold; padding:3px 10px; border-radius:14px; flex-shrink:0; }
+        .vs-tag-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0; }
+        .vs-tag-scroll { display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth; padding:12px 10px 14px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+        .vs-tag-scroll::-webkit-scrollbar { display:none; }
+        .vs-tag-scroll .ch-card { flex:0 0 calc(50% - 5px); }
+        .vs-tag-next { position:absolute; right:4px; top:55%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:#2f8fd8; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5; }
+        .vs-tag-next svg { width:24px; height:24px; fill:none; stroke:#fff; stroke-width:3; }
+        #video-section #side-video-list.vs-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 10px; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; box-sizing:border-box; }
+        #video-section #side-video-list.vs-grid .pf-empty { grid-column:1 / -1; }
+        .vs-card .ch-card-author { font-weight:normal; color:#222; font-size:13px; }
+        .vs-av { width:26px; height:17px; object-fit:cover; border-radius:3px; background:#ccc; flex-shrink:0; }
+        @media (min-width:700px) {
+            #video-section #side-video-list.vs-grid { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+            .vs-tag-scroll .ch-card { flex:0 0 220px; }
+        }
+
+        /* ===== [추가] 홈 영상 목록 - 동영상 섹션과 같은 카드 형식 ===== */
+        #home-section .unlucky-scroll-container .ch-card { flex:0 0 calc(50% - 5px); min-width:130px; }
+        #home-section .unlucky-scroll-container .ch-card .rank-badge-wrap { top:4px; left:4px; }
+        #home-section .home-reco-box .vs-tag-head { border-radius:3px 3px 0 0; }
+        @media (orientation: landscape) {
+            #home-section .unlucky-scroll-container .ch-card { flex:0 0 calc((100% - 40px) / 5); min-width:130px; }
+            #home-section #home-unlucky .ch-card, #home-section #home-hot-32h .ch-card, #home-section #home-my-uploaded .ch-card { flex:0 0 calc((100% - 30px) / 4); }
+        }
 
         /* ===== [신규] 대댓글 ===== */
         .reply-list { margin: 8px 0 0 20px; border-left: 2px solid #eee; padding-left: 10px; display: flex; flex-direction: column; gap: 6px; }
@@ -1301,6 +1340,8 @@
                             </a>
                         </div>
                     </div>
+
+                    <div id="home-daily-tag-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rank36">
@@ -1406,6 +1447,7 @@
                         <div id="cloud-text-input-overlay" style="display:none;">
                             <input type="text" id="cloud-text-input-field" placeholder="자막 입력" maxlength="60" onkeypress="if(event.keyCode==13) confirmCloudTextInput()">
                             <button onclick="confirmCloudTextInput()">확인</button>
+                            <button onclick="confirmCloudBundleInput()" title="입력한 글자를 10개로 뭉쳐서 누른 자리에 띄웁니다">구름뭉치</button>
                             <button onclick="cancelCloudTextInput()">취소</button>
                         </div>
                         <img src="https://i.ibb.co/wZSZFxGP/nyangiple-logo-white-shadow-1.png" alt="nyangiple-logo-white-shadow-1" border="0" class="video-watermark">
@@ -1521,7 +1563,14 @@
                     </div>
                 </div>
             </div>
+            <div class="vs-head">
+                <div class="vs-head-title"><svg viewBox="0 0 24 24"><path d="M3 6h18v2.6H3zm0 5.2h18v2.6H3zm0 5.2h18V19H3z"/></svg><span id="vs-head-text">전체</span></div>
+                <svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2zM4 6h5.2l2 2H20v10H4V6z"/></svg>
+            </div>
+            <div id="vs-filter-row" class="vs-filter-row"></div>
+            <div id="vs-tag-section"></div>
             <div id="side-video-list"></div>
+            <div id="vs-pager" class="ch-pager"></div>
         </section>
 
         <section id="channel-section" class="page-section">
@@ -3083,7 +3132,7 @@
             return;
         }
 
-        container.innerHTML = '<table class="ch-rank-table"><thead><tr><th class="ch-rank-col">Top</th><th>채널</th></tr></thead><tbody>' + ranking.map((item, idx) => {
+        container.innerHTML = '<table class="ch-rank-table"><thead><tr><th class="ch-rank-col">Top</th><th>채널</th><th class="ch-rank-pop">인기도</th></tr></thead><tbody>' + ranking.map((item, idx) => {
             const rank = idx + 1;
             const isTop10 = rank <= 10;
             const safeAuthor = item.author.replace(/'/g, "\\'");
@@ -3091,6 +3140,7 @@
             <tr class="${isTop10 ? 'ch-rank-top10' : ''}" onclick="showUserChannel('${safeAuthor}')">
                 <td class="ch-rank-col">${rank}${isTop10 ? ' ★' : ''}</td>
                 <td class="ch-rank-name">${escapeHtml(item.author)}님의 채널</td>
+                <td class="ch-rank-pop">${(item.views || 0).toLocaleString()}p</td>
             </tr>`;
         }).join('') + '</tbody></table>';
     }
@@ -3113,20 +3163,7 @@
 
     function refreshUnluckyList() {
         const unlucky = db.filter(v => v.views < 5);
-        document.getElementById('home-unlucky').innerHTML = unlucky.map(v => {
-            const timeString = v.playTime || "03:45";
-            const safeTitle = escapeHtml(v.title);
-            const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
-            return `
-            <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                    <div class="unlucky-duration-badge">${timeString}</div>
-                </div>
-                <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
-                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-            </div>`;
-        }).join('');
+        document.getElementById('home-unlucky').innerHTML = unlucky.map(v => vsCardHtml(v, true, { prefix: true })).join('');
 
         const now = new Date();
         const hot32hVideos = db.filter(v => {
@@ -3139,20 +3176,7 @@
         if (hot32hVideos.length === 0) {
             hotContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px; text-align:center; width:100%;'>해당 조건의 인기 동영상이 없습니다.</div>";
         } else {
-            hotContainer.innerHTML = hot32hVideos.map(v => {
-                const timeString = v.playTime || "03:45";
-                const safeTitle = escapeHtml(v.title);
-            const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
-                return `
-                <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                    <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="unlucky-duration-badge">${timeString}</div>
-                    </div>
-                    <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                    <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
-                    <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-                </div>`;
-            }).join('');
+            hotContainer.innerHTML = hot32hVideos.map(v => vsCardHtml(v, true, { prefix: true })).join('');
         }
 
         const myUploadedContainer = document.getElementById('home-my-uploaded');
@@ -3163,23 +3187,11 @@
             if (myUploadedVideos.length === 0) {
                 myUploadedContainer.innerHTML = "<div style='font-size:12px; color:#888; padding:20px; text-align:center; width:100%;'>올린 동영상이 없습니다.</div>";
             } else {
-                myUploadedContainer.innerHTML = myUploadedVideos.map(v => {
-                    const timeString = v.playTime || "03:45";
-                    const safeTitle = escapeHtml(v.title);
-            const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
-                    return `
-                    <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                        <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                            <div class="unlucky-duration-badge">${timeString}</div>
-                        </div>
-                        <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-                        <div class="list-author-mini" style="padding:4px 4px 0 4px;"><img src="${getAuthorBadgeImg(v.author)}" alt="author"><span style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
-                        <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-                    </div>`;
-                }).join('');
+                myUploadedContainer.innerHTML = myUploadedVideos.map(v => vsCardHtml(v, true, { prefix: true })).join('');
             }
         }
 
+        renderHomeDailyTag();
         renderHomeRankLists();
     }
 
@@ -3270,21 +3282,7 @@
     }
 
     function buildRankItemHtml(v, rank) {
-        const timeString = v.playTime || "03:45";
-        const safeTitle = escapeHtml(v.title);
-            const parsedTitle = safeTitle.startsWith("[냥이플]") ? safeTitle : `[냥이플] ${safeTitle}`;
-        return `
-        <div class="unlucky-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-            <div class="unlucky-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                <div class="rank-badge-wrap">
-                    <img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge">
-                    <div class="rank-badge-num">${rank}</div>
-                </div>
-                <div class="unlucky-duration-badge">${timeString}</div>
-            </div>
-            <div class="unlucky-title-text" title="${parsedTitle}">${parsedTitle}</div>
-            <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-        </div>`;
+        return vsCardHtml(v, true, { prefix: true, rank: rank });
     }
 
     function renderRankContainer(containerId, list) {
@@ -4085,6 +4083,146 @@
         if(unluckyEl) unluckyEl.scrollIntoView({ behavior: 'smooth' });
     }
 
+    /* ===== [추가] 동영상 섹션 목록 UI (전체 헤더 / 3칸 필터 / 태그 캐러셀 / 2열 카드 / 페이지 번호) ===== */
+    let vsPageSize = [20, 40, 60].includes(Number(localStorage.getItem('tvple_vs_size'))) ? Number(localStorage.getItem('tvple_vs_size')) : 20;
+    let vsPage = 1;
+    let vsLastSig = '';
+
+    function vsTagsOf(v) {
+        if(v.tags && Array.isArray(v.tags)) return v.tags;
+        if(v.tag) return String(v.tag).split(',').map(t => t.trim()).filter(t => t);
+        return [];
+    }
+
+    function vsCardHtml(v, withViews, opt) {
+        opt = opt || {};
+        const thumbStyle = v.thumb ? `background-image:url('${v.thumb}');` : '';
+        const verified = chIsVerified(v.author);
+        let titleHtml = escapeHtml(v.title);
+        if(opt.prefix && !titleHtml.startsWith("[냥이플]")) titleHtml = `[냥이플] ${titleHtml}`;
+        const rankHtml = opt.rank ? `<div class="rank-badge-wrap"><img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge"><div class="rank-badge-num">${opt.rank}</div></div>` : '';
+        return `
+        <div class="ch-card vs-card${verified ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+            <div class="ch-card-thumb" style="${thumbStyle}">${rankHtml}<div class="ch-card-dur">${v.playTime || '03:45'}</div></div>
+            <div class="ch-card-title">${titleHtml}</div>
+            <div class="ch-card-author"><img class="vs-av" src="${getAuthorBadgeImg(v.author)}" alt="author">${verified ? chBadgeHtml(false) : ''}<span class="nm" style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
+            ${withViews ? `<div class="ch-card-views"><i></i>${(v.views || 0).toLocaleString()}p</div>` : ''}
+            <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
+        </div>`;
+    }
+
+    function vsSetGenre(g) { clearAuthorFilter(); selectGenre(g); }
+    function vsSetSort(sv) { currentSort = sv; localStorage.setItem('tvple_current_sort', sv); renderList(); }
+    function vsSetSize(n) { vsPageSize = Number(n) || 20; localStorage.setItem('tvple_vs_size', String(vsPageSize)); renderList(); }
+    function vsGoPage(n) {
+        vsPage = n;
+        renderList();
+        const head = document.querySelector('#video-section .vs-head');
+        if(head && head.scrollIntoView) head.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function vsTagScrollRight() {
+        const sc = document.getElementById('vs-tag-scroll');
+        if(sc) sc.scrollBy({ left: Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
+    }
+
+    function vsRenderChrome(list) {
+        /* 헤더 제목: 태그/작성자 필터 중이면 그 이름, 아니면 현재 분류 */
+        const titleEl = document.getElementById('vs-head-text');
+        if(titleEl) titleEl.textContent = filterTagName ? ('#' + filterTagName) : (filterAuthorName ? filterAuthorName : (currentGenre === 'all' ? '전체' : currentGenre));
+
+        /* 3칸 필터: 분류 / 정렬 / 표시 개수 */
+        const fr = document.getElementById('vs-filter-row');
+        if(fr) {
+            const calIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 8h14v10H5V10zm2 2v2h2v-2H7zm4 0v2h2v-2h-2z"/></svg>';
+            const chkIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 8h14v10H5V10zm4.2 7.6L6.6 15l1.2-1.2 1.4 1.4 4-4 1.2 1.2-5.2 5.2z"/></svg>';
+            const genreOpts = ['<option value="all"' + (currentGenre === 'all' ? ' selected' : '') + '>전체</option>']
+                .concat(genres.map(g => `<option value="${escapeHtml(g)}"${currentGenre === g ? ' selected' : ''}>${escapeHtml(g)}</option>`)).join('');
+            const sortList = [['date', '최신'], ['views', '재생'], ['clouds', '자막'], ['comments', '댓글']];
+            const sortOpts = sortList.map(x => `<option value="${x[0]}"${currentSort === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('');
+            const sizeOpts = [20, 40, 60].map(n => `<option value="${n}"${vsPageSize === n ? ' selected' : ''}>${n}개씩</option>`).join('');
+            fr.innerHTML = `
+                <div class="vs-sel">${calIcon}<select onchange="vsSetGenre(this.value)">${genreOpts}</select></div>
+                <div class="vs-sel">${chkIcon}<select onchange="vsSetSort(this.value)">${sortOpts}</select></div>
+                <div class="vs-sel" style="flex:1.1;"><select style="padding-left:12px;" onchange="vsSetSize(this.value)">${sizeOpts}</select></div>`;
+        }
+
+        /* 태그 영역: 현재 목록에서 가장 많이 쓰인 태그의 영상을 가로 스크롤로 표시 (태그/작성자 필터 중에는 숨김) */
+        const tagBox = document.getElementById('vs-tag-section');
+        if(tagBox) {
+            let html = '';
+            if(!filterTagName && !filterAuthorName) {
+                const cnt = {}; const latest = {};
+                list.forEach(v => {
+                    const ts = new Date(v.regDate || 0).getTime();
+                    vsTagsOf(v).forEach(t => {
+                        cnt[t] = (cnt[t] || 0) + 1;
+                        if(!(t in latest) || ts > latest[t]) latest[t] = ts;
+                    });
+                });
+                const names = Object.keys(cnt).sort((a, b) => (cnt[b] - cnt[a]) || (latest[b] - latest[a]));
+                if(names.length) {
+                    const tag = names[0];
+                    const vids = list.filter(v => vsTagsOf(v).includes(tag))
+                        .sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0)).slice(0, 10);
+                    html = `
+                    <div class="vs-tag-box">
+                        <div class="vs-tag-head" data-tag="${escapeHtml(tag)}" onclick="filterByTag(this.dataset.tag)"><span class="vs-tag-pill">태그</span><span class="vs-tag-name">#${escapeHtml(tag)}</span></div>
+                        <div class="vs-tag-scroll" id="vs-tag-scroll">${vids.map(v => vsCardHtml(v, false)).join('')}</div>
+                        ${vids.length > 2 ? '<div class="vs-tag-next" onclick="vsTagScrollRight()"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>' : ''}
+                    </div>`;
+                }
+            }
+            tagBox.innerHTML = html;
+        }
+    }
+
+    /* ===== [추가] 홈 - 창작영상 밑 "태그" 섹션 (하루마다 랜덤으로 태그 하나 선택, 같은 날에는 같은 태그 유지) ===== */
+    function homeTagScrollRight() {
+        const sc = document.getElementById('home-tag-scroll');
+        if(sc) sc.scrollBy({ left: Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
+    }
+
+    function renderHomeDailyTag() {
+        const box = document.getElementById('home-daily-tag-section');
+        if(!box) return;
+        const allTags = Array.from(new Set(db.reduce((acc, v) => acc.concat(vsTagsOf(v)), []))).filter(t => t).sort();
+        if(allTags.length === 0) { box.style.display = 'none'; box.innerHTML = ''; return; }
+
+        const d = new Date();
+        const dayKey = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        let tag = null;
+        try {
+            const saved = JSON.parse(localStorage.getItem('nyangiple_daily_tag') || 'null');
+            if(saved && saved.date === dayKey && allTags.includes(saved.tag)) tag = saved.tag;
+        } catch(e) {}
+        if(!tag) {
+            let h = 0;
+            for(let i = 0; i < dayKey.length; i++) h = (h * 31 + dayKey.charCodeAt(i)) >>> 0;
+            h = Math.imul(h ^ (h >>> 13), 1274126177) >>> 0;
+            tag = allTags[h % allTags.length];
+            try { localStorage.setItem('nyangiple_daily_tag', JSON.stringify({ date: dayKey, tag: tag })); } catch(e) {}
+        }
+
+        const vids = db.filter(v => vsTagsOf(v).includes(tag))
+            .sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0)).slice(0, 10);
+        box.innerHTML = `
+            <div class="vs-tag-head" data-tag="${escapeHtml(tag)}" onclick="filterByTag(this.dataset.tag)"><span class="vs-tag-pill">태그</span><span class="vs-tag-name">#${escapeHtml(tag)}</span></div>
+            <div class="vs-tag-scroll" id="home-tag-scroll">${vids.map(v => vsCardHtml(v, false)).join('')}</div>
+            ${vids.length > 2 ? '<div class="vs-tag-next" onclick="homeTagScrollRight()"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>' : ''}`;
+        box.style.display = '';
+    }
+
+    function vsRenderPager(totalPages) {
+        const pagerEl = document.getElementById('vs-pager');
+        if(!pagerEl) return;
+        if(infiniteScrollEnabled || totalPages <= 1) { pagerEl.innerHTML = ''; return; }
+        let h = '';
+        for(let i = 1; i <= totalPages; i++) {
+            h += `<span class="${i === vsPage ? 'active' : ''}" onclick="${i === vsPage ? '' : `vsGoPage(${i})`}">${i}</span>`;
+        }
+        pagerEl.innerHTML = h;
+    }
+
     function renderList() {
         let l = [...db]; 
         if(filterTagName) {
@@ -4115,26 +4253,21 @@
         else l.sort((a,b) => new Date(b.regDate) - new Date(a.regDate));
         
         const listWrap = document.getElementById('side-video-list');
-        listWrap.innerHTML = l.map(v => {
-            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
-            const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
-            const listPlayLength = v.playTime || "03:45";
-            return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
-                </div>
-                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-            </div>`;
-        }).join('');
+        vsRenderChrome(l);
+
+        /* 분류/정렬/필터/표시 개수가 바뀌면 1페이지로 */
+        const vsSig = [currentGenre, currentSort, filterTagName, filterAuthorName, searchQuery, vsPageSize].join('|');
+        if(vsSig !== vsLastSig) { vsLastSig = vsSig; vsPage = 1; }
+        let pageList = l;
+        let totalPages = 1;
+        if(!infiniteScrollEnabled) {
+            totalPages = Math.max(1, Math.ceil(l.length / vsPageSize));
+            if(vsPage > totalPages) vsPage = totalPages;
+            pageList = l.slice((vsPage - 1) * vsPageSize, vsPage * vsPageSize);
+        }
+        listWrap.classList.add('vs-grid');
+        listWrap.innerHTML = pageList.length ? pageList.map(v => vsCardHtml(v, true)).join('') : "<div class='pf-empty'>동영상이 없습니다.</div>";
+        vsRenderPager(totalPages);
 
         applyInfiniteScrollIfEnabled(listWrap);
     }
@@ -4507,7 +4640,7 @@
         const headId = (p === 'home') ? 'home-my-info' : 'my-info';
         const headEl = document.getElementById(headId);
         if(headEl) {
-            headEl.innerHTML = `${escapeHtml(name)}님의 채널` + (chIsVerified(name) ? chBadgeHtml(true) : '');
+            headEl.innerHTML = `${escapeHtml(name)}님의 채널` + (chIsVerified(name) ? chBadgeHtml(true) : '') + `<div class="ch-pop-line">인기도 ${db.filter(v => v.author === name).reduce((s, v) => s + (v.views || 0), 0).toLocaleString()}p</div>`;
         }
 
         const subEl = document.getElementById(p + '-subscribe-area');
@@ -5553,6 +5686,61 @@
         pendingCloudClickInfo = null;
     }
 
+    /* [신규] 구름 자막 달기 입력창에서도 구름뭉치 - 누른 자리에 입력한 글자를 10개로 뭉쳐서 띄움 */
+    function confirmCloudBundleInput() {
+        const field = document.getElementById('cloud-text-input-field');
+        const txt = field.value.trim();
+        const overlay = document.getElementById('cloud-text-input-overlay');
+        overlay.style.display = 'none';
+        if(!txt || !pendingCloudClickInfo || !currentPlayingItem) { pendingCloudClickInfo = null; return; }
+
+        const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+        const cx = parseFloat(pendingCloudClickInfo.clickX) || 0;
+        const cy = parseFloat(pendingCloudClickInfo.clickY) || 0;
+        pendingCloudClickInfo = null;
+        const atTime = Math.floor(video.currentTime || 0);
+
+        if(!currentPlayingItem.savedClouds) currentPlayingItem.savedClouds = [];
+        const BUNDLE_COUNT = 10;
+        for(let i = 0; i < BUNDLE_COUNT; i++) {
+            const bx = clamp(cx + (Math.random() * 2 - 1) * 6, 0, 90).toFixed(1) + '%';
+            const by = clamp(cy + (Math.random() * 2 - 1) * 8, 0, 90).toFixed(1) + '%';
+            shoot(txt, "normal", bx, by, true);
+            currentPlayingItem.savedClouds.push({
+                text: txt,
+                time: atTime,
+                x: bx,
+                y: by,
+                fired: true,
+                author: user ? user.nick : '익명'
+            });
+        }
+        renderCloudLiveFeedBox();
+
+        userStats.cloud += BUNDLE_COUNT;
+        localStorage.setItem('tvple_stats', JSON.stringify(userStats));
+
+        const target = db.find(v => v.id === currentPlayingItem.id);
+        if(target) {
+            target.savedClouds = currentPlayingItem.savedClouds;
+            localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+        }
+        updateDetail();
+
+        recordMyCloud(txt, currentPlayingItem.id, atTime);
+
+        if(user && currentPlayingItem.author !== user.nick) {
+            pushNotification(currentPlayingItem.author, {
+                type: 'cloud',
+                icon: '☁️',
+                text: `${user.nick}님이 "${currentPlayingItem.title}"에 구름 자막을 남겼습니다: "${txt.slice(0,20)}"`,
+                videoId: currentPlayingItem.id,
+                date: new Date().toISOString()
+            });
+        }
+    }
+
     function submitCloudText(txt, clickX, clickY, atTime=null) {
         const cloudTime = (atTime !== null && atTime !== undefined) ? atTime : Math.floor(video.currentTime);
         const pos = shoot(txt, "normal", clickX, clickY); 
@@ -6254,7 +6442,7 @@
 /* [추가] 설명창(desc-tooltip): 홈/채널/검색/재생목록/시청기록 등 다른 화면에서도 호버 시 표시.
    스크롤 영역(overflow)에 잘리지 않도록 화면 기준(fixed)으로 위치 계산. 영상 화면의 기존 목록은 건드리지 않음 */
 (function() {
-    var SKIP = '#side-video-list, #related-videos-list, #popular-videos-list';
+    var SKIP = '#related-videos-list, #popular-videos-list';
     var cur = null;
     function place(item) {
         if (!item || item.closest(SKIP)) return;
