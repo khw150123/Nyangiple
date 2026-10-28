@@ -956,6 +956,18 @@
         .vs-tag-scroll .ch-card { flex:0 0 calc(50% - 5px); }
         .vs-tag-next { position:absolute; right:4px; top:55%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; background:#2f8fd8; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:5; }
         .vs-tag-next svg { width:24px; height:24px; fill:none; stroke:#fff; stroke-width:3; }
+        .vs-tag-next.vs-tag-prev { right:auto; left:4px; }
+        /* 동영상 섹션 목록: 3개씩 한 줄(가로 넘기기), 3개 차면 아래에 새 줄 */
+        #video-section #side-video-list.vs-rows { display:block; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; box-sizing:border-box; }
+        #video-section #side-video-list.vs-rows .pf-empty { grid-column:auto; }
+        .vs-row-box { position:relative; margin-bottom:10px; }
+        .vs-row-box:last-child { margin-bottom:0; }
+        .vs-row-box .vs-tag-scroll { padding:0 0 4px; }
+        /* 태그 구역 / 동영상 섹션 목록 줄: 홈의 이미지 < > 이동 버튼과 같은 버튼 사용 */
+        .vs-tag-box > .unlucky-prev-btn, .vs-row-box > .unlucky-prev-btn, #home-daily-tag-section > .unlucky-prev-btn { position:absolute; left:4px; top:55%; transform:translateY(-50%); margin:0; z-index:20; }
+        .vs-tag-box > .unlucky-next-btn, .vs-row-box > .unlucky-next-btn, #home-daily-tag-section > .unlucky-next-btn { position:absolute; right:4px; top:55%; transform:translateY(-50%); margin:0; z-index:20; }
+        .vs-tag-box > .unlucky-prev-btn:active, .vs-row-box > .unlucky-prev-btn:active, #home-daily-tag-section > .unlucky-prev-btn:active { transform:translateY(-50%) scale(0.9); }
+        .vs-tag-box > .unlucky-next-btn:active, .vs-row-box > .unlucky-next-btn:active, #home-daily-tag-section > .unlucky-next-btn:active { transform:translateY(-50%) scale(0.9); }
         #video-section #side-video-list.vs-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 10px; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; box-sizing:border-box; }
         #video-section #side-video-list.vs-grid .pf-empty { grid-column:1 / -1; }
         .vs-card .ch-card-author { font-weight:normal; color:#222; font-size:13px; }
@@ -4120,6 +4132,14 @@
         const head = document.querySelector('#video-section .vs-head');
         if(head && head.scrollIntoView) head.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    function vsRowScroll(btn, dir) {
+        const sc = btn && btn.parentNode ? btn.parentNode.querySelector('.vs-row-scroll') : null;
+        if(sc) sc.scrollBy({ left: dir * Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
+    }
+    function vsTagScrollLeft() {
+        const sc = document.getElementById('vs-tag-scroll');
+        if(sc) sc.scrollBy({ left: -Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
+    }
     function vsTagScrollRight() {
         const sc = document.getElementById('vs-tag-scroll');
         if(sc) sc.scrollBy({ left: Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
@@ -4168,7 +4188,7 @@
                     <div class="vs-tag-box">
                         <div class="vs-tag-head" data-tag="${escapeHtml(tag)}" onclick="filterByTag(this.dataset.tag)"><span class="vs-tag-pill">태그</span><span class="vs-tag-name">#${escapeHtml(tag)}</span></div>
                         <div class="vs-tag-scroll" id="vs-tag-scroll">${vids.map(v => vsCardHtml(v, false)).join('')}</div>
-                        ${vids.length > 2 ? '<div class="vs-tag-next" onclick="vsTagScrollRight()"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>' : ''}
+                        ${vids.length > 2 ? '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsTagScrollLeft()"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsTagScrollRight()">' : ''}
                     </div>`;
                 }
             }
@@ -4177,6 +4197,10 @@
     }
 
     /* ===== [추가] 홈 - 창작영상 밑 "태그" 섹션 (하루마다 랜덤으로 태그 하나 선택, 같은 날에는 같은 태그 유지) ===== */
+    function homeTagScrollLeft() {
+        const sc = document.getElementById('home-tag-scroll');
+        if(sc) sc.scrollBy({ left: -Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
+    }
     function homeTagScrollRight() {
         const sc = document.getElementById('home-tag-scroll');
         if(sc) sc.scrollBy({ left: Math.max(120, sc.clientWidth * 0.9), behavior: 'smooth' });
@@ -4208,7 +4232,7 @@
         box.innerHTML = `
             <div class="vs-tag-head" data-tag="${escapeHtml(tag)}" onclick="filterByTag(this.dataset.tag)"><span class="vs-tag-pill">태그</span><span class="vs-tag-name">#${escapeHtml(tag)}</span></div>
             <div class="vs-tag-scroll" id="home-tag-scroll">${vids.map(v => vsCardHtml(v, false)).join('')}</div>
-            ${vids.length > 2 ? '<div class="vs-tag-next" onclick="homeTagScrollRight()"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>' : ''}`;
+            ${vids.length > 2 ? '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="homeTagScrollLeft()"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="homeTagScrollRight()">' : ''}`;
         box.style.display = '';
     }
 
@@ -4265,8 +4289,18 @@
             if(vsPage > totalPages) vsPage = totalPages;
             pageList = l.slice((vsPage - 1) * vsPageSize, vsPage * vsPageSize);
         }
-        listWrap.classList.add('vs-grid');
-        listWrap.innerHTML = pageList.length ? pageList.map(v => vsCardHtml(v, true)).join('') : "<div class='pf-empty'>동영상이 없습니다.</div>";
+        listWrap.classList.remove('vs-grid');
+        listWrap.classList.add('vs-rows');
+        if(pageList.length) {
+            let rowsHtml = '';
+            for(let i = 0; i < pageList.length; i += 3) {
+                const rowVids = pageList.slice(i, i + 3);
+                rowsHtml += `<div class="vs-row-box"><div class="vs-tag-scroll vs-row-scroll">${rowVids.map(v => vsCardHtml(v, true)).join('')}</div>${rowVids.length > 2 ? '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">' : ''}</div>`;
+            }
+            listWrap.innerHTML = rowsHtml;
+        } else {
+            listWrap.innerHTML = "<div class='pf-empty'>동영상이 없습니다.</div>";
+        }
         vsRenderPager(totalPages);
 
         applyInfiniteScrollIfEnabled(listWrap);
@@ -6349,6 +6383,8 @@
         return 'rgba(91,191,223,0.5)';
     }
     function setup(btn) {
+        if (btn.__holdSetup) return;
+        btn.__holdSetup = true;
         var timer = null, overlay = null;
         function place() {
             var wrap = btn.parentElement;
@@ -6389,6 +6425,11 @@
     function init() {
         var btns = document.querySelectorAll('.unlucky-next-btn, .unlucky-prev-btn');
         for (var i = 0; i < btns.length; i++) setup(btns[i]);
+        /* 나중에 그려지는 버튼(태그 구역 / 동영상 섹션 목록 줄)에도 같은 띠 효과 적용 */
+        document.addEventListener('pointerdown', function(e) {
+            var t = e.target;
+            if (t && t.classList && (t.classList.contains('unlucky-next-btn') || t.classList.contains('unlucky-prev-btn')) && !t.__holdSetup) setup(t);
+        }, true);
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
