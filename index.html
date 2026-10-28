@@ -3845,6 +3845,9 @@
         showSection('video'); 
         document.getElementById('player-container').style.display = 'block'; 
         
+        /* [신규] 영상을 선택하면 맨 위 영상 화면으로 부드럽게 이동 */
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
         video.removeAttribute('src');
         video.load();
         
