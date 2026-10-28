@@ -922,6 +922,8 @@
         .ch-card:hover .desc-tooltip { opacity: 1; visibility: visible; }
         .desc-tooltip.fx { position: fixed; margin-left: 0; bottom: auto; }
         .desc-tooltip.fx::after { left: var(--arrow-x, 50%); }
+        /* 모바일: 카드를 꾹 누르면 호버처럼 설명창 표시 */
+        .desc-tooltip.touch-show { display:block !important; opacity:1 !important; visibility:visible !important; }
         .desc-tooltip.fx.below::after { top: auto; bottom: 100%; border-color: transparent transparent rgba(87,138,182,0.85) transparent; }
         .ch-card-dur { position:absolute; right:3px; bottom:3px; background:rgba(0,0,0,0.65); color:#fff; font-size:11px; padding:0 4px; line-height:16px; }
         .ch-card-title { margin-top:6px; font-size:13px; line-height:1.35; color:#1565c0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; word-break:break-all; }
@@ -6485,8 +6487,8 @@
 (function() {
     var SKIP = '#related-videos-list, #popular-videos-list';
     var cur = null;
-    function place(item) {
-        if (!item || item.closest(SKIP)) return;
+    function place(item, force) {
+        if (!item || (!force && item.closest(SKIP))) return;
         var tip = null;
         for (var i = 0; i < item.children.length; i++) {
             if (item.children[i].classList && item.children[i].classList.contains('desc-tooltip')) { tip = item.children[i]; break; }
@@ -6529,6 +6531,65 @@
         if (!to || !to.closest || to.closest('.unlucky-item, .list-item, .ch-card') !== cur) cur = null;
     });
     window.addEventListener('scroll', function() { if (cur && document.body.contains(cur)) place(cur); }, true);
+
+    /* [신규] 모바일(터치): 카드를 꾹 누르고 있으면 호버처럼 설명창이 뜨고, 손을 떼면 사라짐 (짧게 톡 누르면 기존처럼 재생/이동) */
+    var CARD_SEL = '.unlucky-item, .list-item, .ch-card';
+    var lpTimer = null, lpItem = null, lpShown = false, lpX = 0, lpY = 0, lpBlockUntil = 0;
+    function tipOf(item) {
+        for (var i = 0; i < item.children.length; i++) {
+            if (item.children[i].classList && item.children[i].classList.contains('desc-tooltip')) return item.children[i];
+        }
+        return null;
+    }
+    function lpHide() {
+        clearTimeout(lpTimer);
+        lpTimer = null;
+        if (lpItem) {
+            var tp = tipOf(lpItem);
+            if (tp) tp.classList.remove('touch-show');
+        }
+        lpItem = null;
+    }
+    document.addEventListener('touchstart', function(e) {
+        lpHide();
+        lpShown = false;
+        if (!e.touches || e.touches.length !== 1) return;
+        var t = e.target;
+        var item = t && t.closest ? t.closest(CARD_SEL) : null;
+        if (!item || !tipOf(item)) return;
+        lpX = e.touches[0].clientX;
+        lpY = e.touches[0].clientY;
+        lpTimer = setTimeout(function() {
+            var tp = tipOf(item);
+            if (!tp) return;
+            lpItem = item;
+            lpShown = true;
+            tp.classList.add('touch-show');
+            place(item, true);
+            try { var sel = window.getSelection && window.getSelection(); if (sel) sel.removeAllRanges(); } catch (err) {}
+        }, 450);
+    }, { passive: true });
+    document.addEventListener('touchmove', function(e) {
+        if (!e.touches || !e.touches.length) return;
+        if (Math.abs(e.touches[0].clientX - lpX) > 10 || Math.abs(e.touches[0].clientY - lpY) > 10) {
+            lpHide();
+            lpShown = false;
+        }
+    }, { passive: true });
+    function lpEnd() {
+        if (lpShown) lpBlockUntil = Date.now() + 600;
+        lpHide();
+        lpShown = false;
+    }
+    document.addEventListener('touchend', lpEnd, { passive: true });
+    document.addEventListener('touchcancel', lpEnd, { passive: true });
+    document.addEventListener('click', function(e) {
+        if (Date.now() < lpBlockUntil) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
+    document.addEventListener('contextmenu', function(e) {
+        var t = e.target;
+        if ((lpShown || lpTimer) && t && t.closest && t.closest(CARD_SEL)) e.preventDefault();
+    });
 })();
 </script>
 </body>
