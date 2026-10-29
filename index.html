@@ -183,9 +183,10 @@
         .home-reco-outer .unlucky-next-btn:active { transform: translateY(-50%) scale(0.9); }
         .home-reco-box .unlucky-title-text { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .home-rank-tabs { display: flex; gap: 0; margin: -20px -10px 15px -10px; padding: 12px 10px 0 10px; background: #EFEFEF; border-bottom: 2px solid #eee; }
-        .home-rank-tab { flex: 1; text-align: center; padding: 10px 4px; font-size: 12px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; box-sizing: border-box; user-select: none; }
-        .home-rank-tab.active { color: #53add2; border-bottom: 2px solid #53add2; background: #fff; border-radius: 2px 2px 0 0; }
+        .home-rank-tabs { display: flex; gap: 2px; margin: -20px -10px 15px -10px; padding: 3px 10px 0 10px; background: #EFEFEF; box-shadow: inset 0 -1px 0 #ddd; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .home-rank-tabs::-webkit-scrollbar { display: none; }
+        .home-rank-tab { flex: 0 0 auto; text-align: center; padding: 8px 12px; font-size: 14px; line-height: 20px; font-weight: normal; white-space: nowrap; color: #0088cc; cursor: pointer; border: 1px solid transparent; border-radius: 4px 4px 0 0; box-sizing: border-box; user-select: none; }
+        .home-rank-tab.active { color: #555; background: #fff; border-color: #ddd; border-bottom-color: #fff; }
         /* ===== [신규] 홈 - 마이페이지 탭 (PC/가로모드 전용) ===== */
         .home-rank-tab-mypage-only { display: none; }
         /* ===== [신규] 홈 랭킹탭 - PC/가로모드 전용 글자 표시 ===== */
@@ -434,9 +435,9 @@
         #channel-genre-filter-bar .filter-item, #channel-genre-filter-bar .filter-item.active { color: #000 !important; }
         #sort-filters .filter-item, #sort-filters .filter-item.active,
         #display-filters .filter-item, #display-filters .filter-item.active { color: #000 !important; }
-        /* [글자색 변경] 홈 랭킹 탭: 선택 = 하늘색, 선택 안 함 = 검은색 */
-        .home-rank-tab { color: #000 !important; }
-        .home-rank-tab.active { color: #53add2 !important; }
+        /* [글자색 변경] 홈 랭킹 탭: 선택 = 진한 회색(흰 배경), 선택 안 함 = 파란색 */
+        .home-rank-tab { color: #0088cc !important; }
+        .home-rank-tab.active { color: #555 !important; }
         /* [글자색 변경] 영상 화면 아래 글자 회색 */
         .vgray,
         #v-detail-info .v-capsule-text,
@@ -568,7 +569,7 @@
             .nav-icon-btn, .header-upload-btn { height: 45px; font-size: 10px; padding: 0 10px; } 
             .frame-wrapper { padding: 15px 10px; } 
             .frame-bg { padding: 10px 5px; min-height: auto; } 
-            .home-rank-tabs { margin: -10px -5px 15px -5px; padding: 10px 5px 0 5px; } 
+            .home-rank-tabs { margin: -10px -5px 15px -5px; padding: 3px 5px 0 5px; } 
             .unlucky-item { width: calc((100% - 10px) / 2); min-width: 130px; } 
             .unlucky-next-btn { height: 32px; margin-left: 5px; } 
             .unlucky-prev-btn { height: 32px; margin-right: 5px; } 
@@ -784,7 +785,7 @@
         /* ===== [신규] PC/가로모드 - 맨 위(헤더) 레이아웃을 참고 사진처럼: 로고 + 탭 메뉴 + CSS 검색창/검색버튼 + 업로드 아이콘 (세로모드는 그대로) ===== */
         .search-btn-css, .lg-upload-icon-btn { display: none; }
         @media (orientation: landscape) {
-            header { align-items: stretch; padding-top: 0; padding-bottom: 0; border-top: 12px solid #53add0; background: linear-gradient(#fff 0%, #fff 55%, #f5f5f5 100%); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+            header { align-items: stretch; padding-top: 0; padding-bottom: 0; background: linear-gradient(#fff 0%, #fff 55%, #f5f5f5 100%); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
             header .header-left { flex-direction: row; align-items: stretch; gap: 0; }
             header .logo-wrap { align-self: center; margin-right: 18px; }
             header .lg-nav { margin-left: 0; gap: 0; align-items: stretch; }
@@ -1186,6 +1187,51 @@
             }
         }
 
+        /* ===== [신규] 초록색 동영상 업로드 버튼 (왼쪽 메뉴의 초록 버튼과 같은 모양) / 랜덤 버튼 / 랭킹 갱신 시각 ===== */
+        .green-upload-btn { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; background: linear-gradient(#62b95f, #4a9f48); border: 1px solid #3f8a3d; border-radius: 4px; color: #fff; font-size: 15px; font-weight: normal; cursor: pointer; white-space: nowrap; text-shadow: 0 1px 1px rgba(0,0,0,0.25); user-select: none; -webkit-user-select: none; box-sizing: border-box; }
+        .green-upload-btn:hover { opacity: 0.9; }
+        .header-upload-btn .green-upload-btn { flex: 1; font-size: 13px; padding: 8px 10px; }
+        .random-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: linear-gradient(#fff, #f3f3f3); border: 1px solid #c9d3d9; border-radius: 4px; color: #333; font-size: 14px; cursor: pointer; white-space: nowrap; user-select: none; -webkit-user-select: none; box-sizing: border-box; }
+        .random-btn:hover { background: #f0f6fa; }
+        .random-btn svg { width: 16px; height: 16px; fill: none; stroke: #1e88c8; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .hdr-top-actions { display: none; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 12px; }
+        .home-top-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 0 0 8px 0; }
+        .home-top-notice-btn { height: 32px; display: block; cursor: pointer; flex-shrink: 0; transition: transform 0.15s; }
+        .home-top-notice-btn:active { transform: scale(0.95); }
+        .home-top-upload-row { display: flex; align-items: center; justify-content: flex-start; margin: 0 0 8px 0; }
+        @media (orientation: landscape) {
+            .hdr-top-actions { display: flex; }
+            .home-top-actions { display: none; }
+            .home-top-upload-row { display: none; }
+        }
+        .rank-updated-time { margin: 10px 2px 0 2px; font-size: 12px; color: #888; text-align: right; }
+
+        /* ===== [신규] 모든 영상 카드 모양 - 맨 위 제목 / 가운데 썸네일 / 아래 영상길이 · 조회수 · 유저 이름 ===== */
+        .ch-card.vc-card, .list-item.vc-li { background:#fff; border:1px solid #e6e6e6; box-sizing:border-box; min-width:0; text-align:left; }
+        .list-item.vc-li { display:block; padding:0; gap:0; width:auto; border-bottom:1px solid #e6e6e6; }
+        .vc-title { background:#f5f5f5; color:#8a8a8a; font-size:12px; font-weight:bold; text-align:center; padding:7px 6px; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .vc-thumbwrap { padding:5px 5px 0; }
+        .vc-info { display:flex; align-items:center; gap:7px; padding:6px 6px 7px; min-width:0; }
+        .vc-dur, .vc-views { display:inline-flex; align-items:center; gap:3px; flex-shrink:0; font-size:12px; color:#999; line-height:1; font-family:sans-serif; }
+        .vc-ico { display:block; flex-shrink:0; }
+        .vc-cam { width:20px; height:16px; }
+        .vc-rep { width:17px; height:17px; }
+        .vc-author { flex:1 1 0; min-width:24px; text-align:right; font-size:13px; color:#999; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .vc-card .ch-card-btns, .vc-li .ch-card-btns { margin-top:0; padding:0 6px 6px; }
+        .list-item.vc-li.ch-verified, .list-item.vc-li.ch-verified:hover, .list-item.vc-li:hover { box-shadow:none; }
+        .list-item.vc-li.ch-verified .ch-card-thumb { border:2px solid #4caf50; }
+        .list-item.vc-li:hover .ch-card-thumb { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
+        .list-item.vc-li.ch-verified:hover .ch-card-thumb { box-shadow:0 4px 14px rgba(76,175,80,0.75); }
+        #related-videos-list, #popular-videos-list, #playlist-video-list, #search-result-list, #history-video-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+        #related-videos-list > :not(.list-item), #popular-videos-list > :not(.list-item), #playlist-video-list > :not(.list-item), #search-result-list > :not(.list-item), #history-video-list > :not(.list-item) { grid-column:1 / -1; }
+        @media (max-width:699.98px) { .ch-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media (max-width:480px) {
+            .vc-info { gap:5px; }
+            .vc-dur, .vc-views { font-size:11px; gap:2px; }
+            .vc-cam { width:17px; height:14px; }
+            .vc-rep { width:15px; height:15px; }
+            .vc-author { font-size:12px; }
+        }
     </style>
 </head>
 <body>
@@ -1206,7 +1252,7 @@
         </div>
         <div class="lg-nav" id="lg-nav">
             <div class="lg-nav-item" onclick="showSection('video')">동영상</div>
-            <div class="lg-nav-item" onclick="showSection('playlist')">재생목록</div>
+            <div class="lg-nav-item" onclick="showSection('playlist')">찜통</div>
             <div class="lg-nav-item lg-nav-channel">
                 <span id="lg-channel-trigger" onclick="openTargetUserChannel();">채널</span>
                 <div class="lg-channel-dropdown" id="lg-channel-dropdown">
@@ -1224,7 +1270,6 @@
             <input type="text" id="main-search-input" class="search-input-overlay" placeholder="검색" autocomplete="off" onkeypress="if(event.keyCode==13) executeSearch()" oninput="renderSearchSuggestions()" onfocus="renderSearchSuggestions()" onblur="setTimeout(hideSearchSuggestions, 150)">
             <img src="https://i.ibb.co/Q7scz5tv/20260617-135055.png" class="search-btn-img" onclick="executeSearch()">
             <button type="button" class="search-btn-css" onclick="executeSearch()" aria-label="검색" title="검색"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button>
-            <button type="button" class="lg-upload-icon-btn" onclick="openModal('upload-modal')" aria-label="업로드" title="업로드"><svg viewBox="0 0 24 24" width="26" height="26" fill="#7a7a7a"><path d="M12 2.5l-7 8h4.5v6h5v-6H19z"/><path d="M3 18.5h18V22H3z"/><circle cx="17.6" cy="20.25" r="0.9" fill="#fff"/></svg></button>
             <div id="search-suggest-box" class="search-suggest-box" style="display:none;"></div>
         </div>
         
@@ -1233,7 +1278,7 @@
             <div class="menu-loading-spinner"></div>
             <div id="sliding-menu" class="sliding-menu">
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
-                <div class="nav-icon-btn" onclick="showSection('playlist')"><span>재생목록</span></div>
+                <div class="nav-icon-btn" onclick="showSection('playlist')"><span>찜통</span></div>
                 <div class="nav-icon-btn" onclick="toggleMobileApkSection()">
                     <img src="https://i.ibb.co/PsbVpwmL/20260810-071211.png" alt="20260810-071211">
                     <span>앱 받기</span>
@@ -1247,8 +1292,7 @@
                 <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
                 <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
                 <div class="header-upload-btn" onclick="openModal('upload-modal')">
-                    <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg">
-                    <span>업로드</span>
+                    <div class="green-upload-btn"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
                 </div>
             </div>
         </div>
@@ -1265,7 +1309,7 @@
         </div>
         <div class="lg-right-actions-wrap" id="lg-right-actions-wrap">
             <div class="lg-right-actions" id="lg-right-actions">
-                <div class="lg-action-btn" onclick="openModal('upload-modal')"><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg"><span>업로드</span></div>
+                <div class="green-upload-btn" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
             </div>
             <div class="lg-notice-row">
                 <div class="lg-apk-dropdown-wrap" id="lg-apk-dropdown-wrap">
@@ -1278,6 +1322,11 @@
                 </div>
             </div>
         </div>
+        <!-- [신규] PC/가로모드 - 맨 위 줄 맨 오른쪽: 랜덤 + 동영상 업로드(초록색) 버튼 -->
+        <div class="hdr-top-actions">
+            <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div>
+            <div class="green-upload-btn" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
+        </div>
     </div>
 </header>
 
@@ -1285,31 +1334,40 @@
     <!-- [신규] PC/가로모드 전용 - 맨 왼쪽 냥이플 메뉴 (세로모드에서는 숨김) -->
     <aside class="nyang-left-nav" id="nyang-left-nav">
         <div class="nln-title">냥이플</div>
-        <div class="nln-item active" data-sec="home" onclick="showSection('home')">홈</div>
+        <div class="nln-item active" data-sec="home" onclick="showSection('home')">랭킹</div>
         <div class="nln-item" data-sec="video" onclick="showSection('video')">동영상</div>
         <div class="nln-item" data-sec="channel" onclick="openTargetUserChannel()">채널</div>
         <div class="nln-item" onclick="openSuggestModal()">운영정책(건의)</div>
         <div class="nln-title nln-small">광장</div>
         <div class="nln-item" data-sec="notice" onclick="showSection('notice')">공지</div>
         <div class="nln-divider"></div>
-        <div class="nln-upload" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
     </aside>
     <aside class="sidebar" id="genre-sidebar"></aside>
 
     <div class="content-area">
         <section id="home-section" class="page-section active">
+            <!-- [신규] 모바일(세로) - 랭킹 화면 맨 위 줄 맨 오른쪽: 랜덤 + 동영상 업로드(초록색) 버튼 -->
+            <div class="home-top-actions">
+                <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div>
+                <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="home-top-notice-btn" onclick="showSection('notice')" title="공지사항">
+            </div>
+            <!-- [신규] 모바일(세로) - 위 줄 밑 왼쪽: 동영상 업로드(초록색) 버튼 -->
+            <div class="home-top-upload-row">
+                <div class="green-upload-btn" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
+            </div>
             <div class="frame-wrapper">
                 <img src="https://i.ibb.co/4RK8Bkz4/20260808-094730.png" class="home-lg-notice-btn" onclick="showSection('notice')" title="공지사항">
                 <div id="home-lg-loading-spinner" class="home-lg-loading-spinner"></div>
                 <div class="frame-bg">
                     <div class="home-rank-tabs" id="home-rank-tabs">
                         <div class="home-rank-tab active" data-tab="recommend" onclick="switchHomeTab('recommend')"><span class="tab-label-mobile">추천</span><span class="tab-label-pc">추천 동영상</span></div>
-                        <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')"><span class="tab-label-mobile">36랭</span><span class="tab-label-pc">36h 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="rankDay" onclick="switchHomeTab('rankDay')"><span class="tab-label-mobile">일랭</span><span class="tab-label-pc">일간 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="rankMonth" onclick="switchHomeTab('rankMonth')"><span class="tab-label-mobile">월랭</span><span class="tab-label-pc">월간 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="rankJjim" onclick="switchHomeTab('rankJjim')"><span class="tab-label-mobile">찜랭</span><span class="tab-label-pc">찜 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')"><span class="tab-label-mobile">댓랭</span><span class="tab-label-pc">댓글 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')"><span class="tab-label-mobile">구랭</span><span class="tab-label-pc">구름 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankJjim" onclick="switchHomeTab('rankJjim')"><span class="tab-label-mobile">찜 랭킹</span><span class="tab-label-pc">찜 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankDay" onclick="switchHomeTab('rankDay')"><span class="tab-label-mobile">일간 랭킹</span><span class="tab-label-pc">일간 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankWeek" onclick="switchHomeTab('rankWeek')"><span class="tab-label-mobile">주간 랭킹</span><span class="tab-label-pc">주간 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rankMonth" onclick="switchHomeTab('rankMonth')"><span class="tab-label-mobile">월간 랭킹</span><span class="tab-label-pc">월간 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')"><span class="tab-label-mobile">36h 랭킹</span><span class="tab-label-pc">36h 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')"><span class="tab-label-mobile">댓글 랭킹</span><span class="tab-label-pc">댓글 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')"><span class="tab-label-mobile">구름 랭킹</span><span class="tab-label-pc">구름 랭킹</span></div>
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
@@ -1320,11 +1378,6 @@
                             <div id="home-unlucky" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollUnluckyRight()">
                         </div>
-                        <div class="unlucky-shuffle-wrapper">
-                            <a href="https://ibb.co/F4NFMwmD" onclick="event.preventDefault(); shufflePlayUnlucky();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Screenshot-20260628-092011-Samsung-Browser-1" border="0">
-                            </a>
-                        </div>
                     </div>
 
                     <div class="home-reco-box">
@@ -1334,11 +1387,6 @@
                             <div id="home-hot-32h" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/4RgbLgzN/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="Screenshot-20260630-164342-Samsung-Browser-2" class="unlucky-next-btn" onclick="scrollHotRight()">
                         </div>
-                        <div class="unlucky-shuffle-wrapper">
-                            <a href="#" onclick="event.preventDefault(); shufflePlayHot();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle Hot Videos" border="0">
-                            </a>
-                        </div>
                     </div>
 
                     <div class="home-reco-box">
@@ -1347,11 +1395,6 @@
                             <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollMyUploadedLeft()">
                             <div id="home-my-uploaded" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollMyUploadedRight()">
-                        </div>
-                        <div class="unlucky-shuffle-wrapper">
-                            <a href="#" onclick="event.preventDefault(); shufflePlayMyUploaded();">
-                                <img src="https://i.ibb.co/23mTQtWk/Screenshot-20260628-092011-Samsung-Browser-1.png" alt="Shuffle My Videos" border="0">
-                            </a>
                         </div>
                     </div>
 
@@ -1364,6 +1407,7 @@
                             <div id="home-rank36-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRank36Right()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankDay">
@@ -1372,6 +1416,16 @@
                             <div id="home-rankday-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankDayRight()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
+                    </div>
+
+                    <div class="home-tab-content" id="home-tab-rankWeek">
+                        <div class="rank-section-title">주간 인기 동영상 랭킹 (조회수)</div>
+                        <div class="unlucky-outer-container">
+                            <div id="home-rankweek-list" class="unlucky-scroll-container"></div>
+                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankWeekRight()">
+                        </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankMonth">
@@ -1380,6 +1434,7 @@
                             <div id="home-rankmonth-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankMonthRight()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankJjim">
@@ -1388,6 +1443,7 @@
                             <div id="home-rankjjim-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankJjimRight()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-commentKing">
@@ -1396,6 +1452,7 @@
                             <div id="home-rank-commentking-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCommentKingRight()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-cloudKing">
@@ -1404,6 +1461,7 @@
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
                         </div>
+                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-mypage">
@@ -1598,7 +1656,7 @@
 
         <section id="playlist-section" class="page-section">
             <div style="padding:15px;">
-                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">내 재생목록</h2>
+                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">내 찜통</h2>
                 <div id="playlist-video-list"></div>
             </div>
         </section>
@@ -1703,7 +1761,7 @@
     </div>
 </div>
 
-<div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="upload-submit-btn" onclick="doUpload()"></div></div></div>
+<div id="upload-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('upload-modal')"><div class="modal-body"><input type="file" id="up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 영상 첫 화면을 자동으로 썸네일로 사용)</div><input type="file" id="up-thumb" accept="image/*"><input type="text" id="up-title" placeholder="제목"><textarea id="up-desc" placeholder="설명"></textarea><div id="modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addTagInputField()"></div></div><select id="up-genre" onchange="toggleGenreCustomInput('up-genre','up-genre-custom')"></select><input type="text" id="up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="upload-progress-fill"></div></div><div class="upload-progress-label" id="upload-progress-label">대기 중...</div></div><div class="green-upload-btn" id="upload-submit-btn" onclick="doUpload()" style="align-self:center; margin-top:5px;"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div></div></div></div>
 
 <div id="edit-modal" class="modal"><div class="modal-content"><img src="https://i.ibb.co/N6kgKMSx/20260326-074816.jpg" style="width:100%; cursor:pointer;" onclick="closeModal('edit-modal')"><div class="modal-body"><div style="font-size:14px; font-weight:bold; text-align:center;">동영상 수정</div><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">동영상 파일 재선택 (미선택시 기존 영상 유지)</div><input type="file" id="edit-up-file" accept="video/*"><div style="font-size:11px; color:#666; text-align:left; margin-bottom:-5px;">썸네일 선택 (미선택시 기존 썸네일 유지)</div><input type="file" id="edit-up-thumb" accept="image/*"><input type="text" id="edit-up-title" placeholder="제목"><textarea id="edit-up-desc" placeholder="설명"></textarea><div id="edit-modal-tag-container" style="display:flex; flex-direction:column; gap:5px;"><div class="modal-tag-row"><input type="text" class="edit-up-tag-input" placeholder="태그를 입력하세요"><img src="https://i.ibb.co/9HZ6SMn5/1781596927830.png" alt="1781596927830" class="tag-add-btn-img" onclick="addEditTagInputField()"></div></div><select id="edit-up-genre" onchange="toggleGenreCustomInput('edit-up-genre','edit-up-genre-custom')"></select><input type="text" id="edit-up-genre-custom" placeholder="장르를 직접 입력하세요" style="display:none;"><div class="upload-progress-wrap" id="edit-upload-progress-wrap"><div class="upload-progress-track"><div class="upload-progress-fill" id="edit-upload-progress-fill"></div></div><div class="upload-progress-label" id="edit-upload-progress-label">대기 중...</div></div><img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" id="edit-upload-submit-btn" onclick="doEditVideo()"></div></div></div>
 
@@ -2247,6 +2305,13 @@
         return isAuthorVeteran(authorName) ? 'color:#8BC34A;' : '';
     }
 
+    /* [신규] 영상 카드 공통 - 맨 위 제목 / 가운데 썸네일 / 아래 영상길이 · 조회수 · 유저 이름 */
+    function vcCamIco() { return '<svg class="vc-ico vc-cam" viewBox="0 0 20 16"><rect width="20" height="16" rx="3" fill="#aaa"/><rect x="4" y="4.5" width="8" height="7" rx="1" fill="#fff"/><polygon points="12.5,7 16,5 16,11 12.5,9" fill="#fff"/></svg>'; }
+    function vcRepIco() { return '<svg class="vc-ico vc-rep" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#aaa"/><path transform="translate(4.8 4.8) scale(0.6)" fill="#fff" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>'; }
+    function vcInfoHtml(v) {
+        return `<div class="vc-info"><span class="vc-dur">${vcCamIco()}${v.playTime || '03:45'}</span><span class="vc-views">${vcRepIco()}${(v.views || 0).toLocaleString()}</span><span class="vc-author" style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>`;
+    }
+
     function renderAuthorMiniHtml(authorName, title) {
         const safeAuthor = escapeHtml(authorName || '');
         const safeTitle = escapeHtml(title || '');
@@ -2623,10 +2688,6 @@
                     </div>
                 </div>
                 <div class="v-info-right-wrapper" style="flex-direction: column; align-items: flex-end; gap: 5px;">
-                    <span class="playlist-toggle-text" onclick="togglePlaylistAction(${currentPlayingItem.id})" style="font-size:11px; font-weight:bold; color:${playlist.includes(currentPlayingItem.id) ? '#ff3300' : '#666'}; cursor:pointer; text-decoration:underline;">
-                        ${playlist.includes(currentPlayingItem.id) ? '[ 재생목록에서 제거 ]' : '[ 재생목록에 담기 ]'}
-                    </span>
-
                     <div style="margin-top: 10px; width: 100%; text-align: right;">
                         <div style="text-align:left; margin-bottom:5px;">
                             <span id="v-desc-short" style="color:#777; font-weight:bold; word-break:break-all; display:block;">${currentPlayingItem.desc && currentPlayingItem.desc.length > 60 ? linkifyText(currentPlayingItem.desc.slice(0, 60)) + '...' : (currentPlayingItem.desc ? linkifyText(currentPlayingItem.desc) : '설명이 없습니다.')}</span>
@@ -2710,18 +2771,10 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -2743,18 +2796,10 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #000; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -2907,23 +2952,12 @@
         renderComments();
     }
 
-    function togglePlaylistAction(videoId) {
-        const idx = playlist.indexOf(videoId);
-        if(idx > -1) {
-            playlist.splice(idx, 1);
-        } else {
-            playlist.push(videoId);
-        }
-        localStorage.setItem('tvple_playlist', JSON.stringify(playlist));
-        if(currentPlayingItem) updateDetail();
-    }
-
     function renderPlaylist() {
         const container = document.getElementById('playlist-video-list');
         if(!container) return;
-        const items = playlist.map(id => db.find(v => v.id === id)).filter(v => v);
+        const items = user ? db.filter(v => v.jjimUsers && v.jjimUsers.includes(user.nick)) : [];
         if(items.length === 0) {
-            container.innerHTML = "<div style='font-size:12px; color:#888; padding:20px 0;'>재생목록에 담긴 동영상이 없습니다.</div>";
+            container.innerHTML = "<div style='font-size:12px; color:#888; padding:20px 0;'>찜(좋아요)한 동영상이 없습니다.</div>";
             return;
         }
         container.innerHTML = items.map(v => {
@@ -2931,20 +2965,11 @@
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-                <button class="channel-video-delete-btn" onclick="event.stopPropagation(); togglePlaylistAction(${v.id}); renderPlaylist();">제거</button>
             </div>`;
         }).join('');
     }
@@ -3075,7 +3100,7 @@
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
         if(typeof updateNyangLeftNavActive === 'function') updateNyangLeftNavActive(s);
-        const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '재생목록', notice: '공지사항' };
+        const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '찜통', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
@@ -3284,6 +3309,21 @@
         preparePlay(randomItem.id);
     }
 
+    /* [신규] 랜덤 버튼 - 아무 동영상이나 하나 보여줌 (지금 보고 있는 영상은 가능하면 제외) */
+    function playRandomVideo() {
+        const pool = db.filter(v => v);
+        if (pool.length === 0) {
+            alert("재생할 동영상이 존재하지 않습니다.");
+            return;
+        }
+        let candidates = pool;
+        if (currentPlayingItem && pool.length > 1) {
+            candidates = pool.filter(v => String(v.id) !== String(currentPlayingItem.id));
+        }
+        const randomItem = candidates[Math.floor(Math.random() * candidates.length)];
+        preparePlay(randomItem.id);
+    }
+
     function shufflePlayMyUploaded() {
         const myList = db.filter(v => v.author === user.nick);
         if(myList.length === 0) {
@@ -3325,6 +3365,12 @@
         }).slice().sort((a, b) => b.views - a.views);
         renderRankContainer('home-rankday-list', rankDay);
 
+        const rankWeek = db.filter(v => {
+            const diffDays = (now - new Date(v.regDate)) / (1000 * 60 * 60 * 24);
+            return diffDays >= 0 && diffDays <= 7;
+        }).slice().sort((a, b) => b.views - a.views);
+        renderRankContainer('home-rankweek-list', rankWeek);
+
         const rankMonth = db.filter(v => {
             const regDate = new Date(v.regDate);
             return regDate.getFullYear() === now.getFullYear() && regDate.getMonth() === now.getMonth();
@@ -3336,7 +3382,54 @@
 
         renderUserRankContainer('home-rank-commentking-list', computeCommentKingRanking(), '개');
         renderUserRankContainer('home-rank-cloudking-list', computeCloudKingRanking(), '개');
+
+        /* [신규] 랭킹을 실제로 다시 계산한 시각을 랭킹 목록 밑에 표시 */
+        setRankUpdatedTime();
     }
+
+    /* ---------- [신규] 랭킹 갱신 시각 표시 (예: 2015-04-17 00:30:03) + 실제 서버 데이터로 주기적 갱신 ---------- */
+    function formatRankUpdatedTime(d) {
+        const p = (n) => String(n).padStart(2, '0');
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+    }
+
+    function setRankUpdatedTime() {
+        const text = formatRankUpdatedTime(new Date());
+        document.querySelectorAll('.rank-updated-time-val').forEach(el => { el.textContent = text; });
+    }
+
+    let rankRefreshBusy = false;
+    let rankRefreshLastTime = 0;
+    function refreshRankingsFromServer() {
+        if (rankRefreshBusy) return;
+        if (typeof fbLoadAllVideos !== 'function') return;
+        if (Date.now() - rankRefreshLastTime < 15000) return;
+        rankRefreshBusy = true;
+        rankRefreshLastTime = Date.now();
+        fbLoadAllVideos().then((onlineVideos) => {
+            if (onlineVideos) {
+                onlineVideos.forEach((ov) => {
+                    const local = db.find((v) => String(v.id) === String(ov.id));
+                    if (!local) { db.push(ov); return; }
+                    /* 랭킹에 쓰이는 값만 제자리에서 갱신 (재생 중인 영상 객체는 교체하지 않음) */
+                    if (ov.views !== undefined) local.views = Math.max(local.views || 0, ov.views || 0);
+                    if (ov.jjim !== undefined) local.jjim = ov.jjim;
+                    if (ov.jjimUsers) local.jjimUsers = ov.jjimUsers;
+                    if (!currentPlayingItem || String(currentPlayingItem.id) !== String(local.id)) {
+                        if (ov.comments) local.comments = ov.comments;
+                        if (ov.savedClouds) local.savedClouds = ov.savedClouds;
+                    }
+                });
+            }
+            renderHomeRankLists();
+        }).catch(() => {}).then(() => { rankRefreshBusy = false; });
+    }
+
+    setInterval(() => {
+        const homeEl = document.getElementById('home-section');
+        if (document.hidden || !homeEl || !homeEl.classList.contains('active')) return;
+        refreshRankingsFromServer();
+    }, 60000);
 
     function computeCommentKingRanking() {
         const counts = {};
@@ -3415,6 +3508,7 @@
             recommend: 'home-tab-recommend',
             rank36: 'home-tab-rank36',
             rankDay: 'home-tab-rankDay',
+            rankWeek: 'home-tab-rankWeek',
             rankMonth: 'home-tab-rankMonth',
             rankJjim: 'home-tab-rankJjim',
             commentKing: 'home-tab-commentKing',
@@ -3428,6 +3522,9 @@
 
         if (tabName !== 'recommend') {
             renderHomeRankLists();
+        }
+        if (tabName !== 'recommend' && tabName !== 'mypage') {
+            refreshRankingsFromServer();
         }
         if (tabName === 'mypage') {
             renderHomeMyPageChannelInfo();
@@ -3495,20 +3592,12 @@
             const channelItemLength = v.playTime || "03:45";
 
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${channelItemLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="font-weight:bold; color:#ff3300;">${channelItemLength}</span> | 조회수: ${v.views} | 장르: ${v.genre}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${formatDate(v.regDate)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-                <button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button>
+                <div class="ch-card-btns"><button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>
             </div>`;
         }).join('');
     }
@@ -3578,6 +3667,11 @@
 
     function scrollRankDayRight() {
         const container = document.getElementById('home-rankday-list');
+        if (container) container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+    }
+
+    function scrollRankWeekRight() {
+        const container = document.getElementById('home-rankweek-list');
         if (container) container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
     }
 
@@ -4122,11 +4216,10 @@
         if(opt.prefix && !titleHtml.startsWith("[냥이플]")) titleHtml = `[냥이플] ${titleHtml}`;
         const rankHtml = opt.rank ? `<div class="rank-badge-wrap"><img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge"><div class="rank-badge-num">${opt.rank}</div></div>` : '';
         return `
-        <div class="ch-card vs-card${verified ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-            <div class="ch-card-thumb" style="${thumbStyle}">${rankHtml}<div class="ch-card-dur">${v.playTime || '03:45'}</div></div>
-            <div class="ch-card-title">${titleHtml}</div>
-            <div class="ch-card-author"><img class="vs-av" src="${getAuthorBadgeImg(v.author)}" alt="author">${verified ? chBadgeHtml(false) : ''}<span class="nm" style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author)}</span></div>
-            ${withViews ? `<div class="ch-card-views"><i></i>${(v.views || 0).toLocaleString()}p</div>` : ''}
+        <div class="ch-card vs-card vc-card${verified ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+            <div class="vc-title">${titleHtml}</div>
+            <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${thumbStyle}">${rankHtml}</div></div>
+            ${vcInfoHtml(v)}
             <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
         </div>`;
     }
@@ -4764,11 +4857,10 @@
             const thumbStyle = v.thumb ? `background-image:url('${v.thumb}');` : '';
             const btns = isMe ? `<div class="ch-card-btns"><button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>` : '';
             return `
-            <div class="ch-card${verified ? ' ch-verified' : ''}" onclick="${goBack}preparePlay(${v.id})">
-                <div class="ch-card-thumb" style="${thumbStyle}"><div class="ch-card-dur">${v.playTime || '03:45'}</div></div>
-                <div class="ch-card-title">${escapeHtml(v.title)}</div>
-                <div class="ch-card-author">${verified ? chBadgeHtml(false) : ''}<span class="nm">${escapeHtml(v.author)}</span></div>
-                <div class="ch-card-views"><i></i>${(v.views || 0).toLocaleString()}p</div>
+            <div class="ch-card vc-card${verified ? ' ch-verified' : ''}" onclick="${goBack}preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${thumbStyle}"></div></div>
+                ${vcInfoHtml(v)}
                 ${btns}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
@@ -5297,7 +5389,7 @@
         document.querySelectorAll('#nyang-left-nav .nln-item[data-sec]').forEach(function(el) {
             el.classList.toggle('active', el.getAttribute('data-sec') === s);
         });
-        /* 맨 위 탭 메뉴(동영상/재생목록/채널/마이페이지)도 지금 보는 곳을 표시 */
+        /* 맨 위 탭 메뉴(동영상/찜통/채널/마이페이지)도 지금 보는 곳을 표시 */
         const lgIdx = { video: 0, playlist: 1, channel: 2, mypage: 3 };
         document.querySelectorAll('#lg-nav > .lg-nav-item').forEach(function(el, i) { el.classList.toggle('active', lgIdx[s] === i); });
     }
@@ -6084,18 +6176,10 @@
             const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    화질: ${v.quality || '360p'}${sizeText} | 자막 수: ${Math.floor(v.views/3) + savedCount} | 등록일: ${getTimeAgo(v.regDate)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -6153,18 +6237,10 @@
             const savedCount = v.savedClouds ? v.savedClouds.length : 0;
             const listPlayLength = v.playTime || "03:45";
             return `
-            <div class="list-item${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="list-thumb-col">
-                    <div class="list-thumb" style="${v.thumb ? `background-image:url('${v.thumb}'); background-size:cover; background-position:center;` : ''}">
-                        <div class="list-duration-badge">${listPlayLength}</div>
-                    </div>
-                    ${renderAuthorMiniHtml(v.author, v.title)}
-                </div>
-                <div class="list-info">
-                    <b>${escapeHtml(v.title)}</b>
-                    길이: <span style="color: #ff3300; font-weight:bold;">${listPlayLength}</span> | 조회수: ${v.views}<br>
-                    자막 수: ${Math.floor(v.views/3) + savedCount} | 시청: ${getTimeAgo(date)}
-                </div>
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
@@ -6490,7 +6566,7 @@
 </script>
 
 <script>
-/* [추가] 설명창(desc-tooltip): 홈/채널/검색/재생목록/시청기록 등 다른 화면에서도 호버 시 표시.
+/* [추가] 설명창(desc-tooltip): 홈/채널/검색/찜통/시청기록 등 다른 화면에서도 호버 시 표시.
    스크롤 영역(overflow)에 잘리지 않도록 화면 기준(fixed)으로 위치 계산. 영상 화면의 기존 목록은 건드리지 않음 */
 (function() {
     var SKIP = '#related-videos-list, #popular-videos-list';
