@@ -152,7 +152,7 @@
         .unlucky-scroll-container::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
         
         .unlucky-item { position: relative; cursor: pointer; border: 1px solid #ddd; overflow: visible; width: calc((100% - 40px) / 5); min-width: 140px; flex-shrink: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #fff; }
-        #home-unlucky .unlucky-item, #home-hot-32h .unlucky-item, #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 2); min-width: 130px; }
+        #home-hot-32h .unlucky-item, #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 2); min-width: 130px; }
         .unlucky-thumb { width: 100%; aspect-ratio: 16/9; background: #222; position: relative; }
         
         .unlucky-title-text {
@@ -182,6 +182,19 @@
         .home-reco-outer .unlucky-prev-btn:active { transform: translateY(-50%) scale(0.9); }
         .home-reco-outer .unlucky-next-btn:active { transform: translateY(-50%) scale(0.9); }
         .home-reco-box .unlucky-title-text { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        /* ===== [신규] 홈 - "최근 업로드(36시간) 인기 영상" / "[창작플] 자작 영상을 올려보자" 제목을 이미지 대신 CSS로 표시 ===== */
+        .home-css-head { display:flex; align-items:center; gap:8px; margin:-12px -12px 10px; padding:10px 12px; font-size:18px; border-radius:3px 3px 0 0; }
+        .home-css-pill { font-size:13px; font-weight:bold; color:#fff; padding:3px 10px; border-radius:14px; flex-shrink:0; }
+        .home-css-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .home-css-hot-box { border-color:#e6bcc1; }
+        .home-css-hot-box .home-css-head { background:linear-gradient(#f9e1e2, #f0c9cc); color:#a8444c; }
+        .home-css-hot-box .home-css-pill { background:#b94a52; }
+        .home-css-create-box { border-color:#bcdaee; }
+        .home-css-create-box .home-css-head { background:linear-gradient(#dbeffb, #cfe6f5); color:#2f6aa5; }
+        .home-css-create-box .home-css-pill { background:#1f6f8b; }
+        @media (max-width: 768px) and (orientation: portrait) {
+            .home-css-head { margin:-12px 0 10px; }
+        }
 
         .home-rank-tabs { display: flex; gap: 2px; margin: -20px -10px 15px -10px; padding: 3px 10px 0 10px; background: #EFEFEF; box-shadow: inset 0 -1px 0 #ddd; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .home-rank-tabs::-webkit-scrollbar { display: none; }
@@ -247,7 +260,6 @@
         .wait-searching-text { font-size: 13px; font-weight: bold; color: #fff; letter-spacing: 0.5px; }
         #error-screen { position: absolute; top:0; left:0; width:100%; height:100%; background:#000; z-index:600; display:none; flex-direction:column; align-items:center; justify-content:center; gap: 10px; padding: 10px; box-sizing: border-box; } 
         #error-screen img.err-window { max-width: 85%; max-height: 60%; object-fit: contain; } 
-        #error-screen img.err-btn { max-width: 70%; max-height: 35%; cursor: pointer; object-fit: contain; } 
         @keyframes fadeInOut { 0% { opacity: 0; } 10% { opacity: 0.95; } 90% { opacity: 0.95; } 100% { opacity: 0; } } 
         .cloud { position: absolute; color: #fff !important; font-size: 14px; font-weight: bold; white-space: pre; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000, 1px 0 0 #000, 2px 2px 4px rgba(0,0,0,0.8); pointer-events: none; z-index: 110; animation: fadeInOut 3.3s linear forwards; line-height: 1.1; opacity: 0.85; } 
         
@@ -531,7 +543,7 @@
             #popular-videos-box { grid-area: popular; }
             #video-comments-section { grid-area: comments; }
             #home-section .unlucky-item { width: calc((100% - 40px) / 10); min-width: 70px; }
-            #home-section #home-unlucky .unlucky-item, #home-section #home-hot-32h .unlucky-item, #home-section #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 4); min-width: 65px; }
+            #home-section #home-hot-32h .unlucky-item, #home-section #home-my-uploaded .unlucky-item { width: calc((100% - 10px) / 4); min-width: 65px; }
             #home-section .unlucky-title-text { font-size: 11px; padding: 5px 4px; } /* [수정] 가로모드 홈 영상 제목이 너무 작아서(5.5px) 기본 크기로 확대 */
         }
         /* ===== [신규] PC/모바일 가로모드 - 영상 재생 화면 크기 축소 (전체화면은 제외) ===== */
@@ -986,7 +998,7 @@
         #home-section .home-reco-box .vs-tag-head { border-radius:3px 3px 0 0; }
         @media (orientation: landscape) {
             #home-section .unlucky-scroll-container .ch-card { flex:0 0 calc((100% - 40px) / 5); min-width:130px; }
-            #home-section #home-unlucky .ch-card, #home-section #home-hot-32h .ch-card, #home-section #home-my-uploaded .ch-card { flex:0 0 calc((100% - 30px) / 4); }
+            #home-section #home-hot-32h .ch-card, #home-section #home-my-uploaded .ch-card { flex:0 0 calc((100% - 30px) / 4); }
         }
 
         /* ===== [신규] 대댓글 ===== */
@@ -1387,17 +1399,10 @@
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
-                    <div class="home-reco-box">
-                        <img src="https://i.ibb.co/N6YgVwkr/20261027-092614.png" alt="20261027-092614" class="unlucky-title-img">
-                        <div class="unlucky-outer-container home-reco-outer">
-                            <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollUnluckyLeft()">
-                            <div id="home-unlucky" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollUnluckyRight()">
-                        </div>
-                    </div>
+                    <div id="home-daily-tag-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
 
-                    <div class="home-reco-box">
-                        <img src="https://i.ibb.co/tph1Q2fn/Screenshot-20260630-164342-Samsung-Browser-1.png" alt="Screenshot-20260630-164342-Samsung-Browser-1" class="unlucky-title-img">
+                    <div class="home-reco-box home-css-hot-box">
+                        <div class="home-css-head"><span class="home-css-pill">HOT</span><span class="home-css-name">최근 업로드(36시간) 인기 영상</span></div>
                         <div class="unlucky-outer-container home-reco-outer">
                             <img src="https://i.ibb.co/VcFs78XM/Screenshot-20260630-164342-Samsung-Browser-2.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollHotLeft()">
                             <div id="home-hot-32h" class="unlucky-scroll-container"></div>
@@ -1405,8 +1410,8 @@
                         </div>
                     </div>
 
-                    <div class="home-reco-box">
-                        <img src="https://i.ibb.co/CpHP1dc4/1783060875685.png" alt="1783060875685" class="unlucky-title-img">
+                    <div class="home-reco-box home-css-create-box">
+                        <div class="home-css-head"><span class="home-css-pill">자작</span><span class="home-css-name">[창작플] 자작 영상을 올려보자</span></div>
                         <div class="unlucky-outer-container home-reco-outer" style="margin-top:10px;">
                             <img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="scrollMyUploadedLeft()">
                             <div id="home-my-uploaded" class="unlucky-scroll-container"></div>
@@ -1414,7 +1419,6 @@
                         </div>
                     </div>
 
-                    <div id="home-daily-tag-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rank36">
@@ -1550,7 +1554,6 @@
                         </div>
                         <div id="error-screen">
                             <img src="https://i.ibb.co/rKmKtKtK/1781596926103-1-1.jpg" alt="1781596926103-1-1" class="err-window">
-                            <img src="https://i.ibb.co/Rt4T6fQ/1781596926103-1.png" alt="1781596926103-1" class="err-btn" onclick="goToUnluckySection()">
                         </div>
                     </div>
                     
@@ -3136,7 +3139,7 @@
         if(typeof updateNyangLeftNavActive === 'function') updateNyangLeftNavActive(s);
         const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '찜통', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
-        if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-unlucky', 'home-hot-32h', 'home-my-uploaded'], true);
+        if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
         if(s === 'channel') {
             renderChannelRankList();
@@ -3235,9 +3238,6 @@
     }
 
     function refreshUnluckyList() {
-        const unlucky = db.filter(v => v.views < 5);
-        document.getElementById('home-unlucky').innerHTML = unlucky.map(v => vsCardHtml(v, true, { prefix: true })).join('');
-
         const now = new Date();
         /* [수정] 홈 36시간 인기동영상 = 랭킹 탭의 36h 랭킹과 완전히 같은 영상/순서 */
         const hot32hVideos = db.filter(v => {
@@ -3267,22 +3267,6 @@
 
         renderHomeDailyTag();
         renderHomeRankLists();
-    }
-
-    function scrollUnluckyRight() {
-        const container = document.getElementById('home-unlucky');
-        if(container) {
-            const scrollAmount = container.clientWidth; 
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-    }
-
-    function scrollUnluckyLeft() {
-        const container = document.getElementById('home-unlucky');
-        if(container) {
-            const scrollAmount = container.clientWidth; 
-            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        }
     }
 
     function scrollHotRight() {
@@ -3315,17 +3299,6 @@
             const scrollAmount = container.clientWidth;
             container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         }
-    }
-
-    function shufflePlayUnlucky() {
-        const unluckyList = db.filter(v => v.views < 5);
-        if(unluckyList.length === 0) {
-            alert("재생할 불운의 동영상이 존재하지 않습니다.");
-            return;
-        }
-        const randomIndex = Math.floor(Math.random() * unluckyList.length);
-        const randomItem = unluckyList[randomIndex];
-        preparePlay(randomItem.id);
     }
 
     function shufflePlayHot() {
@@ -4249,13 +4222,6 @@
             }
         };
         userStats.play++; updateChannel(); recordWatchHistory(item);
-    }
-
-    function goToUnluckySection() {
-        errorScreen.style.display = "none";
-        showSection('home');
-        const unluckyEl = document.getElementById('home-unlucky');
-        if(unluckyEl) unluckyEl.scrollIntoView({ behavior: 'smooth' });
     }
 
     /* ===== [추가] 동영상 섹션 목록 UI (전체 헤더 / 3칸 필터 / 태그 캐러셀 / 2열 카드 / 페이지 번호) ===== */
