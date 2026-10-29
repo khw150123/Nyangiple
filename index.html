@@ -55,7 +55,7 @@
 
         .credit-wrapper { display: none; }
 
-        .logo-hover-tip { opacity: 0; visibility: hidden; position: absolute; top: 100%; left: 0; margin-top: 32px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .logo-hover-tip { opacity: 0; visibility: hidden; position: absolute; top: 100%; left: 0; margin-top: 32px; background: rgba(87,138,182,0.85); color: #fff; padding: 8px 12px; border-radius: 0; font-size: 12px; font-weight: bold; white-space: nowrap; z-index: 5000; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .logo-hover-tip::after { content: ""; position: absolute; bottom: 100%; left: 20px; border-width: 5px; border-style: solid; border-color: transparent transparent rgba(87,138,182,0.85) transparent; }
         @media (hover: hover) and (pointer: fine) {
             .logo-wrap:hover .logo-hover-tip { opacity: 1; visibility: visible; }
@@ -1325,7 +1325,6 @@
         <!-- [신규] PC/가로모드 - 맨 위 줄 맨 오른쪽: 랜덤 + 동영상 업로드(초록색) 버튼 -->
         <div class="hdr-top-actions">
             <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div>
-            <div class="green-upload-btn" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
         </div>
     </div>
 </header>
@@ -1341,6 +1340,7 @@
         <div class="nln-title nln-small">광장</div>
         <div class="nln-item" data-sec="notice" onclick="showSection('notice')">공지</div>
         <div class="nln-divider"></div>
+        <div class="nln-upload" onclick="openModal('upload-modal')"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
     </aside>
     <aside class="sidebar" id="genre-sidebar"></aside>
 
