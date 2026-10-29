@@ -1942,6 +1942,16 @@
 
     async function fbSaveVideo(videoObj) {
         try {
+            /* [수정] 영상 파일이 아직 온라인에 올라가지 않은 상태(url이 indexeddb_stored)로는 서버에 저장하지 않는다.
+               (업로드 직후 재생/조회수 저장 등이 먼저 서버에 저장되면, 다른 기기 목록에는 뜨는데 재생하면 "존재하지 않음" 에러가 남)
+               또 서버에 이미 진짜 영상 주소가 있으면, 오래된 로컬 정보가 그 주소를 indexeddb_stored로 덮어쓰지 못하게 서버 주소를 유지한다. */
+            if(videoObj && videoObj.url === 'indexeddb_stored') {
+                const existingRow = await blFindByKey('Videos', 'videoId', videoObj.id);
+                if(!existingRow) return;
+                let existingObj = null;
+                try { existingObj = JSON.parse(existingRow.data); } catch(parseErr) {}
+                if(existingObj && existingObj.url && /^https?:/i.test(existingObj.url)) videoObj.url = existingObj.url;
+            }
             if(videoObj.thumb && typeof videoObj.thumb === 'string' && videoObj.thumb.indexOf('data:') === 0) {
                 try {
                     const thumbFile = blDataURLtoFile(videoObj.thumb, `thumb_${videoObj.id}.jpg`);
@@ -3423,6 +3433,32 @@
         document.querySelectorAll('.rank-updated-time-val').forEach(el => { el.textContent = text; });
     }
 
+    /* [신규] 온라인 영상 파일 주소가 없고(indexeddb_stored) 이 기기에도 영상 파일이 없는 영상은 재생이 불가능하므로 목록에서 숨긴다.
+       (올린 사람 기기에는 파일이 있어서 계속 보이고, 재생하면 자동으로 다시 업로드되어 모두에게 복구됨) */
+    function purgeUnplayableVideos(done) {
+        const pending = db.filter(v => v && v.url === 'indexeddb_stored');
+        if(!pending.length || !indexedDBInstance) { if(done) done(); return; }
+        let left = pending.length;
+        const missing = new Set();
+        function finish() {
+            if(missing.size) {
+                db = db.filter(v => !missing.has(String(v.id)));
+                try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
+            }
+            if(done) done();
+        }
+        pending.forEach(v => {
+            let req;
+            try { req = indexedDBInstance.transaction('videos', 'readonly').objectStore('videos').get(Number(v.id)); }
+            catch(e) { if(--left === 0) finish(); return; }
+            req.onsuccess = (e) => {
+                if(!(e.target.result && e.target.result.data)) missing.add(String(v.id));
+                if(--left === 0) finish();
+            };
+            req.onerror = () => { if(--left === 0) finish(); };
+        });
+    }
+
     let rankRefreshBusy = false;
     let rankRefreshLastTime = 0;
     function refreshRankingsFromServer() {
@@ -3446,7 +3482,7 @@
                     }
                 });
             }
-            renderHomeRankLists();
+            purgeUnplayableVideos(renderHomeRankLists);
         }).catch(() => {}).then(() => { rankRefreshBusy = false; });
     }
 
@@ -6445,7 +6481,7 @@
             });
             db = db.filter((v) => onlineIds.has(String(v.id)) || v.url === 'indexeddb_stored');
             try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
-            renderList();
+            purgeUnplayableVideos(renderList);
         });
 
         /* [신규] 유저 목록 불러오기 */
