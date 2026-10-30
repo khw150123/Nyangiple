@@ -1245,8 +1245,8 @@
         .list-item.vc-li.ch-verified .ch-card-thumb { border:2px solid #4caf50; }
         .list-item.vc-li:hover .ch-card-thumb { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
         .list-item.vc-li.ch-verified:hover .ch-card-thumb { box-shadow:0 4px 14px rgba(76,175,80,0.75); }
-        #related-videos-list, #popular-videos-list, #playlist-video-list, #search-result-list, #history-video-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-        #related-videos-list > :not(.list-item), #popular-videos-list > :not(.list-item), #playlist-video-list > :not(.list-item), #search-result-list > :not(.list-item), #history-video-list > :not(.list-item) { grid-column:1 / -1; }
+        #related-videos-list, #popular-videos-list, #playlist-video-list, #search-result-list, #history-video-list, #subscribe-video-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+        #related-videos-list > :not(.list-item), #popular-videos-list > :not(.list-item), #playlist-video-list > :not(.list-item), #search-result-list > :not(.list-item), #history-video-list > :not(.list-item), #subscribe-video-list > :not(.list-item) { grid-column:1 / -1; }
         /* ===== [신규] 가로모드/PC - 영상 오른쪽 관련동영상 카드의 정보줄(시간/조회수/작성자)이 카드 밖으로 넘치지 않게 줄바꿈 ===== */
         @media (orientation: landscape) {
             #side-related-slot .vc-info { flex-wrap:wrap; row-gap:2px; gap:4px; padding:5px 4px 6px; overflow:hidden; }
@@ -1292,6 +1292,7 @@
         <div class="lg-nav" id="lg-nav">
             <div class="lg-nav-item" onclick="showSection('video')">동영상</div>
             <div class="lg-nav-item" onclick="showSection('playlist')">찜통</div>
+            <div class="lg-nav-item" onclick="showSection('subscribe')">구독</div>
             <div class="lg-nav-item lg-nav-channel">
                 <span id="lg-channel-trigger" onclick="openTargetUserChannel();">채널</span>
                 <div class="lg-channel-dropdown" id="lg-channel-dropdown">
@@ -1318,6 +1319,7 @@
             <div id="sliding-menu" class="sliding-menu">
                 <div class="nav-icon-btn" onclick="showSection('video')"><span>동영상</span></div>
                 <div class="nav-icon-btn" onclick="showSection('playlist')"><span>찜통</span></div>
+                <div class="nav-icon-btn" onclick="showSection('subscribe')"><span>구독</span></div>
                 <div class="nav-icon-btn" onclick="toggleMobileApkSection()">
                     <img src="https://i.ibb.co/PsbVpwmL/20260810-071211.png" alt="20260810-071211">
                     <span>앱 받기</span>
@@ -1691,6 +1693,13 @@
             <div style="padding:15px;">
                 <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">내 찜통</h2>
                 <div id="playlist-video-list"></div>
+            </div>
+        </section>
+
+        <section id="subscribe-section" class="page-section">
+            <div style="padding:15px;">
+                <h2 style="font-size:16px; text-align: left; margin-bottom:12px; font-weight: bold; border-bottom: 1px solid #ddd; padding-bottom: 8px;">구독 채널 새 영상</h2>
+                <div id="subscribe-video-list"></div>
             </div>
         </section>
 
@@ -3150,10 +3159,11 @@
         document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
         document.getElementById(s + '-section').classList.add('active');
         if(typeof updateNyangLeftNavActive === 'function') updateNyangLeftNavActive(s);
-        const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '찜통', notice: '공지사항' };
+        const sectionTitleMap = { home: '재밌는 UCC 세상 냥이플', video: '동영상', channel: '채널 순위', playlist: '찜통', subscribe: '구독', notice: '공지사항' };
         document.title = `냥이플 >> ${sectionTitleMap[s] || s}`;
         if(s === 'home') showSkeletonBeforeRender(refreshUnluckyList, ['home-hot-32h', 'home-my-uploaded'], true);
         if(s === 'playlist') renderPlaylist();
+        if(s === 'subscribe') renderSubscribeList();
         if(s === 'channel') {
             renderChannelRankList();
         }
@@ -6302,6 +6312,29 @@
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
+    }
+
+    /* ===== [신규] 구독 화면: 구독한 채널들의 영상을 최신순으로 모아서 보여줌 ===== */
+    function renderSubscribeList() {
+        const listEl = document.getElementById('subscribe-video-list');
+        if(!listEl) return;
+        if(!subscriptions || subscriptions.length === 0) {
+            listEl.innerHTML = "<div class='my-clouds-empty'>구독 중인 채널이 없습니다. 채널을 구독하면 새 영상이 여기에 모입니다.</div>";
+            return;
+        }
+        const items = db.filter(v => subscriptions.includes(v.author))
+            .slice().sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0)).slice(0, 60);
+        if(items.length === 0) {
+            listEl.innerHTML = "<div class='my-clouds-empty'>구독한 채널의 영상이 아직 없습니다.</div>";
+            return;
+        }
+        listEl.innerHTML = items.map(v => `
+            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+                <div class="vc-title">${escapeHtml(v.title)}</div>
+                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
+                ${vcInfoHtml(v)}
+                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
+            </div>`).join('');
     }
 
     function clearWatchHistory() {
