@@ -9,6 +9,9 @@
     <title>냥이플</title>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>emailjs.init("6SjliBKhSXYtbaVQs");</script>
+    <!-- [신규] 카카오 연동 - 카카오 JavaScript SDK -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script>try { if(window.Kakao && !Kakao.isInitialized()) Kakao.init('14caafd1ed3178bed58381f4bb611aa1'); } catch(e) { console.error('카카오 SDK 초기화 실패:', e); }</script>
     <style>
         :root { --border: #eee; }
         input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(83,173,210,0.5); }
@@ -1575,6 +1578,11 @@
                                 <input type="text" id="home-desc-input" placeholder="소개글" maxlength="200">
                                 <button type="button" class="pf-edit-btn" onclick="saveMyDesc('home-desc-input')">저장</button>
                             </div>
+                            <div class="pf-edit-row kakao-link-row">
+                                <label>카카오</label>
+                                <span class="kakao-status" style="flex:1; min-width:0; font-size:12px; color:#666;">연동 안 됨</span>
+                                <button type="button" class="pf-edit-btn kakao-link-btn" style="background:#FEE500; color:#191919;" onclick="kakaoLinkLogin()">카카오로 연동</button>
+                            </div>
                         </div>
 
                         <div id="home-mypage-tab-content-channel">
@@ -1781,6 +1789,11 @@
                         <label>소개글</label>
                         <input type="text" id="mypage-desc-input" placeholder="소개글" maxlength="200">
                         <button type="button" class="pf-edit-btn" onclick="saveMyDesc()">저장</button>
+                    </div>
+                    <div class="pf-edit-row kakao-link-row">
+                        <label>카카오</label>
+                        <span class="kakao-status" style="flex:1; min-width:0; font-size:12px; color:#666;">연동 안 됨</span>
+                        <button type="button" class="pf-edit-btn kakao-link-btn" style="background:#FEE500; color:#191919;" onclick="kakaoLinkLogin()">카카오로 연동</button>
                     </div>
                 </div>
 
@@ -4410,14 +4423,22 @@
 
     /* ===== [신규] 홈 - 인증채널 섹션 (네오집사 채널 영상, 최신순) ===== */
     const HOME_CERT_CHANNEL = '네오집사';
+    const HOME_CERT_CHANNELS = ['네오집사', '테스터'];
     function renderHomeCertChannel() {
         const box = document.getElementById('home-cert-channel-section');
         if(!box) return;
-        const vids = db.filter(v => v.author === HOME_CERT_CHANNEL)
+        const _dn = new Date();
+        const _dayNum = Math.floor(new Date(_dn.getFullYear(), _dn.getMonth(), _dn.getDate()).getTime() / 86400000);
+        let todayCertCh = HOME_CERT_CHANNELS[_dayNum % HOME_CERT_CHANNELS.length];
+        for(let _i = 0; _i < HOME_CERT_CHANNELS.length; _i++) {
+            const _c = HOME_CERT_CHANNELS[(_dayNum + _i) % HOME_CERT_CHANNELS.length];
+            if(db.some(v => v.author === _c)) { todayCertCh = _c; break; }
+        }
+        const vids = db.filter(v => v.author === todayCertCh)
             .sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0)).slice(0, 20);
         if(vids.length === 0) { box.style.display = 'none'; box.innerHTML = ''; return; }
         box.innerHTML = `
-            <div class="home-cert-head"><span class="home-cert-pill">인증채널</span><span class="home-cert-name">냥이플 공식 인증 채널~! (${escapeHtml(HOME_CERT_CHANNEL)})</span></div>
+            <div class="home-cert-head"><span class="home-cert-pill">인증채널</span><span class="home-cert-name">냥이플 공식 인증 채널~! (${escapeHtml(todayCertCh)})</span></div>
             <div class="vs-tag-scroll vs-row-scroll" id="home-cert-scroll">${vids.map(v => vsCardHtml(v, false)).join('')}</div>
             ${vids.length > 2 ? '<img src="https://i.ibb.co/6J83jSdM/20261030-075417.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/cX6QZ8rk/20261030-075413.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">' : ''}`;
         box.style.display = '';
@@ -4919,7 +4940,7 @@
     }
 
     const CH_OFFICIAL_MARK_SRC = 'data:image/png;base64,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';
-    const CH_OFFICIAL_CHANNELS = ['네오집사'];
+    const CH_OFFICIAL_CHANNELS = ['네오집사', '테스터'];
     function chBadgeHtml(big) {
         return `<span class="ch-badge${big ? ' big' : ''}">${CH_CHECK_SVG}</span>`;
     }
@@ -6874,6 +6895,116 @@
         var t = e.target;
         if ((lpShown || lpTimer) && t && t.closest && t.closest(CARD_SEL)) e.preventDefault();
     });
+})();
+</script>
+<script>
+/* [신규] 카카오 연동 - 기존에 쓰던 데이터(프로필/영상/구독)를 그대로 이어서 쓰는 방식
+   - 처음 연동: 지금 이 기기의 내 프로필(id)을 카카오 계정에 연결만 함 (기존 데이터는 그대로 유지)
+   - 이미 연동된 카카오 계정: 연결된 예전 프로필(id)을 불러와 이어서 사용 */
+(function() {
+    var KAKAO_LINK_TABLE = 'KakaoLink';
+
+    function kakaoSetStatus(text, linked) {
+        document.querySelectorAll('.kakao-status').forEach(function(el) { el.textContent = text; });
+        document.querySelectorAll('.kakao-link-btn').forEach(function(btn) {
+            btn.textContent = linked ? '다시 연동' : '카카오로 연동';
+        });
+    }
+
+    function kakaoRefreshUI() {
+        var kid = null;
+        try { kid = localStorage.getItem('tvple_kakao_id'); } catch(e) {}
+        if(kid) {
+            var nick = '';
+            try { nick = localStorage.getItem('tvple_kakao_nick') || ''; } catch(e) {}
+            kakaoSetStatus('연동됨' + (nick ? ' (' + nick + ')' : ''), true);
+        } else {
+            kakaoSetStatus('연동 안 됨', false);
+        }
+    }
+
+    function kakaoToast(msg, type) {
+        if(typeof showToast === 'function') showToast(msg, type || 'success'); else alert(msg);
+    }
+
+    function kakaoGetMe() {
+        return new Promise(function(resolve, reject) {
+            Kakao.API.request({
+                url: '/v2/user/me',
+                success: function(res) { resolve(res); },
+                fail: function(err) { reject(err); }
+            });
+        });
+    }
+
+    async function kakaoAfterLogin() {
+        var me = await kakaoGetMe();
+        var kakaoId = String(me.id);
+        var kakaoNick = (me.kakao_account && me.kakao_account.profile && me.kakao_account.profile.nickname)
+            || (me.properties && me.properties.nickname) || '';
+
+        var link = await blFindByKey(KAKAO_LINK_TABLE, 'kakaoId', kakaoId);
+        var linkData = null;
+        if(link) { try { linkData = JSON.parse(link.data); } catch(e) {} }
+
+        if(linkData && linkData.userId) {
+            /* 이미 연동된 카카오 계정 → 예전에 쓰던 프로필/데이터를 그대로 이어서 사용 */
+            if(linkData.userId !== user.id) {
+                var row = await blFindByKey('Users2', 'userKey', linkData.userId);
+                var oldUser = null;
+                if(row) { try { oldUser = JSON.parse(row.data); } catch(e) {} }
+                if(oldUser && oldUser.nick) {
+                    oldUser.kakaoId = kakaoId;
+                    user = oldUser;
+                    var idx = users.findIndex(function(u) { return u.id === user.id; });
+                    if(idx >= 0) users[idx] = user; else users.push(user);
+                    try { localStorage.setItem('tvple_user', JSON.stringify(user)); } catch(e) {}
+                    try { localStorage.setItem('tvple_users', JSON.stringify(users)); } catch(e) {}
+                    try { localStorage.setItem('tvple_kakao_id', kakaoId); localStorage.setItem('tvple_kakao_nick', kakaoNick); } catch(e) {}
+                    if(typeof fbLoadSubscriptions === 'function') {
+                        var subs = await fbLoadSubscriptions(user.id);
+                        if(subs) { try { localStorage.setItem('tvple_subscriptions', JSON.stringify(subs)); } catch(e) {} }
+                    }
+                    kakaoToast('카카오 연동 완료! 예전 데이터를 이어서 불러옵니다.');
+                    setTimeout(function() { location.reload(); }, 800);
+                    return;
+                }
+                /* 연결된 예전 프로필을 찾지 못하면 현재 프로필로 다시 연결 */
+            }
+        }
+
+        /* 처음 연동(또는 같은 프로필) → 현재 프로필을 카카오 계정에 연결만 하고 기존 데이터는 그대로 둠 */
+        user.kakaoId = kakaoId;
+        var uIdx = users.findIndex(function(u) { return u.id === user.id; });
+        if(uIdx >= 0) users[uIdx].kakaoId = kakaoId;
+        try { localStorage.setItem('tvple_user', JSON.stringify(user)); } catch(e) {}
+        try { localStorage.setItem('tvple_users', JSON.stringify(users)); } catch(e) {}
+        try { localStorage.setItem('tvple_kakao_id', kakaoId); localStorage.setItem('tvple_kakao_nick', kakaoNick); } catch(e) {}
+        await blUpsert(KAKAO_LINK_TABLE, 'kakaoId', kakaoId, { kakaoId: kakaoId, userId: user.id, linkedAt: new Date().toISOString() });
+        if(typeof fbSaveUser === 'function') fbSaveUser(user);
+        kakaoRefreshUI();
+        kakaoToast('카카오 연동이 완료되었습니다. 기존 데이터는 그대로 유지돼요.');
+    }
+
+    window.kakaoLinkLogin = function() {
+        if(!window.Kakao) { kakaoToast('카카오 SDK를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.', 'error'); return; }
+        try { if(!Kakao.isInitialized()) Kakao.init('14caafd1ed3178bed58381f4bb611aa1'); } catch(e) {}
+        Kakao.Auth.login({
+            success: function() {
+                kakaoAfterLogin().catch(function(err) {
+                    console.error('카카오 연동 실패:', err);
+                    kakaoToast('카카오 연동 중 오류가 발생했습니다.', 'error');
+                });
+            },
+            fail: function(err) {
+                console.error('카카오 로그인 실패:', err);
+                kakaoToast('카카오 로그인에 실패했습니다.', 'error');
+            }
+        });
+    };
+
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', kakaoRefreshUI);
+    else kakaoRefreshUI();
 })();
 </script>
 </body>
