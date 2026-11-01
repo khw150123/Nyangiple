@@ -5854,7 +5854,7 @@
             el.classList.toggle('active', el.getAttribute('data-sec') === s);
         });
         /* 맨 위 탭 메뉴(동영상/찜통/채널/마이페이지)도 지금 보는 곳을 표시 */
-        const lgIdx = { video: 0, playlist: 1, channel: 2, mypage: 3 };
+        const lgIdx = { video: 0, playlist: 1, subscribe: 2, channel: 3, mypage: 4 }; /* [수정] 맨 위 메뉴에 구독이 추가된 뒤 번호가 밀려 마이페이지에서 채널이 표시되던 문제 */
         document.querySelectorAll('#lg-nav > .lg-nav-item').forEach(function(el, i) { el.classList.toggle('active', lgIdx[s] === i); });
     }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; showSection(lastSection); }
@@ -7925,6 +7925,13 @@ function openBoardDetail(id) {
         (canDel ? '<button type="button" class="nb-btn danger" onclick="deleteBoardPost(\'' + escapeHtml(n.id) + '\')">삭제</button>' : '') + '</div>');
     box.style.display = 'block';
     document.getElementById('bd-list-wrap').style.display = 'none';
+    /* [신규] 화목한 게시판 댓글 (동영상 화면 밑 댓글창과 같은 형식) */
+    bdcCurId = n.id;
+    const cm = document.createElement('div');
+    cm.id = 'bd-comments-section';
+    cm.style.cssText = 'padding:15px; font-size:12px; border:1px solid #eee; margin-top:12px; text-align:left; background:#fff;';
+    box.appendChild(cm);
+    bdcRender();
     window.scrollTo({ top: 0 });
 }
 
@@ -7949,6 +7956,154 @@ async function deleteBoardPost(id) {
         console.error('화목한 게시판 삭제 실패:', e);
         alert('삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
+}
+/* ===== [신규] 화목한 게시판 댓글 - 동영상 화면 밑 댓글 기능과 같은 방식(댓글/답글/공감/삭제/정렬), 온라인(Firestore)에 글과 함께 저장 ===== */
+let bdcCurId = null;
+let bdcSortMode = 'latest';
+function bdcNewId() { return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function bdcPost() { return boardList.find(x => x.id === bdcCurId) || null; }
+
+/* 서버의 최신 댓글을 먼저 받아 그 위에 변경을 적용한 뒤 저장 (동시에 다른 사람이 단 댓글을 덮어쓰지 않도록) */
+async function bdcMutate(fn) {
+    const n = bdcPost();
+    if(!n) return;
+    let comments = (n.comments || []).slice();
+    let latest = null;
+    try {
+        const row = await blFindByKey(BOARD_TABLE, 'id', n.id);
+        if(row) { latest = JSON.parse(row.data); if(Array.isArray(latest.comments)) comments = latest.comments; }
+    } catch(e) { console.error('게시판 댓글 최신본 불러오기 실패:', e); }
+    fn(comments);
+    n.comments = comments;
+    try { localStorage.setItem('tvple_board', JSON.stringify(boardList)); } catch(e) {}
+    bdcRender();
+    try {
+        const base = latest || n;
+        await blUpsert(BOARD_TABLE, 'id', n.id, Object.assign({}, base, { comments: comments }));
+    } catch(e) {
+        console.error('게시판 댓글 저장 실패:', e);
+        alert('댓글 저장에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
+}
+
+function bdcLikes(x) { return (x && x.likedBy) ? x.likedBy.length : 0; }
+
+function bdcRender() {
+    const area = document.getElementById('bd-comments-section');
+    const n = bdcPost();
+    if(!area || !n) return;
+    const comments = n.comments || [];
+    const me = user ? user.nick : '';
+    let order = comments.map(function(c, i) { return i; });
+    if(bdcSortMode === 'liked') order.sort(function(a, b) { return (bdcLikes(comments[b]) - bdcLikes(comments[a])) || (b - a); });
+    else order.reverse();
+    const listHtml = comments.length === 0
+        ? '<div style="color:#999; padding:10px 0;">등록된 댓글이 없습니다.</div>'
+        : order.map(function(i) {
+            const c = comments[i];
+            const replies = c.replies || [];
+            const canDelC = !!(user && (me === c.author || isBoardAdmin()));
+            const repliesHtml = replies.length > 0 ? '<div class="reply-list">' + replies.map(function(r) {
+                const canDelR = !!(user && (me === r.author || isBoardAdmin()));
+                return '<div class="reply-item"><b>' + escapeHtml(r.author) + '</b>' +
+                    '<span class="reply-meta">' + formatDateTime(r.date) + '</span>' +
+                    (canDelR ? '<span class="reply-del" onclick="bdcDeleteReply(\'' + c.id + '\', \'' + r.id + '\')">[삭제]</span>' : '') +
+                    '<div style="margin-top:2px; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(r.text) + '</div>' +
+                    '<span class="comment-like-btn ' + ((r.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\', \'' + r.id + '\')">❤ ' + (r.likedBy || []).length + '</span>' +
+                    '</div>';
+            }).join('') + '</div>' : '';
+            return '<div style="padding:8px 0; border-bottom:1px solid #eee;">' +
+                '<b style="font-size:12px; color:#111;">' + escapeHtml(c.author) + '</b>' +
+                '<span style="color:#999; font-size:10px; margin-left:6px;">' + formatDateTime(c.date) + '</span>' +
+                (canDelC ? '<span style="color:#ff3300; font-size:10px; cursor:pointer; margin-left:6px;" onclick="bdcDeleteComment(\'' + c.id + '\')">[삭제]</span>' : '') +
+                '<div style="margin-top:4px; color:#333; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(c.text) + '</div>' +
+                '<span class="comment-like-btn ' + ((c.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\')">❤ ' + (c.likedBy || []).length + '</span>' +
+                '<span class="reply-btn-text" onclick="bdcToggleReplyInput(\'' + c.id + '\')">답글 달기' + (replies.length > 0 ? ' (' + replies.length + ')' : '') + '</span>' +
+                repliesHtml +
+                '<div class="reply-input-row" id="bdc-reply-row-' + c.id + '" style="display:none;">' +
+                    '<input type="text" id="bdc-reply-input-' + c.id + '" placeholder="답글을 입력하세요" onkeypress="if(event.keyCode==13) bdcAddReply(\'' + c.id + '\')">' +
+                    '<button onclick="bdcAddReply(\'' + c.id + '\')">등록</button>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    /* 입력 중이던 내용 보존 */
+    const prevInput = document.getElementById('bdc-comment-input');
+    const prevVal = prevInput ? prevInput.value : '';
+    area.innerHTML =
+        '<h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold;">댓글 (' + comments.length + ')</h4>' +
+        '<div class="comment-sort-tabs">' +
+            '<span class="comment-sort-tab ' + (bdcSortMode === 'latest' ? 'active' : '') + '" onclick="bdcSetSort(\'latest\')">최신순</span>' +
+            '<span class="comment-sort-tab ' + (bdcSortMode === 'liked' ? 'active' : '') + '" onclick="bdcSetSort(\'liked\')">공감 많은순</span>' +
+        '</div>' +
+        '<div style="display:flex; gap:6px; margin-bottom:10px;">' +
+            '<input type="text" id="bdc-comment-input" placeholder="댓글을 입력하세요" style="flex:1; font-size:12px; padding:6px; border:1px solid #ddd; box-sizing:border-box;" onkeypress="if(event.keyCode==13) bdcAddComment()">' +
+            '<button onclick="bdcAddComment()" style="font-size:11px; font-weight:bold; padding:0 12px; border:1px solid #53add2; background:#53add2; color:#fff; cursor:pointer;">등록</button>' +
+        '</div>' + listHtml;
+    const ni = document.getElementById('bdc-comment-input');
+    if(ni && prevVal) ni.value = prevVal;
+}
+
+function bdcSetSort(m) { bdcSortMode = m; bdcRender(); }
+
+function bdcToggleReplyInput(cid) {
+    const row = document.getElementById('bdc-reply-row-' + cid);
+    if(!row) return;
+    row.style.display = (row.style.display === 'none') ? 'flex' : 'none';
+    if(row.style.display === 'flex') { const inp = document.getElementById('bdc-reply-input-' + cid); if(inp) inp.focus(); }
+}
+
+function bdcAddComment() {
+    if(!user) return;
+    const input = document.getElementById('bdc-comment-input');
+    const text = input ? input.value.trim() : '';
+    if(!text) return;
+    input.value = '';
+    bdcMutate(function(list) { list.push({ id: bdcNewId(), author: user.nick, text: text, date: new Date().toISOString() }); });
+}
+
+function bdcAddReply(cid) {
+    if(!user) return;
+    const input = document.getElementById('bdc-reply-input-' + cid);
+    const text = input ? input.value.trim() : '';
+    if(!text) return;
+    bdcMutate(function(list) {
+        const c = list.find(function(x) { return x.id === cid; });
+        if(!c) return;
+        if(!c.replies) c.replies = [];
+        c.replies.push({ id: bdcNewId(), author: user.nick, text: text, date: new Date().toISOString() });
+    });
+}
+
+function bdcDeleteComment(cid) {
+    const n = bdcPost();
+    const c = n && (n.comments || []).find(function(x) { return x.id === cid; });
+    if(!user || !c || !(user.nick === c.author || isBoardAdmin())) return;
+    if(!confirm('댓글을 삭제하시겠습니까?')) return;
+    bdcMutate(function(list) { const i = list.findIndex(function(x) { return x.id === cid; }); if(i >= 0) list.splice(i, 1); });
+}
+
+function bdcDeleteReply(cid, rid) {
+    if(!user) return;
+    if(!confirm('답글을 삭제하시겠습니까?')) return;
+    bdcMutate(function(list) {
+        const c = list.find(function(x) { return x.id === cid; });
+        if(!c || !c.replies) return;
+        const i = c.replies.findIndex(function(x) { return x.id === rid; });
+        if(i >= 0 && (user.nick === c.replies[i].author || isBoardAdmin())) c.replies.splice(i, 1);
+    });
+}
+
+function bdcToggleLike(cid, rid) {
+    if(!user) return;
+    bdcMutate(function(list) {
+        const c = list.find(function(x) { return x.id === cid; });
+        if(!c) return;
+        const t = rid ? (c.replies || []).find(function(x) { return x.id === rid; }) : c;
+        if(!t) return;
+        if(!t.likedBy) t.likedBy = [];
+        const pos = t.likedBy.indexOf(user.nick);
+        if(pos === -1) t.likedBy.push(user.nick); else t.likedBy.splice(pos, 1);
+    });
 }
 </script>
 </body>
