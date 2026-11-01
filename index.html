@@ -4400,6 +4400,18 @@
         }, 400); 
     }
 
+    /* [수정] 검은 화면 복구용 - 영상 주소로 재생이 안 되거나(오류) 소리만 나고 화면이 검게 나올 때,
+       Cloudinary에 올라간 같은 영상을 mp4(H.264)로 변환한 주소로 자동 재시도한다.
+       (public_id가 nyangiple_v_영상ID 로 고정이라 서버 목록의 주소가 낡았거나 비어 있어도 만들어 낼 수 있음) */
+    function getAltVideoUrls(item) {
+        if(!item || item.id === undefined || item.id === null) return [];
+        const base = 'https://res.cloudinary.com/' + CLD_CLOUD_NAME + '/video/upload/';
+        return [
+            base + 'vc_h264,ac_aac,f_mp4/nyangiple_v_' + item.id + '.mp4',
+            base + 'nyangiple_v_' + item.id + '.mp4'
+        ];
+    }
+
     function playImmediately(item) { 
         if(!item) {
             waitScreen.style.display = "none";
@@ -4449,36 +4461,57 @@
                         });
                     }
                 } else {
-                    waitScreen.style.display = "none";
-                    errorScreen.style.display = "flex";
+                    /* [수정] 이 기기에 영상 파일이 없으면 바로 에러(검은 화면)로 끝내지 않고, 서버에 올라간 영상으로 재시도 */
+                    const alts = getAltVideoUrls(item);
+                    if(alts.length) { bindVideoEventAndPlay(alts.shift(), item, alts); }
+                    else { waitScreen.style.display = "none"; errorScreen.style.display = "flex"; }
                 }
             };
             getReq.onerror = () => {
-                waitScreen.style.display = "none";
-                errorScreen.style.display = "flex";
+                const alts = getAltVideoUrls(item);
+                if(alts.length) { bindVideoEventAndPlay(alts.shift(), item, alts); }
+                else { waitScreen.style.display = "none"; errorScreen.style.display = "flex"; }
             };
         } else if (item.url && item.url !== "indexeddb_stored") {
-            bindVideoEventAndPlay(takePrefetchedVideoUrl(item) || item.url, item);
+            /* [수정] 미리 받아둔 영상 → 원래 주소 → mp4 변환 주소 순서로 재생 시도 (앞에서 실패하면 자동으로 다음 것으로) */
+            const prefetched = takePrefetchedVideoUrl(item);
+            const fallbacks = (prefetched ? [item.url] : []).concat(getAltVideoUrls(item));
+            bindVideoEventAndPlay(prefetched || item.url, item, fallbacks);
         } else {
-            waitScreen.style.display = "none";
-            errorScreen.style.display = "flex";
+            const alts = getAltVideoUrls(item);
+            if(alts.length) { bindVideoEventAndPlay(alts.shift(), item, alts); }
+            else { waitScreen.style.display = "none"; errorScreen.style.display = "flex"; }
         }
     }
 
-    function bindVideoEventAndPlay(srcUrl, item) {
+    function bindVideoEventAndPlay(srcUrl, item, fallbackUrls) {
         if(video.src && video.src.startsWith('blob:')) {
             URL.revokeObjectURL(video.src);
         }
         
+        const isRetry = (fallbackUrls && fallbackUrls._used === true);
+        if(fallbackUrls) fallbackUrls._used = true;
+        /* [수정] 이 주소로 재생이 안 되면 다음 후보 주소로 넘어간다. 후보가 없으면 기존처럼 에러 화면 */
+        const tryNextSource = () => {
+            if(fallbackUrls && fallbackUrls.length) {
+                bindVideoEventAndPlay(fallbackUrls.shift(), item, fallbackUrls);
+                return true;
+            }
+            return false;
+        };
+
         video.src = srcUrl; 
         video.load();
         
         video.onerror = () => {
+            if(tryNextSource()) return;
             waitScreen.style.display = "none";
             errorScreen.style.display = "flex";
         };
 
         video.onloadedmetadata = () => {
+            /* [수정] 소리만 나고 화면이 검게 나오는 경우(영상 화면 크기를 못 읽음) 다음 주소로 재시도 */
+            if(!video.videoWidth && tryNextSource()) return;
             const realQ = getRealQuality(video);
             const durationText = formatVideoDuration(video.duration);
             item.quality = realQ;
@@ -4519,7 +4552,7 @@
                 });
             }
         };
-        userStats.play++; updateChannel(); recordWatchHistory(item);
+        if(!isRetry) { userStats.play++; updateChannel(); recordWatchHistory(item); }
     }
 
     /* ===== [추가] 동영상 섹션 목록 UI (전체 헤더 / 3칸 필터 / 태그 캐러셀 / 2열 카드 / 페이지 번호) ===== */
