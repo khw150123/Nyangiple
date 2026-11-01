@@ -2013,7 +2013,7 @@
 
         <footer>
             <p class="footer-text">
-                <span class="blue-text top-btn" onclick="showSection('notice')">공지사항</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
+                <span class="blue-text top-btn" onclick="showSection('notice')">공지사항</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="showSection('board')">화목한 게시판</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
                 <span style="color:#000;">©SINCE 2026</span> <span class="blue-text">Nyangiple.</span>
@@ -5568,10 +5568,112 @@
 
         if(typeof fbSaveUser === 'function') fbSaveUser(user);
 
+        /* [수정] 닉네임 변경을 서버(영상/댓글/구독/게시판)에도 반영 - 안 하면 새로고침 때 서버의 옛 이름으로 되돌아가 영상이 사라지고 채널이 새로 생김 */
+        syncNickChangeToServer(oldNick, newNick);
+
         updateChannel();
         if (document.getElementById('home-my-info')) renderHomeMyPageChannelInfo();
         renderList();
         showToast("닉네임이 변경되었습니다.", "success");
+    }
+
+    /* ===== [신규] 닉네임 변경 시 서버/로컬 전체에 새 이름 반영 ===== */
+    function nickRewriteList(arr, oldNick, newNick) {
+        let changed = false;
+        if(!Array.isArray(arr)) return false;
+        for(let i = 0; i < arr.length; i++) { if(arr[i] === oldNick) { arr[i] = newNick; changed = true; } }
+        return changed;
+    }
+    function nickRewriteComments(comments, oldNick, newNick) {
+        let changed = false;
+        (comments || []).forEach(function(c) {
+            if(c.author === oldNick) { c.author = newNick; changed = true; }
+            if(nickRewriteList(c.likedBy, oldNick, newNick)) changed = true;
+            (c.replies || []).forEach(function(r) {
+                if(r.author === oldNick) { r.author = newNick; changed = true; }
+                if(nickRewriteList(r.likedBy, oldNick, newNick)) changed = true;
+            });
+        });
+        return changed;
+    }
+    function nickRewriteVideo(v, oldNick, newNick) {
+        let changed = false;
+        if(v.author === oldNick) { v.author = newNick; changed = true; }
+        if(nickRewriteList(v.jjimUsers, oldNick, newNick)) changed = true;
+        if(nickRewriteComments(v.comments, oldNick, newNick)) changed = true;
+        (v.savedClouds || []).forEach(function(c) { if(c && c.author === oldNick) { c.author = newNick; changed = true; } });
+        return changed;
+    }
+    async function syncNickChangeToServer(oldNick, newNick) {
+        /* 1) 이 기기의 목록/알림부터 즉시 반영 */
+        db.forEach(function(v) { nickRewriteVideo(v, oldNick, newNick); });
+        if(currentPlayingItem) nickRewriteVideo(currentPlayingItem, oldNick, newNick);
+        try {
+            if(notifications && notifications[oldNick]) {
+                notifications[newNick] = (notifications[newNick] || []).concat(notifications[oldNick]);
+                delete notifications[oldNick];
+                localStorage.setItem('tvple_notifications', JSON.stringify(notifications));
+            }
+        } catch(e) {}
+        try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) {}
+        const rerender = function() {
+            try { renderList(); } catch(e) {}
+            try { if(document.getElementById('channel-section').classList.contains('active')) renderChannelRankList(); } catch(e) {}
+            try { renderHomeRankLists(); } catch(e) {}
+            try { refreshUnluckyList(); } catch(e) {}
+            try { updateChannel(); } catch(e) {}
+            try { if(currentPlayingItem) { updateDetail(); renderComments(); } } catch(e) {}
+        };
+        rerender();
+
+        /* 2) 서버 반영 (각각 실패해도 나머지는 계속) */
+        try {
+            const rows = await blLoadAllRows('Videos');
+            for(const r of rows) {
+                try {
+                    const v = JSON.parse(r.data);
+                    if(nickRewriteVideo(v, oldNick, newNick)) await blUpsert('Videos', 'videoId', v.id, v);
+                } catch(e) { console.error('닉네임 변경 - 영상 반영 실패:', e); }
+            }
+        } catch(e) { console.error('닉네임 변경 - 영상 목록 불러오기 실패:', e); }
+
+        try {
+            const subs = await blLoadAllRows('Subscriptions');
+            for(const r of subs) {
+                try {
+                    const list = JSON.parse(r.data);
+                    if(nickRewriteList(list, oldNick, newNick)) await blUpsert('Subscriptions', 'userId', r.k, list);
+                } catch(e) {}
+            }
+        } catch(e) { console.error('닉네임 변경 - 구독 반영 실패:', e); }
+
+        try {
+            if(subscriberCounts[newNick] !== undefined && typeof fbSaveSubscriberCounts === 'function') {
+                const one = {}; one[newNick] = subscriberCounts[newNick];
+                await fbSaveSubscriberCounts(one);
+            }
+            await fbHttp(FB_DOC_BASE + '/rows/' + fbDocId('SubscriberCounts', oldNick) + '?key=' + FB_API_KEY, { method: 'DELETE' });
+        } catch(e) { console.error('닉네임 변경 - 구독자수 반영 실패:', e); }
+
+        try {
+            const tables = [[BOARD_TABLE, boardList, 'tvple_board'], [NOTICE_TABLE, noticeList, null]];
+            for(const t of tables) {
+                const rows2 = await blLoadAllRows(t[0]);
+                for(const r of rows2) {
+                    try {
+                        const n = JSON.parse(r.data);
+                        let ch = false;
+                        if(n.author === oldNick) { n.author = newNick; ch = true; }
+                        if(nickRewriteComments(n.comments, oldNick, newNick)) ch = true;
+                        if(ch) await blUpsert(t[0], 'id', n.id, n);
+                    } catch(e) {}
+                }
+                (t[1] || []).forEach(function(n) { if(n.author === oldNick) n.author = newNick; nickRewriteComments(n.comments, oldNick, newNick); });
+                if(t[2]) { try { localStorage.setItem(t[2], JSON.stringify(t[1])); } catch(e) {} }
+            }
+        } catch(e) { console.error('닉네임 변경 - 게시판 반영 실패:', e); }
+
+        rerender();
     }
 
     /* [신규] 마이페이지 - 소개글 저장 (추가만) */
@@ -8007,16 +8109,18 @@ function bdcRender() {
                 const canDelR = !!(user && (me === r.author || isBoardAdmin()));
                 return '<div class="reply-item"><b>' + escapeHtml(r.author) + '</b>' +
                     '<span class="reply-meta">' + formatDateTime(r.date) + '</span>' +
+                    ((user && me === r.author) ? '<span class="reply-del" style="color:#53add2;" onclick="bdcEdit(\'' + c.id + '\', \'' + r.id + '\')">[수정]</span>' : '') +
                     (canDelR ? '<span class="reply-del" onclick="bdcDeleteReply(\'' + c.id + '\', \'' + r.id + '\')">[삭제]</span>' : '') +
-                    '<div style="margin-top:2px; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(r.text) + '</div>' +
+                    '<div style="margin-top:2px; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(r.text) + (r.edited ? ' <span style="color:#aaa; font-size:9px;">(수정됨)</span>' : '') + '</div>' +
                     '<span class="comment-like-btn ' + ((r.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\', \'' + r.id + '\')">❤ ' + (r.likedBy || []).length + '</span>' +
                     '</div>';
             }).join('') + '</div>' : '';
             return '<div style="padding:8px 0; border-bottom:1px solid #eee;">' +
                 '<b style="font-size:12px; color:#111;">' + escapeHtml(c.author) + '</b>' +
                 '<span style="color:#999; font-size:10px; margin-left:6px;">' + formatDateTime(c.date) + '</span>' +
+                ((user && me === c.author) ? '<span style="color:#53add2; font-size:10px; cursor:pointer; margin-left:6px;" onclick="bdcEdit(\'' + c.id + '\')">[수정]</span>' : '') +
                 (canDelC ? '<span style="color:#ff3300; font-size:10px; cursor:pointer; margin-left:6px;" onclick="bdcDeleteComment(\'' + c.id + '\')">[삭제]</span>' : '') +
-                '<div style="margin-top:4px; color:#333; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(c.text) + '</div>' +
+                '<div style="margin-top:4px; color:#333; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(c.text) + (c.edited ? ' <span style="color:#aaa; font-size:10px;">(수정됨)</span>' : '') + '</div>' +
                 '<span class="comment-like-btn ' + ((c.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\')">❤ ' + (c.likedBy || []).length + '</span>' +
                 '<span class="reply-btn-text" onclick="bdcToggleReplyInput(\'' + c.id + '\')">답글 달기' + (replies.length > 0 ? ' (' + replies.length + ')' : '') + '</span>' +
                 repliesHtml +
@@ -8071,6 +8175,23 @@ function bdcAddReply(cid) {
         if(!c) return;
         if(!c.replies) c.replies = [];
         c.replies.push({ id: bdcNewId(), author: user.nick, text: text, date: new Date().toISOString() });
+    });
+}
+
+function bdcEdit(cid, rid) {
+    const n = bdcPost();
+    const c = n && (n.comments || []).find(function(x) { return x.id === cid; });
+    const t = c && (rid ? (c.replies || []).find(function(x) { return x.id === rid; }) : c);
+    if(!user || !t || user.nick !== t.author) { alert('본인이 쓴 댓글만 수정할 수 있습니다.'); return; }
+    const nt = prompt('수정할 내용을 입력하세요.', t.text);
+    if(nt === null) return;
+    const text = nt.trim();
+    if(!text) { alert('내용을 입력해주세요.'); return; }
+    if(text === t.text) return;
+    bdcMutate(function(list) {
+        const cc = list.find(function(x) { return x.id === cid; });
+        const tt = cc && (rid ? (cc.replies || []).find(function(x) { return x.id === rid; }) : cc);
+        if(tt && tt.author === user.nick) { tt.text = text; tt.edited = new Date().toISOString(); }
     });
 }
 
