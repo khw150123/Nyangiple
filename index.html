@@ -1346,6 +1346,15 @@
         #playlist-video-row > img.unlucky-next-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
         #playlist-video-row > img.unlucky-prev-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg transform=%22translate(133 0) scale(-1 1)%22%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
         @media (max-width: 768px) and (orientation: portrait) { #playlist-green-box .home-css-head { margin:0 0 10px; } }
+        /* [신규] 마이페이지 내가 올린 영상(채널 화면/홈 마이페이지 탭): 가로로 넘기는 줄 + 초록 버튼/띠 */
+        #channel-internal-video-list, #home-channel-internal-video-list { display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px; text-align:left; }
+        #channel-internal-video-list::-webkit-scrollbar, #home-channel-internal-video-list::-webkit-scrollbar { display:none; }
+        #channel-internal-video-list > .ch-card, #home-channel-internal-video-list > .ch-card { flex:0 0 calc(50% - 5px); min-width:0; }
+        #channel-internal-video-list > :not(.ch-card), #home-channel-internal-video-list > :not(.ch-card) { flex:0 0 100%; }
+        @media (orientation: landscape) { #channel-internal-video-list > .ch-card, #home-channel-internal-video-list > .ch-card { flex:0 0 calc((100% - 40px) / 5); } }
+        #channel-internal-video-list-row > img.unlucky-next-btn, #home-channel-internal-video-list-row > img.unlucky-next-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
+        #channel-internal-video-list-row > img.unlucky-prev-btn, #home-channel-internal-video-list-row > img.unlucky-prev-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg transform=%22translate(133 0) scale(-1 1)%22%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
+        @media (max-width: 768px) and (orientation: portrait) { #mypage-video-green-box .home-css-head, #home-video-green-box .home-css-head { margin:0 0 10px; } }
         /* [신규] 마이페이지 찜통(채널 화면/홈 마이페이지 탭): 가로로 넘기는 줄 + 초록 버튼/띠 */
         #my-jjim-list, #home-my-jjim-list { display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px; }
         #my-jjim-list::-webkit-scrollbar, #home-my-jjim-list::-webkit-scrollbar { display:none; }
@@ -1720,9 +1729,7 @@
                         </div>
 
                         <div id="home-mypage-tab-content-channel">
-                            <div id="home-filter-row" class="ch-filter-row"></div>
-                            <div id="home-channel-internal-video-list" class="ch-grid"></div>
-                            <div id="home-pager" class="ch-pager"></div>
+<div class="home-css-create-box" id="home-video-green-box" style="position:relative; border:1px solid #c5e0bc; border-radius:4px; box-sizing:border-box;"><div class="home-css-head" style="margin:0 0 10px;"><span class="home-css-pill">자작</span><span class="home-css-name">[창작플] 자작 영상을 올려보자</span></div><div style="padding:0 12px 12px;"><div id="home-filter-row" class="ch-filter-row"></div><div id="home-channel-internal-video-list-row" class="vs-row-box"><div id="home-channel-internal-video-list" class="vs-row-scroll ch-hscroll"></div></div><div id="home-pager" class="ch-pager"></div></div></div>
                         </div>
 
                         <div id="home-mypage-tab-content-clouds" style="display:none;">
@@ -1926,9 +1933,7 @@
                 </div>
 
                 <div id="mypage-tab-content-channel">
-                    <div id="mypage-filter-row" class="ch-filter-row"></div>
-                    <div id="channel-internal-video-list" class="ch-grid"></div>
-                    <div id="mypage-pager" class="ch-pager"></div>
+<div class="home-css-create-box" id="mypage-video-green-box" style="position:relative; border:1px solid #c5e0bc; border-radius:4px; box-sizing:border-box;"><div class="home-css-head" style="margin:0 0 10px;"><span class="home-css-pill">자작</span><span class="home-css-name">[창작플] 자작 영상을 올려보자</span></div><div style="padding:0 12px 12px;"><div id="mypage-filter-row" class="ch-filter-row"></div><div id="channel-internal-video-list-row" class="vs-row-box"><div id="channel-internal-video-list" class="vs-row-scroll ch-hscroll"></div></div><div id="mypage-pager" class="ch-pager"></div></div></div>
                 </div>
 
                 <div id="mypage-tab-content-clouds" style="display:none;">
@@ -2035,7 +2040,7 @@
                 <span class="blue-text top-btn" onclick="showSection('notice')">공지사항</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="showSection('board')">화목한 게시판</span>&nbsp;&nbsp;<span class="blue-text top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">TOP↑</span>
             </p>
             <p class="footer-text" style="margin-top: 8px; display:flex; align-items:center; justify-content:flex-start; gap:6px;">
-                <img src="data:image/jpeg;base64,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" alt="discord" style="width:22px; height:22px; border-radius:5px; flex-shrink:0;"><span style="color:#000; cursor:default;">&lt;- 디스코드 서버</span>
+                <a href="https://discord.gg/4eCF23BeY" target="_blank" rel="noopener noreferrer" title="디스코드 서버" style="display:inline-flex; flex-shrink:0;"><img src="data:image/jpeg;base64,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" alt="discord" style="width:22px; height:22px; border-radius:5px; flex-shrink:0; cursor:pointer; display:block;"></a><span style="color:#000; cursor:default;">&lt;- 디스코드 서버</span>
             </p>
             <p class="footer-text" style="margin-top: 10px;">
                 <span style="color:#000;">©SINCE 2026</span> <span class="blue-text">Nyangiple.</span>
@@ -2063,7 +2068,7 @@
         <label class="report-reason-label"><input type="radio" name="report-reason" value="기타" onchange="toggleReportOtherInput(true)"> 기타</label>
     </div>
     <textarea id="report-other-text" placeholder="신고 사유를 직접 입력해주세요."></textarea>
-    <img src="https://i.ibb.co/zV70Dwcd/20260617-135154.jpg" class="modal-btn-img" onclick="submitReport()">
+    <button type="button" onclick="submitReport()" style="width:110px; align-self:center; margin-top:5px; padding:9px 0; border:none; border-radius:3px; background:#53add2; color:#fff; font-size:14px; font-weight:bold; cursor:pointer;">신청</button>
 </div></div></div>
 
 <div id="toast-container"></div>
@@ -2984,7 +2989,7 @@
             ${tagsHtml}
             ${(typeof getUploadDateLineHtml === 'function') ? getUploadDateLineHtml(currentPlayingItem) : ''}
             <div style="margin-top:8px; color:#555; line-height:1.5;">자막 수: <span id="cloud-count-live">${totalClouds}</span> | 화질 등급: ${currentPlayingItem.quality || '감지 중...'}</div>
-            <div style="margin-top:10px;"><span onclick="openReportModal()" title="이 동영상 신고하기" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; color:#c0392b; font-size:11px; font-weight:bold; border:1px solid #e0b4ae; padding:4px 10px; background:#fff;"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>신고하기</span></div>`;
+            <div style="margin-top:10px;"><span onclick="openReportModal()" title="이 동영상 신고하기" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer; color:#337bb6; font-size:17px; font-weight:bold; user-select:none;"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="flex-shrink:0;"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>신고</span></div>`;
 
         placeCloudWriteBox();
         renderComments();
@@ -5303,6 +5308,8 @@
         const filterEl = document.getElementById(p + '-filter-row');
         const pagerEl = document.getElementById(p + '-pager');
         if(!container) return;
+        const videoRow = container.parentNode && container.parentNode.classList && container.parentNode.classList.contains('vs-row-box') ? container.parentNode : null;
+        if(videoRow) videoRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
 
         if(filterEl) {
             const genreOpts = ['<option value="all"' + (st.genre === 'all' ? ' selected' : '') + '>전체</option>']
@@ -5347,6 +5354,8 @@
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
+        /* [신규] 2개보다 많으면 초록색 이동(<, >) 버튼 표시 */
+        if(videoRow && pageList.length > 2) videoRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
 
         if(pagerEl) {
             if(totalPages <= 1) pagerEl.innerHTML = '';
