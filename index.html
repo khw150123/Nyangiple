@@ -259,9 +259,10 @@
         .home-tab-content { display: none; }
         .home-tab-content.active { display: block; }
         .rank-section-title { font-size: 13px; font-weight: bold; color: #333; margin: 0 0 10px 2px; text-align: left; }
-        .rank-badge-wrap { position: absolute; top: 4px; left: 4px; z-index: 20; display: inline-flex; align-items: center; justify-content: center; height: 22px; }
+        .rank-badge-wrap { position: absolute; top: 4px; left: 4px; z-index: 20; display: block; width: 40px; height: 40px; filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.45)); }
+        .rank-badge-wrap::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #5bb85d; clip-path: polygon(0 0, 100% 0, 0 100%); }
         .rank-badge-wrap img { display: block; height: 22px; width: auto; }
-        .rank-badge-num { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.6); pointer-events: none; }
+        .rank-badge-num { position: absolute; top: 0; left: 0; width: 70%; height: 62%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 17px; font-weight: 800; line-height: 1; text-shadow: 0 1px 3px rgba(0,0,0,0.55); pointer-events: none; }
         .rank-empty-msg { font-size: 12px; color: #888; padding: 20px; text-align: center; width: 100%; }
         
         #fullscreen-player-target {
@@ -2325,7 +2326,7 @@
     const cloudLayer = document.getElementById('cloud-layer');
     const waitScreen = document.getElementById('wait-screen');
     const errorScreen = document.getElementById('error-screen');
-    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "새해", "설날", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "추석", "취미/개인기", "취향존중", "테크", "패러디", "편집물", "프로그래밍"];
+    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "새해", "설날", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "추석", "취미/개인기", "취향존중", "테크", "패러디", "편집물", "프로그래밍", "AI"];
 
     const kkk11 = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ\n".repeat(11);
     const garigi = "가리기\n".repeat(30);
@@ -3795,7 +3796,6 @@
         <div class="unlucky-item" onclick="showUserChannel('${nick.replace(/'/g, "\\'")}')">
             <div class="unlucky-thumb" style="background-image:url('${imgUrl}'); background-size:cover; background-position:center;">
                 <div class="rank-badge-wrap">
-                    <img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge">
                     <div class="rank-badge-num">${rank}</div>
                 </div>
             </div>
@@ -4594,7 +4594,7 @@
         const verified = chIsVerified(v.author);
         let titleHtml = escapeHtml(v.title);
         if(opt.prefix && !titleHtml.startsWith("[냥이플]")) titleHtml = `[냥이플] ${titleHtml}`;
-        const rankHtml = opt.rank ? `<div class="rank-badge-wrap"><img src="https://i.ibb.co/FLmysmJh/Screenshot-20260714-163521-NAVER-1.png" alt="rank_badge"><div class="rank-badge-num">${opt.rank}</div></div>` : '';
+        const rankHtml = opt.rank ? `<div class="rank-badge-wrap"><div class="rank-badge-num">${opt.rank}</div></div>` : '';
         return `
         <div class="ch-card vs-card vc-card${verified ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
             <div class="vc-title">${titleHtml}</div>
