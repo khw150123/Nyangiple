@@ -5,7 +5,6 @@
     <link class="favicon" rel="icon" type="image/png" href="https://i.ibb.co/q332LtYY/favicon-1024-1.png">
     <meta name="theme-color" content="#53add2">
     <meta name="naver-site-verification" content="e4095acde3cfd3c0b24c03e17dda32865159b5fe">
-    <meta name="google-site-verification" content="VjVMOy82XiTaSV_cYaeKorhuuNIRPd8ZW1-9AYFxFvI">
     <title>냥이플</title>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>emailjs.init("6SjliBKhSXYtbaVQs");</script>
@@ -8215,6 +8214,201 @@ function bdcToggleLike(cid, rid) {
         if(pos === -1) t.likedBy.push(user.nick); else t.likedBy.splice(pos, 1);
     });
 }
+</script>
+<script>
+/* ===== [신규] 주소(URL) 연동 - 화면을 옮길 때마다 주소 뒤(#/...)가 바뀌고, 뒤로가기/앞으로가기/새로고침/주소 직접 입력으로 해당 화면이 열림 =====
+   #/ 홈 · #/watch/영상번호 · #/video · #/genre/장르 · #/tag/태그 · #/author/작성자 · #/search/검색어
+   #/user/채널이름 · #/channel · #/playlist · #/subscribe · #/history · #/notice(/글번호) · #/board(/글번호) */
+(function() {
+    var suppress = 0, applying = 0, hashSelf = false, routeToken = 0;
+    var initialHash = location.hash || '';
+
+    function isHomeHash(h) { return !h || h === '#' || h === '#/'; }
+    function norm(h) { return isHomeHash(h) ? '#/' : h; }
+    var booting = !isHomeHash(initialHash);
+    function locked() { return booting || applying > 0 || suppress > 0; }
+    function enc(x) { return encodeURIComponent(String(x)); }
+    function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+    function waitFor(cond, ms) {
+        return new Promise(function(res) {
+            var t0 = Date.now();
+            (function tick() {
+                var ok = false;
+                try { ok = !!cond(); } catch (e) {}
+                if (ok || Date.now() - t0 > ms) res(ok); else setTimeout(tick, 100);
+            })();
+        });
+    }
+    function quiet(fn) { applying++; try { return fn(); } finally { applying--; } }
+
+    function pushRoute(h) {
+        if (locked()) return;
+        if (norm(location.hash) === norm(h)) return;
+        try { history.pushState({ nyang: 1 }, '', h); }
+        catch (e) { try { hashSelf = true; location.hash = h; } catch (e2) { hashSelf = false; } }
+    }
+
+    function routeForSection(s) {
+        if (s === 'home') return '#/';
+        if (s === 'video') {
+            if (filterTagName) return '#/tag/' + enc(filterTagName);
+            if (filterAuthorName) return '#/author/' + enc(filterAuthorName);
+            var pc = document.getElementById('player-container');
+            if (currentPlayingItem && pc && pc.style.display === 'block') return '#/watch/' + enc(currentPlayingItem.id);
+            return '#/video';
+        }
+        if (s === 'search-result') return '#/search/' + enc(searchQuery || '');
+        if (s === 'mypage') return currentChannelTargetName ? '#/user/' + enc(currentChannelTargetName) : '#/mypage';
+        return '#/' + s;
+    }
+
+    function wrap(name, fn) {
+        var orig = window[name];
+        if (typeof orig !== 'function') return;
+        window[name] = function() { return fn.call(this, orig, arguments); };
+    }
+
+    wrap('showSection', function(orig, a) {
+        var r = orig.apply(this, a);
+        pushRoute(routeForSection(a[0]));
+        return r;
+    });
+    wrap('preparePlay', function(orig, a) {
+        var r;
+        suppress++;
+        try { r = orig.apply(this, a); } finally { suppress--; }
+        var arg = a[0];
+        var id = (arg && typeof arg === 'object') ? arg.id : arg;
+        if (currentPlayingItem && String(currentPlayingItem.id) === String(id)) pushRoute('#/watch/' + enc(currentPlayingItem.id));
+        return r;
+    });
+    wrap('selectGenre', function(orig, a) {
+        var r;
+        suppress++;
+        try { r = orig.apply(this, a); } finally { suppress--; }
+        pushRoute('#/genre/' + enc(a[0]));
+        return r;
+    });
+    wrap('filterByTag', function(orig, a) {
+        var r;
+        suppress++;
+        try { r = orig.apply(this, a); } finally { suppress--; }
+        pushRoute('#/tag/' + enc(a[0]));
+        return r;
+    });
+    wrap('filterByAuthor', function(orig, a) {
+        var r;
+        suppress++;
+        try { r = orig.apply(this, a); } finally { suppress--; }
+        pushRoute('#/author/' + enc(a[0]));
+        return r;
+    });
+    function secActive(id) { var el = document.getElementById(id); return !!(el && el.classList.contains('active')); }
+    wrap('openNoticeDetail', function(orig, a) {
+        var r = orig.apply(this, a);
+        var b = document.getElementById('nb-detail');
+        if (b && b.style.display === 'block') pushRoute('#/notice/' + enc(a[0]));
+        return r;
+    });
+    wrap('closeNoticeDetail', function(orig, a) {
+        var r = orig.apply(this, a);
+        if (secActive('notice-section')) pushRoute('#/notice');
+        return r;
+    });
+    wrap('openBoardDetail', function(orig, a) {
+        var r = orig.apply(this, a);
+        var b = document.getElementById('bd-detail');
+        if (b && b.style.display === 'block') pushRoute('#/board/' + enc(a[0]));
+        return r;
+    });
+    wrap('closeBoardDetail', function(orig, a) {
+        var r = orig.apply(this, a);
+        if (secActive('board-section')) pushRoute('#/board');
+        return r;
+    });
+
+    /* 주소(#/...)에 맞는 화면을 연다 */
+    async function applyRoute(h, fromPop) {
+        var tok = ++routeToken;
+        var raw = String(h || '').replace(/^#\/?/, '');
+        var parts = raw ? raw.split('/').map(function(p) { try { return decodeURIComponent(p); } catch (e) { return p; } }) : [];
+        var type = parts[0] || 'home';
+        var arg = parts.slice(1).join('/');
+        if (fromPop && type !== 'watch') { try { if (video && !video.paused) video.pause(); } catch (e) {} }
+        switch (type) {
+            case 'watch':
+                await waitFor(function() { return db && db.some(function(v) { return String(v.id) === arg; }); }, 10000);
+                if (tok !== routeToken) return;
+                quiet(function() { preparePlay(arg); });
+                break;
+            case 'video':
+                quiet(function() { showSection('video'); });
+                break;
+            case 'genre':
+                quiet(function() { selectGenre(arg || 'all'); });
+                break;
+            case 'tag':
+                quiet(function() { filterByTag(arg); });
+                break;
+            case 'author':
+                quiet(function() { filterByAuthor(arg); });
+                break;
+            case 'search':
+                quiet(function() {
+                    searchQuery = String(arg).toLowerCase();
+                    filterAuthorName = "";
+                    filterTagName = "";
+                    var inp = document.getElementById('main-search-input');
+                    if (inp) inp.value = arg;
+                    showSection('search-result');
+                });
+                break;
+            case 'user':
+                quiet(function() { if (arg) showUserChannel(arg); else showSection('mypage'); });
+                break;
+            case 'mypage':
+                quiet(function() { showSection('mypage'); });
+                break;
+            case 'channel': case 'playlist': case 'subscribe': case 'history':
+                quiet(function() { showSection(type); });
+                break;
+            case 'notice':
+            case 'board':
+                var isN = (type === 'notice');
+                quiet(function() { showSection(type); });
+                if (arg) {
+                    await waitFor(function() { return secActive(type + '-section'); }, 3000);
+                    if (tok !== routeToken) return;
+                    await sleep(300);
+                    if (tok !== routeToken) return;
+                    try { if (isN) { if (typeof renderNoticeBoard === 'function') await renderNoticeBoard(); } else { if (typeof renderBoardPage === 'function') await renderBoardPage(); } } catch (e) {}
+                    if (tok !== routeToken) return;
+                    quiet(function() { if (isN) openNoticeDetail(arg); else openBoardDetail(arg); });
+                } else {
+                    quiet(function() { if (isN) { if (typeof closeNoticeDetail === 'function') closeNoticeDetail(); } else { if (typeof closeBoardDetail === 'function') closeBoardDetail(); } });
+                }
+                break;
+            default:
+                quiet(function() { showSection('home'); });
+        }
+    }
+
+    window.addEventListener('popstate', function() {
+        if (hashSelf) { hashSelf = false; return; }
+        applyRoute(location.hash, true);
+    });
+
+    /* 주소(#/...)를 달고 들어오거나 새로고침하면, 데이터가 준비된 뒤 해당 화면을 연다 */
+    function boot() {
+        if (isHomeHash(initialHash)) return;
+        setTimeout(function() {
+            applyRoute(initialHash, false).catch(function(e) { console.error('주소 화면 열기 실패:', e); }).then(function() {
+                setTimeout(function() { booting = false; }, 600);
+            });
+        }, 800);
+    }
+    if (document.readyState === 'complete') boot(); else window.addEventListener('load', boot);
+})();
 </script>
 </body>
 </html>
