@@ -1475,6 +1475,25 @@
             .nb-author-cell img { height:15px; }
         }
 </style>
+<script>
+/* [신규] 퍼가기 전용 주소(#/embed/영상번호)로 열리면 영상 화면만 보이는 모드로 시작 */
+try { if (/^#\/embed\//.test(location.hash)) document.documentElement.classList.add('nyang-embed'); } catch (e) {}
+</script>
+<style>
+/* [신규] 퍼가기 모드 - 영상 화면(플레이어)만 꽉 차게 보여주고 나머지는 모두 숨김 */
+html.nyang-embed, html.nyang-embed body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; background: #000 !important; }
+html.nyang-embed body > *:not(.container):not(script):not(style) { display: none !important; }
+html.nyang-embed .container > *:not(.content-area) { display: none !important; }
+html.nyang-embed .container, html.nyang-embed .content-area { margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: none !important; background: #000 !important; }
+html.nyang-embed .content-area > *:not(#video-section) { display: none !important; }
+html.nyang-embed #video-section { display: block !important; margin: 0 !important; padding: 0 !important; background: #000 !important; }
+html.nyang-embed #player-container { display: block !important; position: fixed !important; left: 0 !important; top: 0 !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; z-index: 1; background: #000; }
+html.nyang-embed #player-container > *:not(#player-row) { display: none !important; }
+html.nyang-embed #player-row { display: block !important; width: 100% !important; height: 100% !important; }
+html.nyang-embed #player-side-panel { display: none !important; }
+html.nyang-embed #fullscreen-player-target { display: flex !important; flex-direction: column !important; width: 100% !important; height: 100% !important; }
+html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !important; width: 100% !important; height: auto !important; min-height: 0 !important; aspect-ratio: auto !important; }
+</style>
 </head>
 <body>
 
@@ -7469,9 +7488,11 @@ function closeEmbedCodeModal() {
     document.getElementById('embed-code-modal').style.display = 'none';
 }
 function updateEmbedCode() {
-    var url = getOnlineVideoUrl() || '';
     var size = document.getElementById('embed-code-size').value.split('x');
     var type = document.querySelector('input[name="embed-code-type"]:checked').value;
+    /* [변경] 영상 파일 주소 대신, 영상 화면만 보여주는 퍼가기 전용 주소(#/embed/영상번호)를 사용 */
+    var url = (currentPlayingItem && currentPlayingItem.id !== undefined && currentPlayingItem.id !== null)
+        ? 'https://khw150123.github.io/Nyangiple/#/embed/' + encodeURIComponent(currentPlayingItem.id) : '';
     var code = (type === 'iframe')
         ? '<iframe width="' + size[0] + '" height="' + size[1] + '" src="' + url + '" frameborder="0" allowfullscreen></iframe>'
         : '<embed width="' + size[0] + '" height="' + size[1] + '" src="' + url + '">';
@@ -8355,6 +8376,7 @@ function bdcToggleLike(cid, rid) {
         var arg = parts.slice(1).join('/');
         if (fromPop && type !== 'watch') { try { if (video && !video.paused) video.pause(); } catch (e) {} }
         switch (type) {
+            case 'embed':
             case 'watch':
                 await waitFor(function() { return db && db.some(function(v) { return String(v.id) === arg; }); }, 10000);
                 if (tok !== routeToken) return;
