@@ -1303,6 +1303,9 @@
         .random-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 12px; background: linear-gradient(#fff, #f3f3f3); border: 1px solid #c9d3d9; border-radius: 4px; color: #333; font-size: 14px; cursor: pointer; white-space: nowrap; user-select: none; -webkit-user-select: none; box-sizing: border-box; }
         .random-btn:hover { background: #f0f6fa; }
         .random-btn svg { width: 16px; height: 16px; fill: none; stroke: #1e88c8; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .app-get-btn { display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; background: linear-gradient(#ffffff, #e8e8e8); border: 2px solid #c6c6c6; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.18); color: #222; font-size: 14px; text-decoration: none; text-shadow: 0 1px 0 #fff; cursor: pointer; white-space: nowrap; user-select: none; -webkit-user-select: none; box-sizing: border-box; }
+        .app-get-btn:hover { background: linear-gradient(#ffffff, #dedede); color: #222; text-decoration: none; }
+        .app-get-btn:active { background: linear-gradient(#e8e8e8, #f5f5f5); }
         .hdr-top-actions { display: none; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 12px; }
         .home-top-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 0 0 8px 0; }
         .home-top-notice-btn { height: 32px; display: block; cursor: pointer; flex-shrink: 0; transition: transform 0.15s; }
@@ -1574,7 +1577,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         </div>
         <!-- [신규] PC/가로모드 - 맨 위 줄 맨 오른쪽: 랜덤 + 동영상 업로드(초록색) 버튼 -->
         <div class="hdr-top-actions">
-            <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div>
+            <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div><a class="app-get-btn" href="https://drive.google.com/file/d/17B7fgFw2-SmITRvMLe75Kfv9_-VRP8OH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" title="앱 받기"><span>앱 받기</span></a>
         </div>
     </div>
 </header>
@@ -1599,7 +1602,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         <section id="home-section" class="page-section active">
             <!-- [신규] 모바일(세로) - 랭킹 화면 맨 위 줄 맨 오른쪽: 랜덤 + 동영상 업로드(초록색) 버튼 -->
             <div class="home-top-actions">
-                <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div>
+                <div class="random-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c3 0 4.5 2 6 5s3 5 6 5H21"/><path d="M18 14l3 3-3 3"/><path d="M3 17h3.5c1.3 0 2.3-.4 3.2-1.2"/><path d="M13.3 8.2C14.3 7.4 15.4 7 16.5 7H21"/><path d="M18 4l3 3-3 3"/></svg><span>랜덤</span></div><a class="app-get-btn" href="https://drive.google.com/file/d/17B7fgFw2-SmITRvMLe75Kfv9_-VRP8OH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" title="앱 받기"><span>앱 받기</span></a>
                 <img src="data:image/png;base64,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" class="home-top-notice-btn" onclick="showSection('notice')" title="공지사항">
             </div>
             <!-- [신규] 모바일(세로) - 위 줄 밑 왼쪽: 동영상 업로드(초록색) 버튼 -->
@@ -7345,6 +7348,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     function kakaoRefreshUI() {
         var kid = null;
         try { kid = localStorage.getItem('tvple_kakao_id'); } catch(e) {}
+        if(!kid) { try { if(typeof user !== 'undefined' && user && user.kakaoId) kid = String(user.kakaoId); } catch(e) {} }
         if(kid) {
             var nick = '';
             try { nick = localStorage.getItem('tvple_kakao_nick') || ''; } catch(e) {}
@@ -7417,15 +7421,41 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         kakaoToast('카카오 연동이 완료되었습니다. 기존 데이터는 그대로 유지돼요.');
     }
 
+    /* [수정] 모바일/인앱 브라우저처럼 로그인 창이 새 페이지로 열려 완료 콜백이 사라지는 경우를 위해
+       - 로그인 시작 시 '진행 중' 표시를 남기고
+       - 페이지로 돌아왔을 때(뒤로가기 포함) 카카오 로그인 토큰이 있으면 연동을 마저 저장함 */
+    var KAKAO_PENDING_KEY = 'tvple_kakao_pending';
+    var kakaoBusy = false;
+
+    function kakaoRunAfterLogin() {
+        if(kakaoBusy) return;
+        kakaoBusy = true;
+        try { localStorage.removeItem(KAKAO_PENDING_KEY); } catch(e) {}
+        kakaoAfterLogin().catch(function(err) {
+            console.error('카카오 연동 실패:', err);
+            kakaoToast('카카오 연동 중 오류가 발생했습니다.', 'error');
+        }).then(function() { kakaoBusy = false; });
+    }
+
+    function kakaoTryRecover() {
+        var t = null;
+        try { t = localStorage.getItem(KAKAO_PENDING_KEY); } catch(e) {}
+        if(!t) return;
+        if(Date.now() - Number(t) > 10 * 60 * 1000) { try { localStorage.removeItem(KAKAO_PENDING_KEY); } catch(e) {} return; }
+        try {
+            if(!window.Kakao) return;
+            if(!Kakao.isInitialized()) Kakao.init('14caafd1ed3178bed58381f4bb611aa1');
+            if(Kakao.Auth && Kakao.Auth.getAccessToken && Kakao.Auth.getAccessToken()) kakaoRunAfterLogin();
+        } catch(e) { console.error('카카오 연동 복구 확인 실패:', e); }
+    }
+
     window.kakaoLinkLogin = function() {
         if(!window.Kakao) { kakaoToast('카카오 SDK를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.', 'error'); return; }
         try { if(!Kakao.isInitialized()) Kakao.init('14caafd1ed3178bed58381f4bb611aa1'); } catch(e) {}
+        try { localStorage.setItem(KAKAO_PENDING_KEY, String(Date.now())); } catch(e) {}
         Kakao.Auth.login({
             success: function() {
-                kakaoAfterLogin().catch(function(err) {
-                    console.error('카카오 연동 실패:', err);
-                    kakaoToast('카카오 연동 중 오류가 발생했습니다.', 'error');
-                });
+                kakaoRunAfterLogin();
             },
             fail: function(err) {
                 console.error('카카오 로그인 실패:', err);
@@ -7436,6 +7466,12 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
 
     if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', kakaoRefreshUI);
     else kakaoRefreshUI();
+
+    /* 로그인 창에서 돌아왔을 때(뒤로가기/탭 전환/페이지 복원) 연동 저장 + 마이페이지 표시 갱신 */
+    window.addEventListener('load', function() { setTimeout(function() { kakaoTryRecover(); kakaoRefreshUI(); }, 300); });
+    window.addEventListener('pageshow', function() { setTimeout(function() { kakaoTryRecover(); kakaoRefreshUI(); }, 300); });
+    document.addEventListener('visibilitychange', function() { if(!document.hidden) setTimeout(function() { kakaoTryRecover(); kakaoRefreshUI(); }, 300); });
+    window.addEventListener('focus', function() { setTimeout(function() { kakaoTryRecover(); kakaoRefreshUI(); }, 300); });
 })();
 </script>
 
