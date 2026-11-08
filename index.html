@@ -1732,7 +1732,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                     </div>
 
                     <div class="home-tab-content" id="home-tab-cloudKing">
-                        <div class="rank-section-title">자막왕 랭킹 (구름 자막을 가장 많이 남긴 순)</div>
+                        <div class="rank-section-title">구름 랭킹 (구름 자막이 가장 많은 영상 순)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
@@ -3776,7 +3776,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         renderRankContainer('home-rankjjim-list', rankJjim);
 
         renderUserRankContainer('home-rank-commentking-list', computeCommentKingRanking(), '개');
-        renderUserRankContainer('home-rank-cloudking-list', computeCloudKingRanking(), '개');
+        /* [수정] 구름 랭킹: 구름자막을 많이 단 유저가 아니라, 구름자막이 많은 영상 순 */
+        const rankCloudVideos = db.filter(v => v.savedClouds && v.savedClouds.length > 0).slice().sort((a, b) => b.savedClouds.length - a.savedClouds.length);
+        renderRankContainer('home-rank-cloudking-list', rankCloudVideos);
 
         /* [신규] 랭킹을 실제로 다시 계산한 시각을 랭킹 목록 밑에 표시 */
         setRankUpdatedTime();
