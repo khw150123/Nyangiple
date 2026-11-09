@@ -2398,7 +2398,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     const cloudLayer = document.getElementById('cloud-layer');
     const waitScreen = document.getElementById('wait-screen');
     const errorScreen = document.getElementById('error-screen');
-    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "새해", "설날", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "추석", "취미/개인기", "취향존중", "테크", "패러디", "편집물", "프로그래밍", "AI"];
+    const genres = ["강좌/교육", "게임", "공연/이벤트", "과학 기술", "동물", "명절", "새해", "시즌 이벤트", "애니/음MAD", "여행/레저", "영화", "요리/생활", "유머/감동", "음악", "이슈/사회", "인물/장소", "자동차", "취미/개인기", "취향존중", "테크", "패러디", "편집물", "프로그래밍", "AI"];
 
     const kkk11 = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ\n".repeat(11);
     const garigi = "가리기\n".repeat(30);
@@ -2438,7 +2438,11 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     };
     dbRequest.onsuccess = (e) => { indexedDBInstance = e.target.result; };
 
+    /* [수정] 카테고리 통합: 추석·설날 → 명절 / 만우절·크리스마스·할로윈 → 시즌 이벤트 (예전에 올린 영상의 카테고리도 자동으로 옮겨서 표시) */
+    const GENRE_MERGE_MAP = { "설날": "명절", "추석": "명절", "만우절": "시즌 이벤트", "크리스마스": "시즌 이벤트", "할로윈": "시즌 이벤트" };
+    function normalizeGenreOf(v) { if (v && GENRE_MERGE_MAP[v.genre]) v.genre = GENRE_MERGE_MAP[v.genre]; return v; }
     let db = JSON.parse(localStorage.getItem('tvple_vfinal_db_2') || "[]");
+    db.forEach(normalizeGenreOf);
     
     db.forEach(v => {
         if(!v.playTime) v.playTime = "03:45";
@@ -3833,7 +3837,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
             if (onlineVideos) {
                 onlineVideos.forEach((ov) => {
                     const local = db.find((v) => String(v.id) === String(ov.id));
-                    if (!local) { db.push(ov); return; }
+                    if (!local) { db.push(normalizeGenreOf(ov)); return; }
                     /* 랭킹에 쓰이는 값만 제자리에서 갱신 (재생 중인 영상 객체는 교체하지 않음) */
                     if (ov.views !== undefined) local.views = Math.max(local.views || 0, ov.views || 0);
                     if (ov.jjim !== undefined) local.jjim = ov.jjim;
@@ -7199,7 +7203,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
             const onlineIds = new Set(onlineVideos.map((ov) => String(ov.id)));
             onlineVideos.forEach((ov) => {
                 const idx = db.findIndex((v) => String(v.id) === String(ov.id));
-                if (idx >= 0) { db[idx] = ov; } else { db.push(ov); }
+                if (idx >= 0) { db[idx] = normalizeGenreOf(ov); } else { db.push(normalizeGenreOf(ov)); }
             });
             /* [수정] 다른 기기에서 삭제된 영상은 이 기기의 로컬 목록에서도 제거 (단, 아직 온라인 업로드가 안 된 이 기기만의 영상은 보존) */
             /* [수정] 서버에도 없고 indexeddb_stored도 아닌 비정상 상태(업로드는 됐는데 메타데이터 저장이 실패한 경우 등)는
@@ -9038,6 +9042,51 @@ function bdcToggleLike(cid, rid) {
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
+})();
+</script>
+<script>
+/* [신규 이스터에그] 검색창에 "무지갯빛☆☆☆" 를 입력하면 이후 뜨는 구름자막이 무지갯빛으로 바뀜 (PC / 모바일 가로 / 모바일 세로 공통).
+   해제는 새로고침하면 자동으로 해제됨 (저장하지 않음). */
+(function() {
+    var SECRET = '무지갯빛☆☆☆';
+    var active = false;
+    var hue = 0;
+    function paint(el) {
+        hue = (hue + 47) % 360;
+        el.style.setProperty('color', 'hsl(' + hue + ', 100%, 62%)', 'important');
+    }
+    function paintTree(n) {
+        if (!n || n.nodeType !== 1) return;
+        if (n.classList && n.classList.contains('cloud')) paint(n);
+        if (n.querySelectorAll) {
+            var list = n.querySelectorAll('.cloud');
+            for (var i = 0; i < list.length; i++) paint(list[i]);
+        }
+    }
+    var observer = new MutationObserver(function(mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+            var added = mutations[i].addedNodes;
+            for (var j = 0; j < added.length; j++) paintTree(added[j]);
+        }
+    });
+    function activate() {
+        if (active) return;
+        active = true;
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+    }
+    function check(inp) {
+        var v = String(inp.value || '').replace(/\s+/g, '');
+        if (v === SECRET) activate();
+    }
+    function bind() {
+        var inp = document.getElementById('main-search-input');
+        if (!inp) return;
+        ['input', 'change', 'keyup', 'compositionend'].forEach(function(evt) {
+            inp.addEventListener(evt, function() { check(inp); });
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+    else bind();
 })();
 </script>
 </body>
