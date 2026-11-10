@@ -1521,6 +1521,15 @@
         .cloud-art-meta .cam-author { color: #0088cc; font-weight: bold; }
         .cloud-art-meta .cam-title { color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .cloud-art-empty { grid-column: 1 / -1; padding: 30px 10px; text-align: center; color: #888; font-size: 14px; }
+
+        /* [신규] 강조 구름 - 일반 구름보다 까만 테두리 + 까만 그림자 */
+        .cloud.cloud-strong { -webkit-text-stroke: 0.6px #000; paint-order: stroke fill; text-shadow: 1px 0 #000, -1px 0 #000, 0 1px #000, 0 -1px #000, 0 2px 4px rgba(0,0,0,0.85); }
+        .cb2-btn.cb2-cloud-strong { width: 28px; }
+        /* 버튼이 하나 늘어난 만큼, 좁은 화면에서 재생 시간 글자가 옆 버튼과 겹치지 않도록 진행바 폭에 맞춰 글자를 줄임 */
+        .cb2-progress { container-type: inline-size; }
+        @container (max-width: 91px) { .cb2-time { font-size: 10px; left: 4px; } }
+        @container (max-width: 61px) { .cb2-time { display: none; } }
+        @supports not (container-type: inline-size) { @media (max-width: 399px) { .cb2-time { font-size: 10px; left: 4px; } } }
 </style>
 <script>
 /* [신규] 퍼가기 전용 주소(#/embed/영상번호)로 열리면 영상 화면만 보이는 모드로 시작 */
@@ -1888,6 +1897,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                         </button>
                         <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (켠 뒤 동영상 화면을 누르면 원하는 곳에 달 수 있습니다)">
                             <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                        </button>
+                        <button class="cb2-btn cb2-cloud-strong" id="custom-cloud-strong-btn" type="button" onclick="toggleStrongCloudMode()" title="강조 구름 달기 (켠 뒤 동영상 화면을 누르면 까만 테두리·그림자가 있는 구름을 달 수 있습니다)">
+                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/><path d="M11 8h2v5h-2zM11 14.5h2v2h-2z" fill="#f5a31a"/></svg>
                         </button>
                         <button class="cb2-btn cb2-cloud-art" id="custom-cloud-art-btn" type="button" title="구름 아트 (나만의 글자 그림을 만들어 도장처럼 찍을 수 있습니다)">
                             <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
@@ -2519,6 +2531,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     let channelGenreFilter = "all";
 
     let isCloudWritingModeActive = false;
+    let strongCloudMode = false; /* [신규] 컨트롤바 '강조 구름' 버튼으로 켠 상태 */
     let pendingCloudClickInfo = null;
 
     /* ===== 추가 기능 상태 변수 (기존 변수 변경 없음) ===== */
@@ -2843,6 +2856,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(video.paused) return null;
         const d = document.createElement('div');
         d.className = 'cloud';
+        if (type === "strong") d.classList.add('cloud-strong'); /* [신규] 강조 구름 */
         d.innerText = txt;
         let targetX = x || (Math.random() * 70 + 10) + "%";
         let targetY = y || (Math.random() * 80 + 5) + "%";
@@ -2876,7 +2890,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         let anyCloudFiredThisTick = false;
         currentPlayingItem.savedClouds.forEach(c => {
             if(c.time === currentTime && !c.fired) {
-                shoot(c.text, "normal", c.x, c.y, true);
+                shoot(c.text, c.strong ? "strong" : "normal", c.x, c.y, true);
                 c.fired = true; 
                 anyCloudFiredThisTick = true;
             }
@@ -6616,7 +6630,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         const overlay = document.getElementById('cloud-text-input-overlay');
         overlay.style.display = 'none';
         if(!txt || !pendingCloudClickInfo) { pendingCloudClickInfo = null; return; }
-        submitCloudText(txt, pendingCloudClickInfo.clickX, pendingCloudClickInfo.clickY);
+        submitCloudText(txt, pendingCloudClickInfo.clickX, pendingCloudClickInfo.clickY, null, !!strongCloudMode);
         pendingCloudClickInfo = null;
     }
 
@@ -6680,9 +6694,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         }
     }
 
-    function submitCloudText(txt, clickX, clickY, atTime=null) {
+    function submitCloudText(txt, clickX, clickY, atTime=null, strong=false) {
         const cloudTime = (atTime !== null && atTime !== undefined) ? atTime : Math.floor(video.currentTime);
-        const pos = shoot(txt, "normal", clickX, clickY); 
+        const pos = shoot(txt, strong ? "strong" : "normal", clickX, clickY); 
         userStats.cloud++; 
         /* [수정] 자막 등록마다 채널 페이지 전체(프로필/배너/작성자 전체 영상목록/업로드 상태 등)를
            다시 그리던 updateChannel() 호출을 제거 - 재생 화면에는 보이지도 않는 부분을 매번 다시 그려서
@@ -6699,7 +6713,8 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 x: pos ? pos.x : clickX,
                 y: pos ? pos.y : clickY,
                 fired: true,
-                author: user ? user.nick : '익명'
+                author: user ? user.nick : '익명',
+                ...(strong ? { strong: true } : {})
             });
 
             const target = db.find(v => v.id === currentPlayingItem.id);
@@ -9195,6 +9210,50 @@ function renderCloudArtGallery() {
             + '</div>';
     }).join('');
 }
+</script>
+<script>
+/* [신규] 컨트롤바 '강조 구름' 버튼 - 켠 뒤 동영상 화면을 누르면 까만 테두리/그림자가 있는 구름을 달 수 있음 */
+function syncCloudModeButtons() {
+    var strongBtn = document.getElementById('custom-cloud-strong-btn');
+    var normalBtn = document.getElementById('custom-cloud-toggle-btn');
+    if (strongBtn) strongBtn.classList.toggle('active', !!(isCloudWritingModeActive && strongCloudMode));
+    if (normalBtn && strongCloudMode && isCloudWritingModeActive && normalBtn.classList.contains('active')) normalBtn.classList.remove('active');
+}
+function toggleStrongCloudMode() {
+    if (isCloudWritingModeActive && strongCloudMode) {
+        strongCloudMode = false;
+        toggleCloudWritingMode();
+    } else if (isCloudWritingModeActive) {
+        strongCloudMode = true;
+    } else {
+        strongCloudMode = true;
+        toggleCloudWritingMode();
+    }
+    syncCloudModeButtons();
+}
+(function() {
+    /* 기존 '구름 자막 달기' 버튼을 누르면 일반 구름 모드로 되돌림 */
+    document.addEventListener('click', function(e) {
+        var hit = e.target && e.target.closest && e.target.closest('#custom-cloud-toggle-btn');
+        if (!hit) return;
+        if (strongCloudMode && isCloudWritingModeActive) {
+            /* 강조 구름 모드에서 일반 버튼을 누르면 끄지 않고 일반 구름 모드로 바꿔 줌 */
+            e.stopPropagation();
+            strongCloudMode = false;
+            hit.classList.add('active');
+            syncCloudModeButtons();
+        } else {
+            strongCloudMode = false;
+        }
+    }, true);
+    function init() {
+        var normalBtn = document.getElementById('custom-cloud-toggle-btn');
+        if (!normalBtn || !window.MutationObserver) return;
+        new MutationObserver(syncCloudModeButtons).observe(normalBtn, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
 </script>
 </body>
 </html>
