@@ -1510,6 +1510,17 @@
         #mobile-random-banner .mrb-close { position: absolute; right: 0; top: 0; bottom: 0; width: 13%; cursor: pointer; }
         #mobile-random-banner.mrb-hide { max-height: 0; opacity: 0; }
         @media (max-width: 768px) and (orientation: portrait) { #mobile-random-banner { display: block; } }
+
+        /* [신규] 구름 아트 갤러리 */
+        .cloud-art-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 4px 0 10px; }
+        .cloud-art-card { border: 1px solid #ddd; background: #fff; cursor: pointer; overflow: hidden; }
+        .cloud-art-preview { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #111; overflow: hidden; }
+        .cloud-art-inner { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .cloud-art-glyph { position: absolute; color: #fff; font-weight: bold; font-size: 6px; line-height: 1.1; white-space: pre; text-shadow: 0 1px 1px rgba(0,0,0,0.5); }
+        .cloud-art-meta { padding: 6px 8px; font-size: 12px; line-height: 1.4; color: #333; }
+        .cloud-art-meta .cam-author { color: #0088cc; font-weight: bold; }
+        .cloud-art-meta .cam-title { color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cloud-art-empty { grid-column: 1 / -1; padding: 30px 10px; text-align: center; color: #888; font-size: 14px; }
 </style>
 <script>
 /* [신규] 퍼가기 전용 주소(#/embed/영상번호)로 열리면 영상 화면만 보이는 모드로 시작 */
@@ -1661,6 +1672,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                         <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')"><span class="tab-label-mobile">36h 랭킹</span><span class="tab-label-pc">36h 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')"><span class="tab-label-mobile">댓글 랭킹</span><span class="tab-label-pc">댓글 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')"><span class="tab-label-mobile">구름 랭킹</span><span class="tab-label-pc">구름 랭킹</span></div>
+                        <div class="home-rank-tab" data-tab="cloudArt" onclick="switchHomeTab('cloudArt')"><span class="tab-label-mobile">구름 아트</span><span class="tab-label-pc">구름 아트</span></div>
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
                     </div>
                     <div class="home-tab-content active" id="home-tab-recommend">
@@ -1753,6 +1765,11 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                             <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
+                    </div>
+
+                    <div class="home-tab-content" id="home-tab-cloudArt">
+                        <div class="rank-section-title">구름 아트 갤러리 (사람들이 영상에 찍은 그림 구름 - 누르면 그 영상이 재생됩니다)</div>
+                        <div id="home-cloud-art-gallery" class="cloud-art-gallery"></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-mypage">
@@ -3798,6 +3815,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         /* [수정] 구름 랭킹: 구름자막을 많이 단 유저가 아니라, 구름자막이 많은 영상 순 */
         const rankCloudVideos = db.filter(v => v.savedClouds && v.savedClouds.length > 0).slice().sort((a, b) => b.savedClouds.length - a.savedClouds.length);
         renderRankContainer('home-rank-cloudking-list', rankCloudVideos);
+        if (typeof renderCloudArtGallery === 'function') renderCloudArtGallery(); /* [신규] 구름 아트 갤러리 */
 
         /* [신규] 랭킹을 실제로 다시 계산한 시각을 랭킹 목록 밑에 표시 */
         setRankUpdatedTime();
@@ -3953,7 +3971,8 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
             rankMonth: 'home-tab-rankMonth',
             rankJjim: 'home-tab-rankJjim',
             commentKing: 'home-tab-commentKing',
-            cloudKing: 'home-tab-cloudKing'
+            cloudKing: 'home-tab-cloudKing',
+            cloudArt: 'home-tab-cloudArt'
         };
         const targetId = targetMap[tabName];
         if (targetId) {
@@ -8935,7 +8954,7 @@ function bdcToggleLike(cid, rid) {
                 return;
             }
             var list = Array.isArray(obj.savedClouds) ? obj.savedClouds : [];
-            added.forEach(function(c) { list.push({ text: c.text, time: c.time, x: c.x, y: c.y, fired: true, author: c.author }); });
+            added.forEach(function(c) { list.push({ text: c.text, time: c.time, x: c.x, y: c.y, fired: true, author: c.author, art: c.art }); });
             obj.savedClouds = list;
             try {
                 await blUpsert('Videos', 'videoId', target.id, obj);
@@ -8965,6 +8984,7 @@ function bdcToggleLike(cid, rid) {
         if (!currentPlayingItem.savedClouds) currentPlayingItem.savedClouds = [];
         var count = 0;
         var addedClouds = [];
+        var artId = 'art_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6); /* [신규] 같은 그림의 구름은 같은 묶음 번호 */
         lay.items.forEach(function(it) {
             var x = ((pos.x + it.x) / lw * 100).toFixed(1) + '%';
             var y = ((pos.y + it.y) / lh * 100).toFixed(1) + '%';
@@ -8975,7 +8995,8 @@ function bdcToggleLike(cid, rid) {
                 x: x,
                 y: y,
                 fired: true,
-                author: user ? user.nick : '익명'
+                author: user ? user.nick : '익명',
+                art: artId
             };
             currentPlayingItem.savedClouds.push(rec);
             addedClouds.push(rec);
@@ -9126,6 +9147,53 @@ function mobileBannerPlay() {
         var pick = pool[Math.floor(Math.random() * pool.length)];
         preparePlay(pick.id);
     } catch (err) { console.error(err); }
+}
+</script>
+<script>
+/* [신규] 구름 아트 갤러리 - 같은 묶음 번호(art)를 가진 구름을 모아 작은 그림 카드로 보여줌 (카드를 누르면 그 영상 재생) */
+function renderCloudArtGallery() {
+    var box = document.getElementById('home-cloud-art-gallery');
+    if (!box) return;
+    var arts = {};
+    db.forEach(function(v) {
+        if (!v || !Array.isArray(v.savedClouds)) return;
+        v.savedClouds.forEach(function(c) {
+            if (!c || !c.art) return;
+            var a = arts[c.art];
+            if (!a) {
+                var m = String(c.art).match(/^art_(\d+)_/);
+                a = arts[c.art] = { vid: v.id, title: v.title || '', author: c.author || '익명', ts: m ? parseInt(m[1], 10) : 0, items: [] };
+            }
+            a.items.push(c);
+        });
+    });
+    var list = Object.keys(arts).map(function(k) { return arts[k]; })
+        .sort(function(a, b) { return b.ts - a.ts; }).slice(0, 60);
+    if (list.length === 0) {
+        box.innerHTML = '<div class="cloud-art-empty">아직 찍힌 구름 아트가 없습니다. 영상에서 그림 구름을 찍어 보세요!</div>';
+        return;
+    }
+    function esc(t) { return String(t).replace(/[&<>"']/g, function(ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); }
+    box.innerHTML = list.map(function(a, idx) {
+        var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+        a.items.forEach(function(c) {
+            var x = parseFloat(c.x), y = parseFloat(c.y);
+            if (isNaN(x) || isNaN(y)) return;
+            if (x < minX) minX = x; if (x > maxX) maxX = x;
+            if (y < minY) minY = y; if (y > maxY) maxY = y;
+        });
+        if (minX > maxX) { minX = 0; maxX = 100; minY = 0; maxY = 100; }
+        var cx = (minX + maxX) / 2 + 3, cy = (minY + maxY) / 2 + 4; /* 글자 자체 크기만큼 보정 */
+        var k = Math.min(3, 80 / ((maxX - minX) + 8), 80 / ((maxY - minY) + 10));
+        if (k < 1) k = 1;
+        var glyphs = a.items.map(function(c) {
+            return '<span class="cloud-art-glyph" style="left:' + parseFloat(c.x) + '%;top:' + parseFloat(c.y) + '%;">' + esc(c.text) + '</span>';
+        }).join('');
+        return '<div class="cloud-art-card" onclick="preparePlay(' + JSON.stringify(a.vid).replace(/"/g, '&quot;') + ')">'
+            + '<div class="cloud-art-preview"><div class="cloud-art-inner" style="transform-origin:' + cx + '% ' + cy + '%;transform:translate(' + (50 - cx) + '%,' + (50 - cy) + '%) scale(' + k.toFixed(2) + ');">' + glyphs + '</div></div>'
+            + '<div class="cloud-art-meta"><div class="cam-author">' + esc(a.author) + '</div><div class="cam-title">' + esc(a.title) + '</div></div>'
+            + '</div>';
+    }).join('');
 }
 </script>
 </body>
