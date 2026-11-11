@@ -517,23 +517,26 @@
         .scroll-hold-overlay { position: absolute; top: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease; z-index: 15; }
         .scroll-hold-overlay.show { opacity: 1; transition: opacity 1s ease; }
         /* ===== [신규] 동영상 컨트롤바 (참고 사진 스타일): 재생/정지 | 진행바 | 다시 재생 | 구름 자막 달기 | 소리 조정 ===== */
-        .cb2-bar { width: 100%; height: 40px; display: flex; align-items: stretch; background: #b3b3b3; color: #fff; user-select: none; -webkit-user-select: none; position: relative; z-index: 1005; box-sizing: border-box; font-family: sans-serif; }
-        .cb2-btn { flex: 0 0 auto; width: 40px; height: 100%; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; background: linear-gradient(#f8a612, #f5b923); box-shadow: inset 1px 0 0 rgba(255,235,170,0.6); -webkit-tap-highlight-color: transparent; }
-        .cb2-btn:hover { filter: brightness(1.07); }
+        .cb2-bar { width: 100%; height: auto; display: flex; flex-direction: column; align-items: stretch; background: rgba(58,58,58,0.94); color: #fff; user-select: none; -webkit-user-select: none; position: relative; z-index: 1005; box-sizing: border-box; font-family: sans-serif; }
+        .cb2-row { display: flex; flex-direction: row; align-items: stretch; width: 100%; height: 40px; padding: 0 4px; box-sizing: border-box; }
+        .cb2-btn { flex: 0 1 40px; min-width: 24px; width: 40px; height: 100%; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; background: transparent; box-shadow: none; -webkit-tap-highlight-color: transparent; border-radius: 6px; }
+        .cb2-btn:hover { background: rgba(255,255,255,0.14); }
         .cb2-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
-        .cb2-play { width: 48px; box-shadow: none; }
-        .cb2-replay { background: linear-gradient(#bfa067, #c2a56b); }
-        .cb2-replay.ready { background: linear-gradient(#f8a612, #f5b923); }
-        .cb2-btn.active { background: linear-gradient(#d98a00, #e3a210); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.75); }
-        .cb2-progress { position: relative; flex: 1 1 auto; min-width: 0; height: 100%; background: linear-gradient(#b3b3b3, #aeaeae); }
-        .cb2-range { -webkit-appearance: none; appearance: none; position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; padding: 0; cursor: pointer; background: linear-gradient(to right, rgba(255,255,255,0.4) var(--p, 0%), transparent var(--p, 0%)); }
-        .cb2-range::-webkit-slider-runnable-track { height: 100%; background: transparent; }
-        .cb2-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 3px; height: 40px; background: #fff; border: none; border-radius: 0; box-shadow: 0 0 3px rgba(0,0,0,0.5); }
-        .cb2-range::-moz-range-track { height: 100%; background: transparent; }
-        .cb2-range::-moz-range-thumb { width: 3px; height: 40px; background: #fff; border: none; border-radius: 0; }
-        .cb2-time { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #fff; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.35); }
-        .cb2-vol { position: relative; display: flex; flex: 0 0 auto; }
-        .cb2-vol-pop { display: none; position: absolute; right: 0; bottom: 100%; width: 130px; height: 34px; padding: 0 12px; box-sizing: border-box; align-items: center; background: rgba(0,0,0,0.78); z-index: 1010; }
+        .cb2-play { flex-basis: 44px; width: 44px; }
+        .cb2-replay { opacity: 0.4; }
+        .cb2-replay.ready { opacity: 1; }
+        .cb2-btn.active { background: rgba(255,255,255,0.3); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.85); }
+        .cb2-progress { position: relative; display: flex; align-items: center; width: 100%; height: 22px; padding: 0 10px; box-sizing: border-box; }
+        .cb2-range { -webkit-appearance: none; appearance: none; position: relative; flex: 1 1 auto; min-width: 0; width: 100%; height: 22px; margin: 0; padding: 0; cursor: pointer; background: transparent; }
+        .cb2-range::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(to right, #fff var(--p, 0%), rgba(255,255,255,0.35) var(--p, 0%)); }
+        .cb2-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 10px; height: 10px; margin-top: -3.5px; background: #fff; border: none; border-radius: 50%; box-shadow: 0 0 3px rgba(0,0,0,0.5); }
+        .cb2-range::-moz-range-track { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.35); }
+        .cb2-range::-moz-range-progress { height: 3px; border-radius: 2px; background: #fff; }
+        .cb2-range::-moz-range-thumb { width: 10px; height: 10px; background: #fff; border: none; border-radius: 50%; }
+        .cb2-time { flex: 0 0 auto; margin-left: 8px; font-size: 11px; color: #fff; white-space: nowrap; pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.35); }
+        .cb2-vol { position: relative; display: flex; flex: 0 1 40px; min-width: 24px; width: 40px; }
+        .cb2-vol .cb2-btn { flex: 1 1 auto; width: 100%; }
+        .cb2-vol-pop { display: none; position: absolute; left: 0; bottom: 100%; width: 130px; height: 34px; padding: 0 12px; box-sizing: border-box; align-items: center; background: rgba(0,0,0,0.78); z-index: 1010; border-radius: 6px; }
         .cb2-vol:hover .cb2-vol-pop, .cb2-vol:focus-within .cb2-vol-pop { display: flex; }
         .cb2-vol-pop .volume-slider { width: 100%; }
         /* ===== [신규] 구름 아트 (컨트롤바 버튼 + 글자 정하기 창 + 화면을 눌러 그리는 칸 + 도장 찍기 버튼줄, 기존 스타일 변경 없음) ===== */
@@ -1524,12 +1527,44 @@
 
         /* [신규] 강조 구름 - 일반 구름보다 까만 테두리 + 까만 그림자 */
         .cloud.cloud-strong { -webkit-text-stroke: 0.6px #000; paint-order: stroke fill; text-shadow: 1px 0 #000, -1px 0 #000, 0 1px #000, 0 -1px #000, 0 2px 4px rgba(0,0,0,0.85); }
-        .cb2-btn.cb2-cloud-strong { width: 28px; }
-        /* 버튼이 하나 늘어난 만큼, 좁은 화면에서 재생 시간 글자가 옆 버튼과 겹치지 않도록 진행바 폭에 맞춰 글자를 줄임 */
-        .cb2-progress { container-type: inline-size; }
-        @container (max-width: 91px) { .cb2-time { font-size: 10px; left: 4px; } }
-        @container (max-width: 61px) { .cb2-time { display: none; } }
-        @supports not (container-type: inline-size) { @media (max-width: 399px) { .cb2-time { font-size: 10px; left: 4px; } } }
+
+        /* ===== [변경] 모든 영상 카드 스타일: 썸네일(오른쪽 아래 재생시간) → 파란 제목 → 작성자(회색 아이콘) ===== */
+        .ch-card.vc-card, .list-item.vc-li { display:flex; flex-direction:column; position:relative; background:transparent; border:0; padding:0; text-align:left; }
+        .vc-card .vc-thumbwrap, .vc-li .vc-thumbwrap { order:1; padding:0; }
+        .vc-card .vc-thumbwrap .ch-card-thumb, .vc-li .vc-thumbwrap .ch-card-thumb { background-color:#fff; }
+        .vc-card .vc-title, .vc-li .vc-title { order:2; background:none; color:#337ab7; font-size:14px; font-weight:normal; text-align:left; padding:7px 0 0; line-height:1.3; white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:break-all; }
+        .vc-card .vc-title.vc-title-cmt, .vc-li .vc-title.vc-title-cmt { display:flex; justify-content:flex-start; align-items:flex-start; }
+        .vc-card .vc-title.vc-title-cmt .vc-t, .vc-li .vc-title.vc-title-cmt .vc-t { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+        .vc-card .vc-info, .vc-li .vc-info { order:3; padding:6px 0 0; gap:0; }
+        .vc-card .ch-card-btns, .vc-li .ch-card-btns { order:4; padding:6px 0 0; }
+        .vc-card .vc-views, .vc-li .vc-views { display:none; }
+        .vc-card .vc-dur .vc-ico, .vc-li .vc-dur .vc-ico { display:none; }
+        .vc-card .vc-dur, .vc-li .vc-dur { position:absolute; right:4px; top:0; margin-top:56.25%; transform:translateY(calc(-100% - 4px)); background:rgba(120,120,120,0.85); color:#fff; font-size:12px; line-height:16px; padding:0 5px; z-index:2; }
+        .vc-card .vc-author, .vc-li .vc-author { display:flex; align-items:center; gap:6px; flex:1 1 0; min-width:0; text-align:left; font-size:13px; color:#222; white-space:nowrap; overflow:hidden; }
+        .vc-card .vc-author::before, .vc-li .vc-author::before, .rv-author::before { content:""; flex:0 0 auto; width:26px; height:15px; border-radius:3px; background:#d4d4d4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 15'%3E%3Ccircle cx='13' cy='5' r='2.6' fill='%23fff'/%3E%3Cpath d='M7.6 12.6c0-3 2.4-4.4 5.4-4.4s5.4 1.4 5.4 4.4z' fill='%23fff'/%3E%3C/svg%3E") center/100% 100% no-repeat; }
+        .vc-card.ch-verified .vc-author::before, .vc-li.ch-verified .vc-author::before, .rv-item.ch-verified .rv-author::before { background:#4caf50 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 15'%3E%3Cpath d='M8.5 7.8l3 3 6-6.3' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% 100% no-repeat; }
+        .vc-card.ch-verified .vc-author, .vc-li.ch-verified .vc-author, .rv-item.ch-verified .rv-author { color:#2e9e3a !important; font-weight:bold; }
+
+        /* ===== [변경] 영상 화면 밑 관련 동영상 / 이슈 동영상 목록 (썸네일 왼쪽, 제목 + 작성자 오른쪽) ===== */
+        #related-videos-box h4 { font-size:16px !important; color:#222 !important; padding:0 0 10px; margin:0 0 12px; border-bottom:1px solid #eee; }
+        #related-videos-box .rv-issue-head { margin-top:18px; display:flex; align-items:center; gap:8px; font-weight:bold; }
+        .rv-reco-pill { display:inline-block; background:#757575; color:#fff; font-size:12px; font-weight:bold; border-radius:10px; padding:1px 8px; line-height:18px; flex-shrink:0; }
+        #related-videos-box #related-videos-list, #related-videos-box #issue-videos-list { display:block; overflow:visible; padding:0; }
+        .rv-list > .rv-item { display:flex; gap:12px; margin-bottom:12px; cursor:pointer; }
+        .rv-thumb { position:relative; flex:0 0 34%; max-width:200px; min-width:0; }
+        .rv-thumb .ch-card-thumb { background-color:#fff; }
+        .rv-item.ch-verified .ch-card-thumb { border:2px solid #4caf50; }
+        .rv-item:hover .ch-card-thumb { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
+        .rv-dur { position:absolute; right:4px; bottom:4px; background:rgba(120,120,120,0.85); color:#fff; font-size:12px; line-height:16px; padding:0 5px; }
+        .rv-meta { flex:1 1 0; min-width:0; }
+        .rv-title { color:#337ab7; font-size:14px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-all; }
+        .rv-title .vc-cmt { margin-left:3px; }
+        .rv-author { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:13px; color:#222; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+        /* ===== [변경] 모바일 세로 - 홈 위쪽의 앱 받기 / 랜덤 / 공지사항 / 업로드 버튼은 삼선(≡) 메뉴로 이동 (홈에서는 숨김) ===== */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .home-top-actions, .home-top-upload-row { display: none !important; }
+        }
 </style>
 <script>
 /* [신규] 퍼가기 전용 주소(#/embed/영상번호)로 열리면 영상 화면만 보이는 모드로 시작 */
@@ -1551,6 +1586,30 @@ html.nyang-embed #player-row { display: block !important; width: 100% !important
 html.nyang-embed #player-side-panel { display: none !important; }
 html.nyang-embed #fullscreen-player-target { display: flex !important; flex-direction: column !important; width: 100% !important; height: 100% !important; }
 html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !important; width: 100% !important; height: auto !important; min-height: 0 !important; aspect-ratio: auto !important; }
+</style>
+<style id="cb2-transparent-patch">
+/* ===== [수정] 동영상 컨트롤바 투명(영상 위에 겹침) + 소리 조정(스피커 + 하늘색 선 + 흰색 막대) + 10초 앞으로 버튼 ===== */
+.cb2-bar { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; background: transparent !important; box-shadow: none; pointer-events: none; z-index: 1005; }
+.cb2-bar .cb2-btn, .cb2-bar .cb2-range, .cb2-bar .volume-slider { pointer-events: auto; }
+.cb2-bar .cb2-btn svg { fill: #fff; filter: drop-shadow(0 0 2px rgba(0,0,0,0.95)) drop-shadow(0 1px 2px rgba(0,0,0,0.8)); }
+.cb2-bar .cb2-range { filter: drop-shadow(0 0 2px rgba(0,0,0,0.9)); }
+.cb2-bar .cb2-time { text-shadow: 0 0 3px #000, 0 1px 2px #000; }
+.cb2-bar .cb2-vol { position: relative; display: flex; align-items: center; flex: 0 1 auto; width: auto; min-width: 0; }
+.cb2-bar .cb2-vol .cb2-btn { flex: 0 1 36px; width: 36px; min-width: 24px; }
+.cb2-bar .cb2-vol .cb2-vol-pop,
+.cb2-bar .cb2-vol:hover .cb2-vol-pop,
+.cb2-bar .cb2-vol:focus-within .cb2-vol-pop { display: flex; position: static; flex: 0 1 64px; width: 64px; min-width: 38px; height: 100%; padding: 0 6px 0 0; align-items: center; background: transparent; border-radius: 0; z-index: auto; }
+.cb2-bar .cb2-vol-pop .volume-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 24px; margin: 0; padding: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 0 2px rgba(0,0,0,0.9)); }
+.cb2-bar .volume-slider::-webkit-slider-runnable-track { height: 2px; border-radius: 0; background: linear-gradient(to right, #62b6dc var(--v, 100%), #ffffff var(--v, 100%)); }
+.cb2-bar .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 5px; height: 22px; margin-top: -10px; border-radius: 2px; background: #ffffff; border: none; box-shadow: 0 0 3px rgba(0,0,0,0.7); transform: none; cursor: pointer; }
+.cb2-bar .volume-slider::-webkit-slider-thumb:hover, .cb2-bar .volume-slider::-webkit-slider-thumb:active { transform: none; }
+.cb2-bar .volume-slider::-moz-range-track { height: 2px; border-radius: 0; background: #ffffff; }
+.cb2-bar .volume-slider::-moz-range-progress { height: 2px; border-radius: 0; background: #62b6dc; }
+.cb2-bar .volume-slider::-moz-range-thumb { width: 5px; height: 22px; border-radius: 2px; background: #ffffff; border: none; box-shadow: 0 0 3px rgba(0,0,0,0.7); transform: none; cursor: pointer; }
+.cb2-bar .volume-slider::-moz-range-thumb:hover { transform: none; }
+/* 컨트롤바가 영상 위에 겹치므로 아래쪽에 있던 워터마크 / 구름 아트 버튼줄은 컨트롤바 바로 위로 올림 */
+.player-wrapper .video-watermark { bottom: 66px; }
+#cloud-art-bar, #cloud-art-editbar { bottom: 68px; }
 </style>
 </head>
 <body>
@@ -1605,6 +1664,8 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 <div class="nav-icon-btn" onclick="showSection('board')"><span>화목한 게시판</span></div>
                 <div class="nav-icon-btn" onclick="openMyPage()"><span>마이페이지</span></div>
                 <div class="nav-icon-btn" onclick="showSection('history')"><span>최근 본 동영상</span></div>
+                <div class="nav-icon-btn" onclick="playRandomVideo()" title="아무 동영상이나 하나 보여줍니다"><span>랜덤</span></div>
+                <a class="nav-icon-btn" href="https://drive.google.com/file/d/17B7fgFw2-SmITRvMLe75Kfv9_-VRP8OH/view?usp=drive_link" target="_blank" rel="noopener noreferrer" title="앱 받기" style="color:inherit; text-decoration:none;"><span>앱 받기</span></a>
                 <div class="header-upload-btn" onclick="openModal('upload-modal')">
                     <div class="green-upload-btn"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M12 6l5 6h-3.2v6h-3.6v-6H7z" fill="#4a9f48"/></svg><span>동영상 업로드</span></div>
                 </div>
@@ -1884,25 +1945,20 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                     </div>
                     
                     <div class="cb2-bar">
-                        <button class="cb2-btn cb2-play" id="custom-play-toggle-btn" onclick="togglePlayPause()" title="재생/일시정지">
-                            <svg id="ctrl-play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <svg id="ctrl-pause-svg" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                        </button>
                         <div class="cb2-progress">
                             <input type="range" class="cb2-range" id="custom-progress-bar" min="0" max="100" step="any" value="0" oninput="seekVideo(this.value)">
                             <span class="cb2-time" id="custom-time-display">00:00 / 00:00</span>
                         </div>
-                        <button class="cb2-btn cb2-replay" id="replay-btn" onclick="replayVideo()" title="다시 재생">
-                            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                        <div class="cb2-row">
+                        <button class="cb2-btn cb2-play" id="custom-play-toggle-btn" onclick="togglePlayPause()" title="재생/일시정지">
+                            <svg id="ctrl-play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <svg id="ctrl-pause-svg" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                         </button>
-                        <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (켠 뒤 동영상 화면을 누르면 원하는 곳에 달 수 있습니다)">
-                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                        <button class="cb2-btn cb2-back10" id="custom-back10-btn" type="button" onclick="skipTime(-10)" title="10초 뒤로가기">
+                            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16.6" font-size="7.5" font-weight="bold" text-anchor="middle" font-family="sans-serif">10</text></svg>
                         </button>
-                        <button class="cb2-btn cb2-cloud-strong" id="custom-cloud-strong-btn" type="button" onclick="toggleStrongCloudMode()" title="강조 구름 달기 (켠 뒤 동영상 화면을 누르면 까만 테두리·그림자가 있는 구름을 달 수 있습니다)">
-                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/><path d="M11 8h2v5h-2zM11 14.5h2v2h-2z" fill="#f5a31a"/></svg>
-                        </button>
-                        <button class="cb2-btn cb2-cloud-art" id="custom-cloud-art-btn" type="button" title="구름 아트 (나만의 글자 그림을 만들어 도장처럼 찍을 수 있습니다)">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                        <button class="cb2-btn cb2-fwd10" id="custom-fwd10-btn" type="button" onclick="skipTime(10)" title="10초 앞으로가기">
+                            <svg viewBox="0 0 24 24" fill="#fff"><path fill="#fff" transform="translate(24,0) scale(-1,1)" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16.6" font-size="7.5" font-weight="bold" text-anchor="middle" font-family="sans-serif" fill="#fff">10</text></svg>
                         </button>
                         <div class="cb2-vol">
                             <button class="cb2-btn" id="volume-mute-btn" onclick="toggleMute()" title="소리 조정 / 음소거">
@@ -1912,9 +1968,22 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                                 <input type="range" class="volume-slider" id="custom-volume-bar" min="0" max="1" step="0.05" value="1" oninput="adjustVolume(this.value)">
                             </div>
                         </div>
+                        <button class="cb2-btn cb2-replay" id="replay-btn" onclick="replayVideo()" title="다시 재생">
+                            <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+                        </button>
+                        <button class="cb2-btn cb2-cloud" id="custom-cloud-toggle-btn" onclick="toggleCloudWritingMode()" title="구름 자막 달기 (켠 뒤 동영상 화면을 누르면 원하는 곳에 달 수 있습니다)">
+                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                        </button>
                         <button class="cb2-btn cb2-fullscreen" id="custom-fullscreen-btn" onclick="toggleFullscreen()" title="전체화면">
                             <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                         </button>
+                        <button class="cb2-btn cb2-cloud-art" id="custom-cloud-art-btn" type="button" title="구름 아트 (나만의 글자 그림을 만들어 도장처럼 찍을 수 있습니다)">
+                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                        </button>
+                        <button class="cb2-btn cb2-cloud-strong" id="custom-cloud-strong-btn" type="button" onclick="toggleStrongCloudMode()" title="강조 구름 달기 (켠 뒤 동영상 화면을 누르면 까만 테두리·그림자가 있는 구름을 달 수 있습니다)">
+                            <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/><path d="M11 8h2v5h-2zM11 14.5h2v2h-2z" fill="#4a4a4a"/></svg>
+                        </button>
+                        </div>
                     </div>
                 </div>
                 <div id="player-side-panel"><div id="player-side-inner">
@@ -1938,8 +2007,10 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                     </div>
                 </div>
                 <div id="related-videos-box" style="padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
-                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold; display:flex; align-items:center; gap:6px;"><span class="related-link-badge"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>관련동영상</h4>
-                    <div id="related-videos-row" class="vs-row-box"><div id="related-videos-list" class="vs-row-scroll"></div></div>
+                    <h4 style="margin:0 0 8px 0; font-size:12px; color:#000; font-weight:bold; display:flex; align-items:center; gap:6px;"><span class="related-link-badge"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>관련 동영상</h4>
+                    <div id="related-videos-row" class="vs-row-box"><div id="related-videos-list" class="rv-list"></div></div>
+                    <h4 id="issue-videos-title" class="rv-issue-head"><span class="rv-reco-pill">추천</span><span id="issue-videos-title-text">이슈 동영상</span></h4>
+                    <div id="issue-videos-list" class="rv-list"></div>
                 </div>
                 <!-- [변경] 영상 화면 밑 "32시간 인기동영상" 구역 숨김 (가로모드 관련영상 위치 계산이 이 칸을 기준으로 쓰므로 코드는 지우지 않고 숨김 처리) -->
                 <div id="popular-videos-box" style="display:none; padding:12px 15px; font-size:12px; border:1px solid #eee; margin-top:8px; text-align: left; background: #fff;">
@@ -3150,36 +3221,54 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
             </div>`).join('');
     }
 
+    /* [변경] 영상 화면 밑: 관련 동영상 4개 + 추천 이슈 동영상 4개 (썸네일 왼쪽 / 파란 제목 + 작성자 오른쪽 목록) */
+    function rvItemHtml(v) {
+        const verified = chIsVerified(v.author);
+        const thumbStyle = v.thumb ? `background-image:url('${v.thumb}');` : '';
+        return `
+        <div class="rv-item${verified ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
+            <div class="rv-thumb"><div class="ch-card-thumb" style="${thumbStyle}"></div><span class="rv-dur">${escapeHtml(v.playTime || '03:45')}</span></div>
+            <div class="rv-meta">
+                <div class="rv-title">${vcTitleHtml(v, escapeHtml(v.title))}</div>
+                <div class="rv-author" style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author || '')}</div>
+            </div>
+        </div>`;
+    }
+
     function renderRelatedVideos() {
         const box = document.getElementById('related-videos-list');
         if(!box || !currentPlayingItem) return;
 
-        const related = db.filter(v => v.author === currentPlayingItem.author && v.id !== currentPlayingItem.id).slice(0, 5);
+        const cur = currentPlayingItem;
+        const byViews = (a, b) => (b.views || 0) - (a.views || 0);
+        const others = db.filter(v => v.id !== cur.id);
 
-        /* [신규] 영상 화면 밑 관련영상 줄의 이동(<, >) 버튼: 이전 버튼을 지우고 3개 이상일 때만 새로 붙임 */
+        /* 관련 동영상 4개: 같은 작성자 → 같은 카테고리 → 나머지 순으로 채움 */
+        const related = [];
+        const pushUnique = (list) => { list.forEach(v => { if(related.length < 4 && !related.includes(v)) related.push(v); }); };
+        pushUnique(others.filter(v => v.author === cur.author));
+        pushUnique(others.filter(v => v.genre === cur.genre).sort(byViews));
+        pushUnique(others.slice().sort(byViews));
+
+        /* 이슈 동영상 4개: 같은 카테고리에서 인기 있는 순 (관련 동영상과 겹치지 않게), 모자라면 전체 인기순으로 채움 */
+        const issue = [];
+        const pushIssue = (list) => { list.forEach(v => { if(issue.length < 4 && !issue.includes(v) && !related.includes(v)) issue.push(v); }); };
+        pushIssue(others.filter(v => v.genre === cur.genre).sort(byViews));
+        pushIssue(others.slice().sort(byViews));
+
         const relRow = document.getElementById('related-videos-row');
-        if(relRow) {
-            relRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
-            if(related.length > 2) relRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
-        }
+        if(relRow) relRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
 
-        if(related.length === 0) {
-            box.innerHTML = `<div style="color:#999; padding:10px 0;">관련동영상이 없습니다.</div>`;
-            return;
-        }
+        box.innerHTML = related.length === 0
+            ? `<div style="color:#999; padding:10px 0;">관련동영상이 없습니다.</div>`
+            : related.map(rvItemHtml).join('');
 
-        box.innerHTML = related.map(v => {
-            const listPlayLength = v.playTime || "03:45";
-            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
-            const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
-            return `
-            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="vc-title${vcCmtClass(v)}">${vcTitleHtml(v, escapeHtml(v.title))}</div>
-                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
-                ${vcInfoHtml(v)}
-                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-            </div>`;
-        }).join('');
+        const issueTitle = document.getElementById('issue-videos-title-text');
+        if(issueTitle) issueTitle.textContent = '이슈 동영상 ▷ ' + (cur.genre || '전체');
+        const issueBox = document.getElementById('issue-videos-list');
+        if(issueBox) issueBox.innerHTML = issue.length === 0
+            ? `<div style="color:#999; padding:10px 0;">이슈동영상이 없습니다.</div>`
+            : issue.map(rvItemHtml).join('');
     }
 
     function renderPopularVideos() {
@@ -9253,6 +9342,21 @@ function toggleStrongCloudMode() {
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
+})();
+</script>
+<script>
+(function(){
+    var v = document.getElementById('main-video');
+    var bar = document.getElementById('custom-volume-bar');
+    if (!v || !bar) return;
+    function fill() {
+        var val = v.muted ? 0 : v.volume;
+        if (typeof val !== 'number' || isNaN(val)) val = 1;
+        bar.style.setProperty('--v', Math.round(val * 1000) / 10 + '%');
+    }
+    bar.addEventListener('input', function() { bar.style.setProperty('--v', (parseFloat(bar.value) || 0) * 100 + '%'); });
+    v.addEventListener('volumechange', fill);
+    fill();
 })();
 </script>
 </body>
