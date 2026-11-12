@@ -1662,6 +1662,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
 #cloud-art-bar, #cloud-art-editbar { bottom: 68px; }
 </style>
 <style>
+    /* [수정] 홈 이슈 영상 왼/오 버튼 - 이미지 대신 CSS(SVG)로 만든 주황색 원형 버튼 */
+    #home-issue-section > img.unlucky-next-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%23f0ae4f%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); width: 40px; height: 40px; }
+    #home-issue-section > img.unlucky-prev-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg transform=%22translate(133 0) scale(-1 1)%22%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%23f0ae4f%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); width: 40px; height: 40px; }
 /* [수정] PC/가로모드 - 헤더 오른쪽(업로드/로그인/랜덤) 버튼이 화면 밖으로 잘리지 않도록 검색창이 남는 폭에 맞춰 줄어들게 함 */
 @media (orientation: landscape) {
     header .header-right { min-width: 0; flex: 1 1 0 !important; }
