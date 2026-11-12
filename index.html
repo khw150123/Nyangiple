@@ -1661,6 +1661,30 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
 .player-wrapper .video-watermark { bottom: 66px; }
 #cloud-art-bar, #cloud-art-editbar { bottom: 68px; }
 </style>
+<style>
+/* [수정] PC/가로모드 - 헤더 오른쪽(업로드/로그인/랜덤) 버튼이 화면 밖으로 잘리지 않도록 검색창이 남는 폭에 맞춰 줄어들게 함 */
+@media (orientation: landscape) {
+    header .header-right { min-width: 0; flex: 1 1 0 !important; }
+    header .search-wrapper { min-width: 0; flex: 0 1 auto; }
+    header .search-wrapper .search-input-overlay { flex: 1 1 auto; min-width: 40px; }
+    header .search-wrapper { min-width: 112px; }
+    header .search-wrapper .search-input-overlay { min-width: 40px; }
+    header .search-btn-css { flex-shrink: 0; }
+    header .lg-nav-item { padding-left: clamp(5px, 1.5vw, 24px); padding-right: clamp(5px, 1.5vw, 24px); }
+    header .hdr-uinfo-box { flex-shrink: 1; min-width: 0; margin-left: 6px; }
+    header .hdr-uinfo-box .uinfo-toggle { min-width: 0; }
+    header .hdr-uinfo-box .uinfo-nick { max-width: clamp(30px, 8vw, 110px); }
+    header .hdr-top-actions { margin-left: 6px; }
+}
+/* [수정] 좁은 가로화면(폰 가로 등) - 헤더가 한 줄에 안 들어가 서로 겹치고 버튼이 빠지므로 두 줄로 나눠 모든 항목을 표시 */
+@media (orientation: landscape) {
+    header.hdr-wrap { flex-wrap: wrap; row-gap: 4px; padding-bottom: 4px; }
+    header.hdr-wrap .header-left { flex: 1 1 100% !important; min-width: 0; overflow: visible; justify-content: flex-start; flex-wrap: wrap; }
+    header.hdr-wrap .header-right { flex: 1 1 100% !important; flex-wrap: wrap; row-gap: 4px; justify-content: flex-start; padding-right: 5px; }
+    header.hdr-wrap .search-wrapper { margin-left: 8px !important; }
+    header.hdr-wrap .hdr-top-actions { margin-left: auto; }
+}
+</style>
 </head>
 <body>
 
@@ -1824,6 +1848,8 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                         </div>
                     </div>
 
+                    <div id="home-issue-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
+
                     <div class="home-reco-box home-css-create-box">
                         <div class="home-css-head ny-seeall" onclick="homeSeeAll('original')"><span class="home-css-pill">자작</span><span class="home-css-name">[창작플] 자작 영상을 올려보자</span></div>
                         <div class="unlucky-outer-container home-reco-outer" style="margin-top:10px;">
@@ -1834,8 +1860,6 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                     </div>
 
                     <div id="home-cert-channel-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
-
-                    <div id="home-issue-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
 
                     <div id="home-short-section" class="home-reco-box" style="display:none; position:relative; padding:0;"></div>
 
@@ -9507,6 +9531,7 @@ updateShuffleEndBtn();
     }
     window.nyInstallWebApp = function() {
         if (isStandalone()) { alert('이미 냥이플 웹앱으로 실행 중이에요.'); return; }
+        if (!/^https?:$/.test(location.protocol)) { alert('웹앱 설치는 파일로 연 화면에서는 안 돼요.\n올려둔 사이트 주소(https://...)로 접속해서 눌러주세요.'); return; }
         if (deferredInstall) {
             var p = deferredInstall;
             deferredInstall = null;
@@ -9533,7 +9558,7 @@ updateShuffleEndBtn();
             var wrap = btn && btn.parentNode;
             var row = document.getElementById('home-rank-tabs');
             if (!btn || !wrap || !row) return;
-            if (!window.matchMedia('(orientation: landscape)').matches) { btn.style.left = ''; btn.style.right = ''; return; }
+            if (!window.matchMedia('(orientation: landscape)').matches) { btn.style.left = ''; btn.style.right = ''; wrap.style.paddingTop = ''; return; }
             var tabs = row.querySelectorAll('.home-rank-tab'), maxR = 0, i;
             for (i = 0; i < tabs.length; i++) {
                 var r = tabs[i].getBoundingClientRect();
@@ -9542,8 +9567,15 @@ updateShuffleEndBtn();
             var w = wrap.getBoundingClientRect();
             if (!maxR || !w.width) return;
             var left = maxR - w.left + GAP, bw = btn.getBoundingClientRect().width || btn.offsetWidth;
-            var limit = w.width - bw - 14;
-            if (left > limit) left = limit;
+            var limit = w.width - bw - 24;
+            wrap.style.paddingTop = '';
+            if (left > limit) {
+                /* [수정] 탭 오른쪽에 버튼이 들어갈 자리가 없으면 탭을 가리지 않도록 탭 줄 위쪽에 따로 배치 */
+                var bh = btn.getBoundingClientRect().height || btn.offsetHeight;
+                var bt = parseFloat(window.getComputedStyle(btn).top) || 0;
+                wrap.style.paddingTop = (bt + bh + 6) + 'px';
+                left = limit;
+            }
             btn.style.left = left + 'px';
             btn.style.right = 'auto';
         } catch (e) {}
@@ -9564,6 +9596,100 @@ updateShuffleEndBtn();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
     var img = document.querySelector('.home-lg-notice-btn');
     if (img && !img.complete) img.addEventListener('load', place);
+})();
+</script>
+<script>
+/* [신규] 제목이 정확히 "SADMGLK;SDGDSDDDD" 인 영상을 온라인 DB와 이 기기에서 삭제 (다른 영상은 건드리지 않음) */
+(function() {
+    var TARGET = 'SADMGLK;SDGDSDDDD';
+    var busy = false, onlineChecked = false;
+    function isTarget(v) { return !!v && typeof v.title === 'string' && v.title === TARGET; }
+    async function run() {
+        if (busy) return;
+        busy = true;
+        try {
+            if (!onlineChecked && typeof fbLoadAllVideos === 'function' && typeof fbDeleteVideo === 'function') {
+                var online = await fbLoadAllVideos();
+                if (online) {
+                    onlineChecked = true;
+                    for (var i = 0; i < online.length; i++) {
+                        if (isTarget(online[i])) await fbDeleteVideo(online[i].id);
+                    }
+                }
+            }
+            if (typeof db !== 'undefined' && Array.isArray(db)) {
+                var hits = db.filter(isTarget);
+                if (hits.length) {
+                    var ids = hits.map(function(v) { return String(v.id); });
+                    db = db.filter(function(v) { return !(v && ids.indexOf(String(v.id)) !== -1); });
+                    try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch (e) {}
+                    for (var j = 0; j < hits.length; j++) {
+                        if (typeof fbDeleteVideo === 'function') { try { await fbDeleteVideo(hits[j].id); } catch (e) {} }
+                        try {
+                            if (typeof indexedDBInstance !== 'undefined' && indexedDBInstance) {
+                                indexedDBInstance.transaction('videos', 'readwrite').objectStore('videos').delete(Number(hits[j].id));
+                            }
+                        } catch (e) {}
+                    }
+                    try {
+                        if (typeof currentPlayingItem !== 'undefined' && currentPlayingItem && ids.indexOf(String(currentPlayingItem.id)) !== -1) {
+                            video.pause(); video.removeAttribute('src'); video.load();
+                            currentPlayingItem = null;
+                            document.getElementById('player-container').style.display = 'none';
+                        }
+                    } catch (e) {}
+                    if (typeof initUI === 'function') initUI();
+                }
+            }
+        } catch (e) {}
+        busy = false;
+    }
+    setTimeout(run, 2500);
+    setTimeout(run, 9000);
+    setTimeout(run, 25000);
+})();
+</script>
+<script>
+/* [수정] PC/가로모드 - 헤더 항목이 한 줄에 다 안 들어가(겹치거나 화면 밖으로 넘침) 잘리면 두 줄로 나눠서 모두 보이게 함 */
+(function() {
+    function vis(e) { var r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+    function fit() {
+        try {
+            var h = document.querySelector('header');
+            if (!h) return;
+            h.classList.remove('hdr-wrap');
+            if (!window.matchMedia('(orientation: landscape)').matches) return;
+            var hl = h.querySelector('.header-left'), hr = h.querySelector('.header-right');
+            if (!hl || !hr) return;
+            var L = Array.prototype.slice.call(hl.querySelectorAll('.logo-wrap,.lg-nav-item')).filter(vis);
+            var R = Array.prototype.slice.call(hr.querySelectorAll('.search-wrapper,.hdr-uinfo-box,.lg-upload-icon-btn,.hdr-top-actions > *')).filter(vis);
+            var W = document.documentElement.clientWidth;
+            var lastL = 0, firstR = 1e9, lastR = 0, i, r;
+            for (i = 0; i < L.length; i++) { r = L[i].getBoundingClientRect(); if (r.right > lastL) lastL = r.right; }
+            for (i = 0; i < R.length; i++) { r = R[i].getBoundingClientRect(); if (r.left < firstR) firstR = r.left; if (r.right > lastR) lastR = r.right; }
+            var bad = (L.length && R.length && lastL > firstR - 2) || lastR > W - 2 || lastL > W - 2 || h.scrollWidth > h.clientWidth + 1;
+            if (R.length > 1) {
+                var sorted = R.map(function(e) { return e.getBoundingClientRect(); }).sort(function(a, b) { return a.left - b.left; });
+                for (i = 1; i < sorted.length; i++) if (sorted[i].left < sorted[i - 1].right - 1) bad = true;
+            }
+            if (bad) h.classList.add('hdr-wrap');
+        } catch (e) {}
+    }
+    window.addEventListener('resize', fit);
+    window.addEventListener('orientationchange', function() { setTimeout(fit, 200); });
+    window.addEventListener('load', function() { fit(); setTimeout(fit, 500); setTimeout(fit, 1500); setTimeout(fit, 4000); });
+    document.addEventListener('DOMContentLoaded', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    if (window.ResizeObserver) {
+        document.addEventListener('DOMContentLoaded', function() {
+            var h = document.querySelector('header');
+            if (!h) return;
+            var ro = new ResizeObserver(function() { clearTimeout(fit._t); fit._t = setTimeout(fit, 60); });
+            ro.observe(document.documentElement);
+            var mo = new MutationObserver(function() { clearTimeout(fit._t); fit._t = setTimeout(fit, 120); });
+            mo.observe(h, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+        });
+    }
 })();
 </script>
 </body>
