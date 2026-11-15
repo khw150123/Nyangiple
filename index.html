@@ -10221,7 +10221,6 @@ html.app-mode.app-watch #as-back { display: flex; position: fixed; left: 12px; b
         $('as-wt-tt').textContent = cur.title || '';
         $('as-wi-body').innerHTML = watchInfoHtml(cur);
         var ex = $('as-wi-extra'), box = document.getElementById('cloud-write-box'), cm = document.getElementById('video-comments-section');
-        if (box && box.parentNode !== ex) ex.appendChild(box);
         if (cm && cm.parentNode !== ex) ex.appendChild(cm);
         var au = cur.author || '', isMe = false, subd = false, sc = 0;
         try { isMe = !!(user && user.nick === au); } catch (e) {}
@@ -10293,6 +10292,8 @@ html.app-mode.app-watch #as-back { display: flex; position: fixed; left: 12px; b
 html.as-vid.app-watch #as-wv { display: block; background: #fff; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); font-family: inherit; color: #222; text-align: left; }
 html.as-vid.app-watch #video-section > *:not(#player-container) { display: none !important; }
 html.as-vid.app-watch #player-top-bar, html.as-vid.app-watch #player-side-panel { display: none !important; }
+/* [앱 전용] 접었다 펴는 정보 영역과 중복되는 원래 화면(상세 정보/연관·이슈 동영상)과 구름자막 달기 칸은 앱에서만 숨김 */
+html.as-vid.app-watch #v-detail-info, html.as-vid.app-watch #related-videos-box, html.as-vid.app-watch #cloud-write-box { display: none !important; }
 html.as-vid.app-watch #player-container { margin-bottom: 0 !important; }
 html.as-vid.app-watch #as-wbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1550; height: 64px; padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: content-box; background: rgba(45,45,45,0.95); align-items: center; }
 html.as-vid.app-watch #as-back { top: calc(8px + env(safe-area-inset-top, 0px)); bottom: auto; left: 8px; width: 38px; height: 38px; background: rgba(0,0,0,0.5); box-shadow: none; }
