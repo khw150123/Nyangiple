@@ -1496,6 +1496,12 @@ html.app-splash::before { content: ''; position: fixed; top: 0; left: 0; right: 
         #my-jjim-row > img.unlucky-next-btn, #home-my-jjim-row > img.unlucky-next-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
         #my-jjim-row > img.unlucky-prev-btn, #home-my-jjim-row > img.unlucky-prev-btn { content: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22115%22 height=%22115%22 viewBox=%229 9 115 115%22%3E%3Cg transform=%22translate(133 0) scale(-1 1)%22%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2257.5%22 fill=%22%23fff%22/%3E%3Ccircle cx=%2266.5%22 cy=%2266.5%22 r=%2251%22 fill=%22%235cb85c%22/%3E%3Cpolyline points=%2258,41 86,66.5 58,92%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%2216%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/g%3E%3C/svg%3E"); }
         @media (max-width: 768px) and (orientation: portrait) { #my-jjim-green-box .home-css-head, #home-my-jjim-green-box .home-css-head { margin:0 0 10px; } }
+        /* [신규] 검색 결과(브라우저 화면): 영상을 가로로 넘기는 줄 + 파란 이동(<, >) 버튼/띠. 웹앱 화면에는 영향 없음 */
+        html:not(.app-mode) #search-result-list { display:flex; gap:10px; overflow-x:auto; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:4px; }
+        html:not(.app-mode) #search-result-list::-webkit-scrollbar { display:none; }
+        html:not(.app-mode) #search-result-list > .list-item { flex:0 0 calc(50% - 5px); min-width:0; }
+        html:not(.app-mode) #search-result-list > :not(.list-item) { flex:0 0 100%; }
+        @media (orientation: landscape) { html:not(.app-mode) #search-result-list > .list-item { flex:0 0 calc((100% - 40px) / 5); } }
         /* ===== [신규] 가로모드/PC - 영상 오른쪽 관련동영상 카드의 정보줄(시간/조회수/작성자)이 카드 밖으로 넘치지 않게 줄바꿈 ===== */
         @media (orientation: landscape) {
             #side-related-slot .vc-info { flex-wrap:wrap; row-gap:2px; gap:4px; padding:5px 4px 6px; overflow:hidden; }
@@ -2304,7 +2310,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                     </div>
                 </div>
             </div>
-            <div id="search-result-list"></div>
+            <div id="search-result-row" class="vs-row-box"><div id="search-result-list" class="vs-row-scroll"></div></div>
         </section>
 
         <section id="history-section" class="page-section">
@@ -7265,6 +7271,8 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         const headerEl = document.getElementById('search-result-header-text');
         const listEl = document.getElementById('search-result-list');
         if(!listEl) return;
+        const srRow = document.getElementById('search-result-row');
+        if(srRow) srRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
 
         let l = db.filter(v => v.title.toLowerCase().includes(searchQuery) || (v.author && v.author.toLowerCase().includes(searchQuery)) || (v.tags && Array.isArray(v.tags) && v.tags.some(t => t.toLowerCase().includes(searchQuery.replace(/^#/, '')))));
 
@@ -7298,6 +7306,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
             </div>`;
         }).join('');
+        listEl.scrollLeft = 0;
+        /* [신규] 검색 결과: 2개보다 많으면 파란색 이동(<, >) 버튼 표시 */
+        if(srRow && l.length > 2) srRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
     }
 
     function setSearchSort(s, el) {
@@ -9883,6 +9894,10 @@ html.app-mode:not(.app-watch) body { overflow: hidden; }
 #as-fab { position: absolute; right: 16px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50% !important; border: 0; background: #2aa9d8; box-shadow: 0 3px 8px rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center; cursor: pointer; padding: 0; z-index: 3; }
 #as-fab.on { display: flex; }
 #as-fab svg { width: 26px; height: 26px; fill: #fff; }
+/* [신규] 앱 필터 버튼: 파란 원 + 흰색 깔때기 모양(CSS로 그림) */
+#as-fab { background: #25abdc; }
+#as-fab svg { display: none; }
+#as-fab::before { content: ''; position: absolute; left: 31.7%; top: 33.3%; width: 36.7%; height: 33.3%; background: #fff; clip-path: polygon(0 0, 100% 0, 60.6% 52%, 60.6% 100%, 40.5% 100%, 40.5% 52%); }
 #as-sheet-bg { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); display: none; z-index: 5; }
 #as-sheet-bg.on { display: block; }
 #as-sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 14px 14px 0 0; padding: 6px 0 calc(10px + env(safe-area-inset-bottom, 0px)) 0; z-index: 6; display: none; }
