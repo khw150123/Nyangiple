@@ -10219,7 +10219,9 @@ html.app-mode.app-watch #as-back { display: flex; position: fixed; left: 12px; b
         if (!cur || !ensureWatchPanel()) return;
         if (WV.vid !== cur.id) { WV.vid = cur.id; $('as-wt').classList.remove('open'); $('as-wi').classList.remove('open'); }
         $('as-wt-tt').textContent = cur.title || '';
-        $('as-wi-body').innerHTML = watchInfoHtml(cur);
+        /* [변경] 접었다 펴는 정보 영역에는 원래 화면의 영상 정보(#v-detail-info)를 그대로 가져와서 보여줌 */
+        var vdi = document.getElementById('v-detail-info'), wib = $('as-wi-body');
+        if (vdi && wib && vdi.parentNode !== wib) wib.appendChild(vdi);
         var ex = $('as-wi-extra'), box = document.getElementById('cloud-write-box'), cm = document.getElementById('video-comments-section');
         if (cm && cm.parentNode !== ex) ex.appendChild(cm);
         var au = cur.author || '', isMe = false, subd = false, sc = 0;
@@ -10293,7 +10295,10 @@ html.as-vid.app-watch #as-wv { display: block; background: #fff; padding-bottom:
 html.as-vid.app-watch #video-section > *:not(#player-container) { display: none !important; }
 html.as-vid.app-watch #player-top-bar, html.as-vid.app-watch #player-side-panel { display: none !important; }
 /* [앱 전용] 접었다 펴는 정보 영역과 중복되는 원래 화면(상세 정보/연관·이슈 동영상)과 구름자막 달기 칸은 앱에서만 숨김 */
-html.as-vid.app-watch #v-detail-info, html.as-vid.app-watch #related-videos-box, html.as-vid.app-watch #cloud-write-box { display: none !important; }
+html.as-vid.app-watch #related-videos-box, html.as-vid.app-watch #cloud-write-box { display: none !important; }
+/* [앱 전용] 접었다 펴는 영역 안의 영상 정보에서 찜하기 칸과 공유 버튼(하단 바에 이미 있음)은 숨김 */
+html.as-vid.app-watch #as-wi-body #jjim-top-slot, html.as-vid.app-watch #as-wi-body #v-detail-info > div:nth-child(3) { display: none !important; }
+#as-wi-body #v-detail-info { margin-top: 0 !important; }
 html.as-vid.app-watch #player-container { margin-bottom: 0 !important; }
 html.as-vid.app-watch #as-wbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1550; height: 64px; padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: content-box; background: rgba(45,45,45,0.95); align-items: center; }
 html.as-vid.app-watch #as-back { top: calc(8px + env(safe-area-inset-top, 0px)); bottom: auto; left: 8px; width: 38px; height: 38px; background: rgba(0,0,0,0.5); box-shadow: none; }
