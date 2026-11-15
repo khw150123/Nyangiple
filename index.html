@@ -1252,6 +1252,42 @@ html.app-splash::before { content: ''; position: fixed; top: 0; left: 0; right: 
         .comment-sort-tab { font-size:11px; color:#000; cursor:pointer; font-weight:bold; }
         .comment-sort-tab.active { color:#000; text-decoration:underline; }
 
+        /* ===== [신규] 댓글 카드 스타일 (프로필 / 닉네임 / 시간 / 답글·더보기 버튼 / 내용) - 동영상·게시판 모든 댓글 구역 공통 ===== */
+        .cm-wrap { margin: 0 0 12px 0; }
+        .cm-card { position: relative; background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 12px 14px; box-sizing: border-box; box-shadow: 0 1px 2px rgba(0,0,0,0.04); text-align: left; }
+        .cm-card.cm-top { margin-left: 9px; }
+        .cm-card.cm-top::before { content: ""; position: absolute; left: -9px; top: 20px; border: 8px solid transparent; border-left: 0; border-right: 9px solid #ddd; }
+        .cm-card.cm-top::after { content: ""; position: absolute; left: -8px; top: 21px; border: 7px solid transparent; border-left: 0; border-right: 8px solid #fff; }
+        .cm-head { display: flex; align-items: center; gap: 10px; }
+        .cm-av { width: 44px; height: 44px; flex: none; object-fit: cover; background: #f4f4f4; border-radius: 4px; display: block; }
+        .cm-who { flex: 1; min-width: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
+        .cm-nick { color: #337ab7; font-weight: bold; font-size: 15px; word-break: break-all; }
+        .cm-time { color: #888; font-size: 12px; white-space: nowrap; }
+        .cm-btns { flex: none; display: flex; align-items: stretch; margin-left: auto; position: relative; border: 1px solid #bbb; border-radius: 4px; background: linear-gradient(#fff, #e6e6e6); }
+        .cm-btns > .cm-btn + .cm-more { border-left: 1px solid #bbb; }
+        .cm-more { position: relative; display: inline-flex; }
+        .cm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 3px; min-width: 36px; height: 30px; padding: 0 8px; border: 0; background: transparent; color: #333; font-size: 11px; font-weight: bold; cursor: pointer; font-family: inherit; box-sizing: border-box; }
+        .cm-btn:active { background: rgba(0,0,0,0.08); }
+        .cm-btn svg { display: block; fill: currentColor; }
+        .cm-menu { display: none; position: absolute; right: 0; top: 100%; margin-top: 4px; min-width: 84px; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.18); z-index: 60; overflow: hidden; }
+        .cm-menu.open { display: block; }
+        .cm-menu div { padding: 10px 14px; font-size: 13px; color: #333; cursor: pointer; white-space: nowrap; }
+        .cm-menu div:hover { background: #f2f8fb; }
+        .cm-menu div.del { color: #ff3300; }
+        .cm-body { margin-top: 12px; color: #222; font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-all; }
+        .cm-edited { color: #aaa; font-size: 11px; }
+        .cm-foot { margin-top: 6px; }
+        .cm-card.cm-small { padding: 9px 11px; }
+        .cm-card.cm-small .cm-av { width: 34px; height: 34px; }
+        .cm-card.cm-small .cm-nick { font-size: 13px; }
+        .cm-card.cm-small .cm-time { font-size: 11px; }
+        .cm-card.cm-small .cm-body { margin-top: 8px; font-size: 13px; }
+        .cm-card.cm-small .cm-btn { height: 26px; min-width: 32px; }
+        .cm-write .cm-wrow { display: flex; gap: 6px; margin-top: 10px; }
+        .cm-write .cm-wrow input { flex: 1; min-width: 0; font-size: 14px; padding: 9px 10px; border: 1px solid #ccc; border-radius: 3px; box-sizing: border-box; }
+        .cm-write .cm-wrow button { font-size: 13px; font-weight: bold; padding: 0 16px; border: 1px solid #53add2; background: #53add2; color: #fff; border-radius: 3px; cursor: pointer; }
+        .cm-wrap .reply-input-row { margin-top: 8px; padding: 8px; background: #fff; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+
         /* ===== [신규] 영상 내 인기 구름 자막 하이라이트 ===== */
         .top-cloud-item { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px dashed #eee; cursor:pointer; }
         .top-cloud-item:last-child { border-bottom:none; }
@@ -3443,6 +3479,136 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         }
     }
 
+    /* ---------- [신규] 댓글 카드 공통 도우미 (동영상 댓글 / 화목한 게시판 댓글 둘 다 사용) ---------- */
+    function cmtTimeAgo(dateStr) {
+        if(!dateStr) return '';
+        const t = new Date(dateStr).getTime();
+        if(isNaN(t)) return '';
+        const sec = Math.max(0, Math.floor((Date.now() - t) / 1000));
+        if(sec < 60) return '방금 전';
+        const min = Math.floor(sec / 60);
+        if(min < 60) return min + '분 전';
+        const hour = Math.floor(min / 60);
+        if(hour < 24) return hour + '시간 전';
+        const day = Math.floor(hour / 24);
+        if(day < 30) return day + '일 전';
+        if(day < 365) return Math.floor(day / 30) + '개월 전';
+        return Math.floor(day / 365) + '년 전';
+    }
+    /* 프로필 사진이 큰 data 주소여도 댓글마다 통째로 넣지 않도록, 한 번만 변환해서 공유 (댓글이 많아도 가볍게) */
+    window.__cmtAv = window.__cmtAv || {};
+    function cmtAvatarUrl(nick) {
+        let src = '';
+        try { src = getUserProfileImgByNick(nick) || ''; } catch(e) {}
+        if(typeof src !== 'string' || src.indexOf('data:') !== 0 || src.length < 3000) return src;
+        const c = window.__cmtAv[nick];
+        if(c && c.src === src) return c.url;
+        try {
+            const comma = src.indexOf(',');
+            const head = src.slice(5, comma);
+            if(head.indexOf(';base64') === -1) return src;
+            const bin = atob(src.slice(comma + 1));
+            const arr = new Uint8Array(bin.length);
+            for(let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+            const url = URL.createObjectURL(new Blob([arr], { type: head.split(';')[0] || 'image/png' }));
+            if(c && c.url) { try { URL.revokeObjectURL(c.url); } catch(e) {} }
+            window.__cmtAv[nick] = { src: src, url: url };
+            return url;
+        } catch(e) { return src; }
+    }
+    function cmtFillAvatars(root) {
+        if(!root) return;
+        const memo = {};
+        root.querySelectorAll('img.cm-av[data-nick]').forEach(function(img) {
+            const n = img.getAttribute('data-nick');
+            if(!(n in memo)) memo[n] = cmtAvatarUrl(n);
+            if(memo[n]) img.src = memo[n];
+        });
+    }
+    function cmtMenuCloseAll() {
+        document.querySelectorAll('.cm-menu.open').forEach(function(m) { m.classList.remove('open'); });
+    }
+    function cmtMenuToggle(btn, ev) {
+        if(ev) ev.stopPropagation();
+        const m = btn && btn.parentNode ? btn.parentNode.querySelector('.cm-menu') : null;
+        if(!m) return;
+        const wasOpen = m.classList.contains('open');
+        cmtMenuCloseAll();
+        if(!wasOpen) m.classList.add('open');
+    }
+    if(!window.__cmtMenuInit) { window.__cmtMenuInit = true; document.addEventListener('click', cmtMenuCloseAll); }
+    /* o: { author, date, text, edited, small, replyCall, replyCount, canEdit, canDel, editCall, delCall, likeHtml, extraHtml } */
+    function cmtCardHtml(o) {
+        const nick = o.author || '';
+        let btns = '';
+        if(o.replyCall) {
+            btns += `<button type="button" class="cm-btn" title="답글" onclick="${o.replyCall}"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>${o.replyCount ? `<span>${o.replyCount}</span>` : ''}</button>`;
+        }
+        if(o.canEdit || o.canDel) {
+            btns += `<span class="cm-more"><button type="button" class="cm-btn" title="더보기" onclick="cmtMenuToggle(this, event)"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>` +
+                `<div class="cm-menu">${o.canEdit ? `<div onclick="${o.editCall}">수정</div>` : ''}${o.canDel ? `<div class="del" onclick="${o.delCall}">삭제</div>` : ''}</div></span>`;
+        }
+        return `<div class="cm-wrap">
+            <div class="cm-card ${o.small ? 'cm-small' : 'cm-top'}">
+                <div class="cm-head">
+                    <img class="cm-av" alt="" data-nick="${escapeHtml(nick)}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+                    <div class="cm-who"><span class="cm-nick">${escapeHtml(nick)}</span><span class="cm-time" title="${formatDateTime(o.date)}">${cmtTimeAgo(o.date)}</span></div>
+                    ${btns ? `<div class="cm-btns">${btns}</div>` : ''}
+                </div>
+                <div class="cm-body">${escapeHtml(o.text)}${o.edited ? ' <span class="cm-edited">(수정됨)</span>' : ''}</div>
+                ${o.likeHtml ? `<div class="cm-foot">${o.likeHtml}</div>` : ''}
+            </div>
+            ${o.extraHtml || ''}
+        </div>`;
+    }
+    /* 댓글 쓰는 구역 (댓글 카드와 같은 모양) */
+    function cmtWriteHtml(inputId, addCall) {
+        return `<div class="cm-wrap">
+            <div class="cm-card cm-top cm-write">
+                <div class="cm-head">
+                    <img class="cm-av" alt="" data-nick="${escapeHtml(user ? user.nick : '')}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+                    <div class="cm-who"><span class="cm-nick">${escapeHtml(user ? user.nick : '')}</span></div>
+                </div>
+                <div class="cm-wrow">
+                    <input type="text" id="${inputId}" placeholder="댓글을 입력하세요" onkeypress="if(event.keyCode==13) ${addCall}">
+                    <button type="button" onclick="${addCall}">등록</button>
+                </div>
+            </div>
+        </div>`;
+    }
+    /* [신규] 동영상 댓글/답글 수정 (점 세개 메뉴) */
+    function saveVideoComments() {
+        const target = db.find(v => v.id === currentPlayingItem.id);
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+    }
+    function editComment(idx) {
+        if(!user || !currentPlayingItem || !currentPlayingItem.comments) return;
+        const c = currentPlayingItem.comments[idx];
+        if(!c || c.author !== user.nick) { alert('본인이 쓴 댓글만 수정할 수 있습니다.'); return; }
+        const nt = prompt('수정할 내용을 입력하세요.', c.text);
+        if(nt === null) return;
+        const text = nt.trim();
+        if(!text) { alert('내용을 입력해주세요.'); return; }
+        if(text === c.text) return;
+        c.text = text; c.edited = new Date().toISOString();
+        saveVideoComments();
+        renderComments();
+    }
+    function editReply(commentIdx, replyIdx) {
+        if(!user || !currentPlayingItem || !currentPlayingItem.comments) return;
+        const c = currentPlayingItem.comments[commentIdx];
+        const r = c && c.replies ? c.replies[replyIdx] : null;
+        if(!r || r.author !== user.nick) { alert('본인이 쓴 답글만 수정할 수 있습니다.'); return; }
+        const nt = prompt('수정할 내용을 입력하세요.', r.text);
+        if(nt === null) return;
+        const text = nt.trim();
+        if(!text) { alert('내용을 입력해주세요.'); return; }
+        if(text === r.text) return;
+        r.text = text; r.edited = new Date().toISOString();
+        saveVideoComments();
+        renderComments();
+    }
+
     function renderComments() {
         const area = document.getElementById('video-comments-section');
         if(!area || !currentPlayingItem) return;
@@ -3459,29 +3625,26 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 const replies = c.replies || [];
                 const repliesHtml = replies.length > 0 ? `
                     <div class="reply-list">
-                        ${replies.map((r, ridx) => `
-                            <div class="reply-item">
-                                <b>${escapeHtml(r.author)}</b>
-                                <span class="reply-meta">${formatDateTime(r.date)}</span>
-                                ${user && user.nick === r.author ? `<span class="reply-del" onclick="deleteReply(${idx}, ${ridx})">[삭제]</span>` : ''}
-                                <div style="margin-top:2px; white-space:pre-wrap; word-break:break-all;">${escapeHtml(r.text)}</div>
-                                <span class="comment-like-btn ${(r.likedBy || []).includes(user ? user.nick : '') ? 'liked' : ''}" onclick="toggleReplyLike(${idx}, ${ridx})">❤ ${(r.likedBy || []).length}</span>
-                            </div>`).join('')}
+                        ${replies.map((r, ridx) => cmtCardHtml({
+                            small: true, author: r.author, date: r.date, text: r.text, edited: r.edited,
+                            canEdit: !!(user && user.nick === r.author), canDel: !!(user && user.nick === r.author),
+                            editCall: `editReply(${idx}, ${ridx})`, delCall: `deleteReply(${idx}, ${ridx})`,
+                            likeHtml: `<span class="comment-like-btn ${(r.likedBy || []).includes(user ? user.nick : '') ? 'liked' : ''}" onclick="toggleReplyLike(${idx}, ${ridx})">❤ ${(r.likedBy || []).length}</span>`
+                        })).join('')}
                     </div>` : '';
-                return `
-                <div style="padding:8px 0; border-bottom:1px solid #eee;">
-                    <b style="font-size:12px; color:#111;">${escapeHtml(c.author)}</b>
-                    <span style="color:#999; font-size:10px; margin-left:6px;">${formatDateTime(c.date)}</span>
-                    ${user && user.nick === c.author ? `<span style="color:#ff3300; font-size:10px; cursor:pointer; margin-left:6px;" onclick="deleteComment(${idx})">[삭제]</span>` : ''}
-                    <div style="margin-top:4px; color:#333; white-space:pre-wrap; word-break:break-all;">${escapeHtml(c.text)}</div>
-                    <span class="comment-like-btn ${(c.likedBy || []).includes(user ? user.nick : '') ? 'liked' : ''}" onclick="toggleCommentLike(${idx})">❤ ${(c.likedBy || []).length}</span>
-                    <span class="reply-btn-text" onclick="toggleReplyInput(${idx})">답글 달기${replies.length > 0 ? ` (${replies.length})` : ''}</span>
-                    ${repliesHtml}
+                const replyRowHtml = `
                     <div class="reply-input-row" id="reply-input-row-${idx}" style="display:none;">
                         <input type="text" id="reply-input-${idx}" placeholder="답글을 입력하세요" onkeypress="if(event.keyCode==13) addReply(${idx})">
                         <button onclick="addReply(${idx})">등록</button>
-                    </div>
-                </div>`;
+                    </div>`;
+                return cmtCardHtml({
+                    author: c.author, date: c.date, text: c.text, edited: c.edited,
+                    replyCall: `toggleReplyInput(${idx})`, replyCount: replies.length,
+                    canEdit: !!(user && user.nick === c.author), canDel: !!(user && user.nick === c.author),
+                    editCall: `editComment(${idx})`, delCall: `deleteComment(${idx})`,
+                    likeHtml: `<span class="comment-like-btn ${(c.likedBy || []).includes(user ? user.nick : '') ? 'liked' : ''}" onclick="toggleCommentLike(${idx})">❤ ${(c.likedBy || []).length}</span>`,
+                    extraHtml: repliesHtml + replyRowHtml
+                });
             }).join('');
 
         area.innerHTML = `
@@ -3490,11 +3653,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 <span class="comment-sort-tab ${commentSortMode === 'latest' ? 'active' : ''}" onclick="setCommentSort('latest')">최신순</span>
                 <span class="comment-sort-tab ${commentSortMode === 'liked' ? 'active' : ''}" onclick="setCommentSort('liked')">공감 많은순</span>
             </div>
-            <div style="display:flex; gap:6px; margin-bottom:10px;">
-                <input type="text" id="comment-input" placeholder="댓글을 입력하세요" style="flex:1; font-size:12px; padding:6px; border:1px solid #ddd; box-sizing:border-box;" onkeypress="if(event.keyCode==13) addComment()">
-                <button onclick="addComment()" style="font-size:11px; font-weight:bold; padding:0 12px; border:1px solid #53add2; background:#53add2; color:#fff; cursor:pointer;">등록</button>
-            </div>
+            ${cmtWriteHtml('comment-input', 'addComment()')}
             ${listHtml}`;
+        cmtFillAvatars(area);
     }
 
     function addComment() {
@@ -3505,7 +3666,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(!currentPlayingItem.comments) currentPlayingItem.comments = [];
         currentPlayingItem.comments.push({ author: user.nick, text: text, date: new Date().toISOString() });
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         input.value = "";
         renderComments();
 
@@ -3526,7 +3687,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(!confirm("댓글을 삭제하시겠습니까?")) return;
         currentPlayingItem.comments.splice(idx, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -3539,7 +3700,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(pos === -1) c.likedBy.push(user.nick);
         else c.likedBy.splice(pos, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -6957,7 +7118,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         comment.replies.push({ author: user.nick, text: text, date: new Date().toISOString() });
 
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
 
         input.value = "";
         renderComments();
@@ -6980,7 +7141,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(!confirm("답글을 삭제하시겠습니까?")) return;
         comment.replies.splice(replyIdx, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -6997,7 +7158,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         if(pos === -1) reply.likedBy.push(user.nick);
         else reply.likedBy.splice(pos, 1);
         const target = db.find(v => v.id === currentPlayingItem.id);
-        if(target) { target.comments = currentPlayingItem.comments; localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
+        if(target) { target.comments = currentPlayingItem.comments; try { localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); } catch(e) { console.warn('로컬 저장 실패(저장공간 부족) - 서버 저장은 계속 진행:', e); } if(typeof fbUpdateVideoComments === 'function') fbUpdateVideoComments(target.id, target.comments); }
         renderComments();
     }
 
@@ -8578,28 +8739,25 @@ function bdcRender() {
             const canDelC = !!(user && (me === c.author || isBoardAdmin()));
             const repliesHtml = replies.length > 0 ? '<div class="reply-list">' + replies.map(function(r) {
                 const canDelR = !!(user && (me === r.author || isBoardAdmin()));
-                return '<div class="reply-item"><b>' + escapeHtml(r.author) + '</b>' +
-                    '<span class="reply-meta">' + formatDateTime(r.date) + '</span>' +
-                    ((user && me === r.author) ? '<span class="reply-del" style="color:#53add2;" onclick="bdcEdit(\'' + c.id + '\', \'' + r.id + '\')">[수정]</span>' : '') +
-                    (canDelR ? '<span class="reply-del" onclick="bdcDeleteReply(\'' + c.id + '\', \'' + r.id + '\')">[삭제]</span>' : '') +
-                    '<div style="margin-top:2px; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(r.text) + (r.edited ? ' <span style="color:#aaa; font-size:9px;">(수정됨)</span>' : '') + '</div>' +
-                    '<span class="comment-like-btn ' + ((r.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\', \'' + r.id + '\')">❤ ' + (r.likedBy || []).length + '</span>' +
-                    '</div>';
+                return cmtCardHtml({
+                    small: true, author: r.author, date: r.date, text: r.text, edited: r.edited,
+                    canEdit: !!(user && me === r.author), canDel: canDelR,
+                    editCall: "bdcEdit('" + c.id + "', '" + r.id + "')", delCall: "bdcDeleteReply('" + c.id + "', '" + r.id + "')",
+                    likeHtml: '<span class="comment-like-btn ' + ((r.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\', \'' + r.id + '\')">❤ ' + (r.likedBy || []).length + '</span>'
+                });
             }).join('') + '</div>' : '';
-            return '<div style="padding:8px 0; border-bottom:1px solid #eee;">' +
-                '<b style="font-size:12px; color:#111;">' + escapeHtml(c.author) + '</b>' +
-                '<span style="color:#999; font-size:10px; margin-left:6px;">' + formatDateTime(c.date) + '</span>' +
-                ((user && me === c.author) ? '<span style="color:#53add2; font-size:10px; cursor:pointer; margin-left:6px;" onclick="bdcEdit(\'' + c.id + '\')">[수정]</span>' : '') +
-                (canDelC ? '<span style="color:#ff3300; font-size:10px; cursor:pointer; margin-left:6px;" onclick="bdcDeleteComment(\'' + c.id + '\')">[삭제]</span>' : '') +
-                '<div style="margin-top:4px; color:#333; white-space:pre-wrap; word-break:break-all;">' + escapeHtml(c.text) + (c.edited ? ' <span style="color:#aaa; font-size:10px;">(수정됨)</span>' : '') + '</div>' +
-                '<span class="comment-like-btn ' + ((c.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\')">❤ ' + (c.likedBy || []).length + '</span>' +
-                '<span class="reply-btn-text" onclick="bdcToggleReplyInput(\'' + c.id + '\')">답글 달기' + (replies.length > 0 ? ' (' + replies.length + ')' : '') + '</span>' +
-                repliesHtml +
-                '<div class="reply-input-row" id="bdc-reply-row-' + c.id + '" style="display:none;">' +
+            const replyRowHtml = '<div class="reply-input-row" id="bdc-reply-row-' + c.id + '" style="display:none;">' +
                     '<input type="text" id="bdc-reply-input-' + c.id + '" placeholder="답글을 입력하세요" onkeypress="if(event.keyCode==13) bdcAddReply(\'' + c.id + '\')">' +
                     '<button onclick="bdcAddReply(\'' + c.id + '\')">등록</button>' +
-                '</div>' +
-            '</div>';
+                '</div>';
+            return cmtCardHtml({
+                author: c.author, date: c.date, text: c.text, edited: c.edited,
+                replyCall: "bdcToggleReplyInput('" + c.id + "')", replyCount: replies.length,
+                canEdit: !!(user && me === c.author), canDel: canDelC,
+                editCall: "bdcEdit('" + c.id + "')", delCall: "bdcDeleteComment('" + c.id + "')",
+                likeHtml: '<span class="comment-like-btn ' + ((c.likedBy || []).includes(me) ? 'liked' : '') + '" onclick="bdcToggleLike(\'' + c.id + '\')">❤ ' + (c.likedBy || []).length + '</span>',
+                extraHtml: repliesHtml + replyRowHtml
+            });
         }).join('');
     /* 입력 중이던 내용 보존 */
     const prevInput = document.getElementById('bdc-comment-input');
@@ -8610,10 +8768,8 @@ function bdcRender() {
             '<span class="comment-sort-tab ' + (bdcSortMode === 'latest' ? 'active' : '') + '" onclick="bdcSetSort(\'latest\')">최신순</span>' +
             '<span class="comment-sort-tab ' + (bdcSortMode === 'liked' ? 'active' : '') + '" onclick="bdcSetSort(\'liked\')">공감 많은순</span>' +
         '</div>' +
-        '<div style="display:flex; gap:6px; margin-bottom:10px;">' +
-            '<input type="text" id="bdc-comment-input" placeholder="댓글을 입력하세요" style="flex:1; font-size:12px; padding:6px; border:1px solid #ddd; box-sizing:border-box;" onkeypress="if(event.keyCode==13) bdcAddComment()">' +
-            '<button onclick="bdcAddComment()" style="font-size:11px; font-weight:bold; padding:0 12px; border:1px solid #53add2; background:#53add2; color:#fff; cursor:pointer;">등록</button>' +
-        '</div>' + listHtml;
+        cmtWriteHtml('bdc-comment-input', 'bdcAddComment()') + listHtml;
+    cmtFillAvatars(area);
     const ni = document.getElementById('bdc-comment-input');
     if(ni && prevVal) ni.value = prevVal;
 }
