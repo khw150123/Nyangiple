@@ -1142,6 +1142,28 @@ html.app-splash::before { content: ''; position: fixed; top: 0; left: 0; right: 
             .v-title-cell { display: none; }
             .v-title-grid { grid-template-columns: minmax(0, 1fr) !important; }
         }
+        /* [신규] PC/가로모드 - 영상 위 찜 버튼: 이미지가 잘리지 않고 전부 보이게 + 조금 크게 (제목 칸을 너무 좁히지 않도록 최대 330px / 가로 줄의 48%) */
+        @media (orientation: landscape) {
+            #top-jjim-slot { flex: 0 0 auto; width: min(330px, 48%); overflow: visible; }
+            #top-jjim-slot #jjim-box { width: 100%; margin-left: 0; }
+        }
+        /* [신규] PC/가로모드 - 홈(추천): 한 줄에 섹션 2개씩 (태그|HOT, 이슈|자작, 인증|타임워프). 숨겨진 섹션이 있으면 짝꿍이 한 줄을 다 씀. 세로모드는 그대로 */
+        @media (orientation: landscape) {
+            html:not(.app-mode) #home-tab-recommend.active { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:0 14px; align-items:start; }
+            html:not(.app-mode) #home-tab-recommend > .home-reco-box { min-width:0; grid-column:auto; }
+            html:not(.app-mode) #home-tab-recommend > #home-daily-tag-section { grid-column:1; }
+            html:not(.app-mode) #home-tab-recommend > .home-css-hot-box { grid-column:2; }
+            html:not(.app-mode) #home-tab-recommend > #home-issue-section { grid-column:1; }
+            html:not(.app-mode) #home-tab-recommend > .home-css-create-box { grid-column:2; }
+            html:not(.app-mode) #home-tab-recommend > #home-cert-channel-section { grid-column:1; }
+            html:not(.app-mode) #home-tab-recommend > #home-short-section { grid-column:2; }
+            html:not(.app-mode) #home-tab-recommend > #home-daily-tag-section[style*="none"] + .home-css-hot-box,
+            html:not(.app-mode) #home-tab-recommend > #home-issue-section[style*="none"] + .home-css-create-box,
+            html:not(.app-mode) #home-tab-recommend > #home-cert-channel-section[style*="none"] + #home-short-section { grid-column:1 / -1; }
+            html:not(.app-mode) #home-tab-recommend > .home-css-hot-box:has(+ #home-issue-section) + #home-issue-section[style*="none"] { grid-column:1; }
+            html:not(.app-mode) #home-tab-recommend > #home-cert-channel-section:has(+ #home-short-section[style*="none"]) { grid-column:1 / -1; }
+            html:not(.app-mode) #home-tab-recommend > #home-issue-section:has(+ .home-css-create-box[style*="none"]) { grid-column:1 / -1; }
+        }
         /* [신규] 찜(좋아요) 버튼 - 초록 "찜 하기" 이미지 + 글자 바로 오른쪽 찜 수(알약 모양). 가로모드/PC는 영상 오른쪽 구름자막 입력칸 밑, 모바일 세로는 제목 위 */
         #jjim-box { width:100%; box-sizing:border-box; cursor:pointer; -webkit-tap-highlight-color:transparent; }
         #jjim-box .jjim-btn-img { position:relative; container-type:inline-size; transition:opacity .15s; }
@@ -1671,6 +1693,14 @@ html.app-splash::before { content: ''; position: fixed; top: 0; left: 0; right: 
         .rv-thumb .ch-card-thumb { background-color:#fff; }
         .rv-item.ch-verified .ch-card-thumb { border:2px solid #4caf50; }
         .rv-item:hover .ch-card-thumb { box-shadow:0 4px 12px rgba(0,0,0,0.35); }
+        /* [신규] 가로모드/PC - 영상 오른쪽 목록: 마우스를 올리면 인증 채널은 초록 그림자, 아니면 일반 그림자 + 다른 화면처럼 설명창 표시 (세로모드는 그대로) */
+        .rv-item > .desc-tooltip { display:none; }
+        @media (orientation: landscape) {
+            #side-related-slot .rv-item { position:relative; }
+            #side-related-slot .rv-item > .desc-tooltip { display:block; }
+            #side-related-slot .rv-item:hover > .desc-tooltip { opacity:1; visibility:visible; }
+            #side-related-slot .rv-item.ch-verified:hover .ch-card-thumb { box-shadow:0 4px 14px rgba(76,175,80,0.75); }
+        }
         .rv-dur { position:absolute; right:4px; bottom:4px; background:rgba(120,120,120,0.85); color:#fff; font-size:12px; line-height:16px; padding:0 5px; }
         .rv-meta { flex:1 1 0; min-width:0; }
         .rv-title { color:#337ab7; font-size:14px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-all; }
@@ -1900,7 +1930,6 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                         <div class="home-rank-tab" data-tab="rankWeek" onclick="switchHomeTab('rankWeek')"><span class="tab-label-mobile">주간 랭킹</span><span class="tab-label-pc">주간 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="rankMonth" onclick="switchHomeTab('rankMonth')"><span class="tab-label-mobile">월간 랭킹</span><span class="tab-label-pc">월간 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="rank36" onclick="switchHomeTab('rank36')"><span class="tab-label-mobile">36h 랭킹</span><span class="tab-label-pc">36h 랭킹</span></div>
-                        <div class="home-rank-tab" data-tab="commentKing" onclick="switchHomeTab('commentKing')"><span class="tab-label-mobile">댓글 랭킹</span><span class="tab-label-pc">댓글 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="cloudKing" onclick="switchHomeTab('cloudKing')"><span class="tab-label-mobile">구름 랭킹</span><span class="tab-label-pc">구름 랭킹</span></div>
                         <div class="home-rank-tab" data-tab="cloudArt" onclick="switchHomeTab('cloudArt')"><span class="tab-label-mobile">구름 아트</span><span class="tab-label-pc">구름 아트</span></div>
                         <div class="home-rank-tab home-rank-tab-mypage-only" data-tab="mypage" onclick="switchHomeTab('mypage')">마이페이지</div>
@@ -1979,20 +2008,10 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
-                    <div class="home-tab-content" id="home-tab-commentKing">
-                        <div class="rank-section-title">댓글왕 랭킹 (댓글을 가장 많이 남긴 순)</div>
-                        <div class="unlucky-outer-container">
-                            <div id="home-rank-commentking-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCommentKingRight()">
-                        </div>
-                        <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
-                    </div>
-
                     <div class="home-tab-content" id="home-tab-cloudKing">
                         <div class="rank-section-title">구름 랭킹 (구름 자막이 가장 많은 영상 순)</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
@@ -3382,6 +3401,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
                 <div class="rv-title">${vcTitleHtml(v, escapeHtml(v.title))}</div>
                 <div class="rv-author" style="${getAuthorNameColorStyle(v.author)}">${escapeHtml(v.author || '')}</div>
             </div>
+            <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
         </div>`;
     }
 
@@ -4202,7 +4222,6 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
         const rankJjim = db.slice().sort((a, b) => (b.jjim || 0) - (a.jjim || 0));
         renderRankContainer('home-rankjjim-list', rankJjim);
 
-        renderUserRankContainer('home-rank-commentking-list', computeCommentKingRanking(), '개');
         /* [수정] 구름 랭킹: 구름자막을 많이 단 유저가 아니라, 구름자막이 많은 영상 순 */
         const rankCloudVideos = db.filter(v => v.savedClouds && v.savedClouds.length > 0).slice().sort((a, b) => b.savedClouds.length - a.savedClouds.length);
         renderRankContainer('home-rank-cloudking-list', rankCloudVideos);
@@ -4361,7 +4380,6 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
             rankWeek: 'home-tab-rankWeek',
             rankMonth: 'home-tab-rankMonth',
             rankJjim: 'home-tab-rankJjim',
-            commentKing: 'home-tab-commentKing',
             cloudKing: 'home-tab-cloudKing',
             cloudArt: 'home-tab-cloudArt'
         };
@@ -7782,9 +7800,10 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
    스크롤 영역(overflow)에 잘리지 않도록 화면 기준(fixed)으로 위치 계산. 영상 화면의 기존 목록은 건드리지 않음 */
 (function() {
     var SKIP = '#related-videos-list, #popular-videos-list';
+    var SIDE = '#side-related-slot .rv-item'; /* [신규] 가로모드 영상 오른쪽 목록 */
     var cur = null;
     function place(item, force) {
-        if (!item || (!force && item.closest(SKIP))) return;
+        if (!item || (!force && item.closest(SKIP) && !item.closest('#side-related-slot'))) return;
         var tip = null;
         for (var i = 0; i < item.children.length; i++) {
             if (item.children[i].classList && item.children[i].classList.contains('desc-tooltip')) { tip = item.children[i]; break; }
@@ -7816,7 +7835,7 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     document.addEventListener('mouseover', function(e) {
         var t = e.target;
         if (!t || !t.closest) return;
-        var item = t.closest('.unlucky-item, .list-item, .ch-card');
+        var item = t.closest('.unlucky-item, .list-item, .ch-card, ' + SIDE);
         if (!item || item === cur) return;
         cur = item;
         place(item);
@@ -7824,12 +7843,12 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     document.addEventListener('mouseout', function(e) {
         if (!cur) return;
         var to = e.relatedTarget;
-        if (!to || !to.closest || to.closest('.unlucky-item, .list-item, .ch-card') !== cur) cur = null;
+        if (!to || !to.closest || to.closest('.unlucky-item, .list-item, .ch-card, ' + SIDE) !== cur) cur = null;
     });
     window.addEventListener('scroll', function() { if (cur && document.body.contains(cur)) place(cur); }, true);
 
     /* [신규] 모바일(터치): 카드를 꾹 누르고 있으면 호버처럼 설명창이 뜨고, 손을 떼면 사라짐 (짧게 톡 누르면 기존처럼 재생/이동) */
-    var CARD_SEL = '.unlucky-item, .list-item, .ch-card';
+    var CARD_SEL = '.unlucky-item, .list-item, .ch-card, ' + SIDE;
     var lpTimer = null, lpItem = null, lpShown = false, lpX = 0, lpY = 0, lpBlockUntil = 0;
     function tipOf(item) {
         for (var i = 0; i < item.children.length; i++) {
@@ -9994,7 +10013,7 @@ html.app-mode.app-watch #as-back { display: flex; position: fixed; left: 12px; b
         starsvg: '<svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>'
     };
     var SORTS = [['latest', '최신순'], ['views', '재생순'], ['clouds', '구름순'], ['jjim', '찜순'], ['comments', '댓글순']];
-    var RANKS = [['jjim', '찜 랭킹'], ['day', '일간 랭킹'], ['week', '주간 랭킹'], ['month', '월간 랭킹'], ['h36', '36h 랭킹'], ['comment', '댓글 랭킹'], ['cloud', '구름 랭킹'], ['art', '구름 아트']];
+    var RANKS = [['jjim', '찜 랭킹'], ['day', '일간 랭킹'], ['week', '주간 랭킹'], ['month', '월간 랭킹'], ['h36', '36h 랭킹'], ['cloud', '구름 랭킹'], ['art', '구름 아트']];
     var RANK_TITLES = { jjim: '찜 랭킹 (찜을 가장 많이 받은 순)', day: '일간 인기 동영상 랭킹 (조회수)', week: '주간 인기 동영상 랭킹 (조회수)', month: '월간 인기 동영상 랭킹 (조회수)', h36: '36시간 인기 동영상 랭킹 (조회수)', comment: '댓글왕 랭킹 (댓글을 가장 많이 남긴 순)', cloud: '구름 랭킹 (구름 자막이 가장 많은 영상 순)', art: '구름 아트 갤러리 (누르면 그 영상이 재생됩니다)' };
     var st = { tab: 'home', rank: 'jjim', genre: 'all', sort: 'latest', q: '', limit: 30, homeIds: [], watching: false, sig: '', t0: Date.now(), searchOpen: false };
 
@@ -10374,6 +10393,11 @@ html.as-vid.app-watch #as-wi-body #v-top-profile-row { display: none !important;
 /* [앱 전용] 접었다 펴는 영역 안의 영상 정보에서 제목(위 제목 줄에 이미 있음)과 유저 정보·구독 버튼(아래 유저 줄에 이미 있음)은 숨김 */
 html.as-vid.app-watch #as-wi-body .v-title-cell, html.as-vid.app-watch #as-wi-body #v-top-profile-row { display: none !important; }
 html.as-vid.app-watch #player-container { margin-bottom: 0 !important; }
+/* [앱 전용] 가로 화면: 영상 보는 화면이 격자 배치 때문에 정보 영역 아래로 밀려 안 보이던 문제 - 세로 화면처럼 영상이 맨 위에 오게 하고, 화면 높이에 맞춰 보여줌 */
+@media (orientation: landscape) {
+    html.as-vid.app-watch #player-container, html.as-vid.app-watch #player-container[style*="display: block"] { display: block !important; }
+    html.as-vid.app-watch #fullscreen-player-target:not(:fullscreen) { width: min(100%, calc((100vh - 84px) * 16 / 9)) !important; margin-left: auto; margin-right: auto; }
+}
 html.as-vid.app-watch #as-wbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1550; height: 64px; padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: content-box; background: rgba(45,45,45,0.95); align-items: center; }
 html.as-vid.app-watch #as-back { top: calc(8px + env(safe-area-inset-top, 0px)); bottom: auto; left: 8px; width: 38px; height: 38px; background: rgba(0,0,0,0.5); box-shadow: none; }
 html.as-vid.app-watch #as-back svg { fill: #fff; }
