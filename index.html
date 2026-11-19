@@ -57,11 +57,11 @@
             box-sizing: border-box;
         }
         .sliding-menu.open { max-height: 500px; border-width: 1px; } 
-        /* [신규] 3줄 메뉴 버튼 모션 - 누르면 연한 하늘색, 메뉴가 열려 있는 동안은 회색 / 메뉴는 위에서 아래로 빠르게 펼쳐짐 */
-        div.menu-toggle-btn { transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.3s ease; }
+        /* [신규] 3줄 메뉴 버튼 모션 - 누르면 파란색 없이 바로 회색, 메뉴가 열려 있는 동안도 회색 / 메뉴는 위에서 아래로 빠르게 펼쳐짐 */
+        div.menu-toggle-btn { transition: transform 0.3s ease; -webkit-tap-highlight-color: transparent; }
         .menu-container:has(.sliding-menu.open) div.menu-toggle-btn { background-color: #d9d9d9; border-color: #d9d9d9; }
-        div.menu-toggle-btn:active { transform: none; background-color: #9ecbe3; border-color: #9ecbe3; }
-        .menu-container:has(.sliding-menu) div.menu-toggle-btn:active { transform: none; background-color: #9ecbe3; border-color: #9ecbe3; }
+        div.menu-toggle-btn:active { transform: none; background-color: #d9d9d9; border-color: #d9d9d9; }
+        .menu-container:has(.sliding-menu) div.menu-toggle-btn:active { transform: none; background-color: #d9d9d9; border-color: #d9d9d9; }
         .sliding-menu { transition: max-height 0.25s ease-out; }
 
         .nav-icon-btn { cursor: pointer; display: flex; align-items: center; font-size: 11px; font-weight: bold; width: 100%; height: 50px; box-sizing: border-box; padding: 0 15px; gap: 10px; border-bottom: 1px solid #f5f5f5; }
@@ -1740,6 +1740,30 @@
         @media (orientation: portrait) {
             .rv-item.ch-verified:hover .ch-card-thumb { box-shadow:0 4px 14px rgba(76,175,80,0.75); }
         }
+        /* ===== [신규] 랭킹 탭(추천 제외) - 2열 격자 레이아웃: 이동 버튼 없음 / 1~3등 초록 배경+초록 테두리+삼각 번호, 호버 시 확대 / 4등부터 일반 ===== */
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0; overflow:visible; padding:0; margin:0 -10px; width:auto; flex:1 1 0; min-width:0; }
+        @media (max-width:768px) { #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) { margin:0 -5px; } }
+        @media (orientation: landscape) and (min-width:700px) { #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) { grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); } }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .rank-empty-msg { grid-column:1 / -1; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card { padding:0 0 14px; box-sizing:border-box; min-width:0; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card > :is(.vc-thumbwrap,.vc-title,.vc-info,.rk-time) { margin-left:12px; margin-right:12px; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card > .vc-thumbwrap { margin-top:10px; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card .vc-dur { right:16px; margin-top:calc((100% - 24px) * 0.5625 + 10px); }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3) { background:#eef5e9; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3) .ch-card-thumb { border:2px solid #4caf50; transition:transform 0.2s ease, box-shadow 0.2s ease; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3):hover { z-index:6; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3):hover .ch-card-thumb { transform:scale(1.1); box-shadow:0 0 16px 4px rgba(76,175,80,0.75); }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3) .rank-badge-wrap { top:0; left:0; width:46px; height:46px; filter:none; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3) .rank-badge-wrap::before { background:#4caf50; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(-n+3) .rank-badge-num { width:62%; height:62%; font-size:22px; font-style:italic; text-shadow:none; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(1) .rank-badge-num { width:68%; height:68%; font-size:36px; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(n+4) .rank-badge-wrap { top:0; left:0; width:36px; height:24px; background:rgba(196,196,196,0.95); border-radius:0 0 10px 0; filter:none; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(n+4) .rank-badge-wrap::before { display:none; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card:nth-child(n+4) .rank-badge-num { width:100%; height:100%; font-size:16px; font-style:italic; text-shadow:none; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card .rk-time { order:5; display:flex; align-items:center; gap:6px; padding-top:5px; font-size:13px; color:#222; white-space:nowrap; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card .rk-time::before { content:""; flex:0 0 auto; width:26px; height:15px; border-radius:3px; background:#d4d4d4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 15'%3E%3Ccircle cx='13' cy='7.5' r='4.6' fill='none' stroke='%23fff' stroke-width='1.4'/%3E%3Cpath d='M13 5v2.7l1.9 1.1' fill='none' stroke='%23fff' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat; }
+        #home-section :is(#home-rank36-list,#home-rankday-list,#home-rankweek-list,#home-rankmonth-list,#home-rankjjim-list,#home-rank-cloudking-list) > .ch-card .rk-time.rk-new { color:#b03a2e; font-weight:bold; }
+        :is(#home-tab-rank36,#home-tab-rankDay,#home-tab-rankWeek,#home-tab-rankMonth,#home-tab-rankJjim,#home-tab-cloudKing,#home-tab-cloudArt) > .rank-section-title { font-size:15px; font-weight:normal; color:#333; margin:0 0 12px 2px; }
         .rv-dur { position:absolute; right:4px; bottom:4px; background:rgba(120,120,120,0.85); color:#fff; font-size:12px; line-height:16px; padding:0 5px; }
         .rv-meta { flex:1 1 0; min-width:0; }
         .rv-title { color:#337ab7; font-size:14px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-all; }
@@ -1817,9 +1841,9 @@ html.nyang-embed #fullscreen-player-target .player-wrapper { flex: 1 1 auto !imp
     header .hdr-uinfo-box .uinfo-nick { max-width: clamp(30px, 8vw, 110px); }
     header .hdr-top-actions { margin-left: 6px; }
 }
-/* [신규] 검색창/검색버튼 꼭짓점을 약간 더 둥글게 */
-header .search-wrapper .search-input-overlay { border-radius: 10px 4px 4px 10px !important; border-right: 1px solid #d3d3d3; margin-right: -1px; }
-header .search-btn-css { border-radius: 4px 10px 10px 4px !important; }
+/* [신규] 검색창은 왼쪽 꼭짓점만, 검색버튼은 오른쪽 꼭짓점만 살짝 둥글게 (맞닿는 쪽은 각지게) */
+header .search-wrapper .search-input-overlay { border-radius: 4px 0 0 4px !important; border-right: 1px solid #d3d3d3; margin-right: -1px; }
+header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 /* [수정] 좁은 가로화면(폰 가로 등) - 헤더가 한 줄에 안 들어가 서로 겹치고 버튼이 빠지므로 두 줄로 나눠 모든 항목을 표시 */
 @media (orientation: landscape) {
     header.hdr-wrap { flex-wrap: wrap; row-gap: 4px; padding-bottom: 4px; }
@@ -2011,61 +2035,55 @@ header .search-btn-css { border-radius: 4px 10px 10px 4px !important; }
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rank36">
-                        <div class="rank-section-title">36시간 인기 동영상 랭킹 (조회수)</div>
+                        <div class="rank-section-title">최근 36시간 이내에 올라온 인기 동영상입니다.</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank36-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRank36Right()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankDay">
-                        <div class="rank-section-title">일간 인기 동영상 랭킹 (조회수)</div>
+                        <div class="rank-section-title">최근 일간 인기 동영상입니다.</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankday-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankDayRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankWeek">
-                        <div class="rank-section-title">주간 인기 동영상 랭킹 (조회수)</div>
+                        <div class="rank-section-title">최근 1주일 인기 동영상입니다.</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankweek-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankWeekRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankMonth">
-                        <div class="rank-section-title">월간 인기 동영상 랭킹 (조회수)</div>
+                        <div class="rank-section-title">최근 1개월 인기 동영상을 소개해 드립니다.</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankmonth-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankMonthRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-rankJjim">
-                        <div class="rank-section-title">찜 랭킹 (찜을 가장 많이 받은 순)</div>
+                        <div class="rank-section-title">모두가 마음에 들어한 동영상입니다!</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rankjjim-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollRankJjimRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-cloudKing">
-                        <div class="rank-section-title">구름 랭킹 (구름 자막이 가장 많은 영상 순)</div>
+                        <div class="rank-section-title">구름 자막이 가장 많은 영상을 소개해 드립니다.</div>
                         <div class="unlucky-outer-container">
                             <div id="home-rank-cloudking-list" class="unlucky-scroll-container"></div>
-                            <img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="scrollCloudKingRight()">
                         </div>
                         <div class="rank-updated-time">갱신 시각: <span class="rank-updated-time-val">-</span></div>
                     </div>
 
                     <div class="home-tab-content" id="home-tab-cloudArt">
-                        <div class="rank-section-title">구름 아트 갤러리 (사람들이 영상에 찍은 그림 구름 - 누르면 그 영상이 재생됩니다)</div>
+                        <div class="rank-section-title">사람들이 영상에 찍은 그림 구름을 소개해 드립니다. 누르면 그 영상이 재생됩니다.</div>
                         <div id="home-cloud-art-gallery" class="cloud-art-gallery"></div>
                     </div>
 
@@ -4380,8 +4398,25 @@ header .search-btn-css { border-radius: 4px 10px 10px 4px !important; }
         preparePlay(randomItem.id);
     }
 
+    /* [신규] 랭킹 카드 - 올린 시각(예: 1일 전) 표시용 */
+    function rankRelTimeHtml(regDate) {
+        const t = new Date(regDate).getTime();
+        if (!regDate || isNaN(t)) return '';
+        const mins = Math.max(0, Math.floor((Date.now() - t) / 60000));
+        const hours = Math.floor(mins / 60);
+        const days = Math.floor(hours / 24);
+        let txt;
+        if (mins < 60) txt = (mins < 1 ? '방금' : mins + '분') + ' 전';
+        else if (hours < 24) txt = hours + '시간 전';
+        else if (days < 30) txt = days + '일 전';
+        else if (days < 365) txt = Math.floor(days / 30) + '개월 전';
+        else txt = Math.floor(days / 365) + '년 전';
+        return '<div class="rk-time' + (hours < 48 ? ' rk-new' : '') + '">' + txt + '</div>';
+    }
+
     function buildRankItemHtml(v, rank) {
-        return vsCardHtml(v, true, { prefix: true, rank: rank });
+        const html = vsCardHtml(v, true, { prefix: true, rank: rank });
+        return html.replace('<div class="desc-tooltip">', rankRelTimeHtml(v.regDate) + '<div class="desc-tooltip">');
     }
 
     function renderRankContainer(containerId, list) {
@@ -4391,7 +4426,7 @@ header .search-btn-css { border-radius: 4px 10px 10px 4px !important; }
             container.innerHTML = "<div class='rank-empty-msg'>해당 조건의 동영상이 없습니다.</div>";
             return;
         }
-        container.innerHTML = list.map((v, idx) => buildRankItemHtml(v, idx + 1)).join('');
+        container.innerHTML = list.slice(0, 30).map((v, idx) => buildRankItemHtml(v, idx + 1)).join(''); /* [신규] 랭킹은 최대 30위까지 */
     }
 
     function renderHomeRankLists() {
