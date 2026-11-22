@@ -318,7 +318,7 @@
         #v-play-btn { cursor: pointer; z-index: 2; -webkit-tap-highlight-color: transparent; }
         #v-play-btn::before, #v-pause-btn::before { content: ''; position: absolute; left: 30%; top: 27.5%; width: 39%; height: 44%; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 39 44'%3E%3Cpolygon points='0,0 39,22 0,44' fill='%23fff' opacity='.6'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
         /* [신규] 재생 전 버튼(#v-play-btn)만 하늘색 둥근 사각형 + 흰색 재생 삼각형 모양으로 변경 */
-        #v-play-btn { width: 100px; height: 75px; border-radius: 9px; background: #4fb6e0; }
+        #v-play-btn { width: 100px; height: 75px; border-radius: 9px; background: rgba(38,38,38,0.88); }
         #v-play-btn::before { left: 37.7%; top: 31%; width: 25%; height: 37.5%; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 39 44'%3E%3Cpolygon points='0,0 39,22 0,44' fill='%23fff' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
         /* [변경] 재생 버튼을 누르면(사라지는 순간) 버튼 모양이 ⏸ 모양으로 바뀜 - 꼭짓점은 각지게 */
         .v-play-ghost::before { content: ''; position: absolute; left: 30%; top: 27.5%; width: 39%; height: 44%; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 39 44'%3E%3Cg fill='%23fff' opacity='.6'%3E%3Crect x='0' y='0' width='13' height='44'/%3E%3Crect x='26' y='0' width='13' height='44'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat; }
@@ -579,7 +579,7 @@
         .cb2-vol:hover .cb2-vol-pop, .cb2-vol:focus-within .cb2-vol-pop { display: flex; }
         .cb2-vol-pop .volume-slider { width: 100%; }
         /* ===== [신규] 구름 아트 (컨트롤바 버튼 + 글자 정하기 창 + 화면을 눌러 그리는 칸 + 도장 찍기 버튼줄, 기존 스타일 변경 없음) ===== */
-        #cloud-art-overlay { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 410; width: 250px; max-width: 92%; box-sizing: border-box; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.85); box-shadow: 0 2px 10px rgba(0,0,0,0.6); color: #fff; text-align: center; font-size: 13px; }
+        #cloud-art-overlay { position: absolute; left: 50%; top: 34%; transform: translate(-50%, -50%); z-index: 410; width: 250px; max-width: 92%; box-sizing: border-box; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.85); box-shadow: 0 2px 10px rgba(0,0,0,0.6); color: #fff; text-align: center; font-size: 13px; }
         #cloud-art-overlay .cloud-art-q { font-weight: bold; margin-bottom: 8px; line-height: 1.4; }
         #cloud-art-overlay input { width: 100%; box-sizing: border-box; font-size: 14px; padding: 6px 8px; border: none; border-radius: 3px; text-align: center; }
         #cloud-art-overlay .cloud-art-btns, #cloud-art-bar, #cloud-art-editbar { display: flex; gap: 6px; }
