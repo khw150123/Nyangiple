@@ -2529,7 +2529,15 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
     const FB_DOC_BASE = 'https://firestore.googleapis.com/v1/projects/' + FB_PROJECT_ID + '/databases/(default)/documents';
     const CLD_CLOUD_NAME = 'c1qp2mgt';
     const CLD_UPLOAD_PRESET = 'Nyangiple';
-    const FB_MAX_DATA_LEN = 900000; /* Firestore 필드 크기 제한(약 1MiB) 보호 */
+    const FB_MAX_DATA_LEN = 1000000; /* [수정] Firestore 문서 크기 제한(1MiB = 1,048,576 바이트) 보호 - 글자 수가 아니라 실제 바이트(UTF-8) 기준으로 검사 */
+    const CLD_MAX_VIDEO_BYTES = 100 * 1024 * 1024; /* [신규] Cloudinary 무료 요금제 영상 1개 업로드 한도(약 100MB) */
+    /* [신규] 문자열의 실제 저장 크기(UTF-8 바이트). 한글은 한 글자가 3바이트라 글자 수(length)로는 크기를 알 수 없음 */
+    function fbByteLen(str) {
+        try {
+            if(typeof TextEncoder === 'function') return new TextEncoder().encode(str).length;
+        } catch(e) {}
+        try { return unescape(encodeURIComponent(str)).length; } catch(e2) { return str.length * 3; }
+    }
 
     /* 테이블+키 → 안전한 문서 ID (키에 / 등이 있어도 되도록 base64url로 변환) */
     function fbDocId(table, key) {
@@ -2571,7 +2579,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
     /* 문서 ID가 키마다 하나뿐이라 같은 키를 여러 번 저장해도 중복이 생기지 않음 */
     async function blUpsert(tableName, keyField, keyValue, payload) {
         const dataStr = JSON.stringify(payload);
-        if(dataStr.length > FB_MAX_DATA_LEN) throw new Error('저장할 데이터가 너무 큽니다.');
+        if(fbByteLen(dataStr) > FB_MAX_DATA_LEN) throw new Error('저장할 데이터가 너무 큽니다.');
         const r = await fbHttp(FB_DOC_BASE + '/rows/' + fbDocId(tableName, keyValue) + '?key=' + FB_API_KEY, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -2649,6 +2657,16 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         });
     }
 
+    /* [신규] 조회수/찜/댓글/구름자막 등이 서버에 저장되지 못했을 때 알림 (연속 실패 시 알림창이 계속 뜨지 않도록 30초에 한 번만) */
+    let fbSaveFailLastAlert = 0;
+    function fbNotifySaveFail(label, err) {
+        console.error('온라인 저장 실패 (' + label + '):', err);
+        const now = Date.now();
+        if(now - fbSaveFailLastAlert < 30000) return;
+        fbSaveFailLastAlert = now;
+        try { alert('온라인 저장 실패 - ' + label + ' 내용이 서버에 저장되지 않아 다른 기기에는 반영되지 않을 수 있습니다.\n사유: ' + ((err && (err.message || err.toString())) || '알 수 없는 오류')); } catch(e) {}
+    }
+
     async function fbSaveVideo(videoObj) {
         try {
             /* [수정] 영상 파일이 아직 온라인에 올라가지 않은 상태(url이 indexeddb_stored)로는 서버에 저장하지 않는다.
@@ -2686,6 +2704,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             await blUpsert('Videos', 'videoId', videoId, videoObj);
         } catch(e) {
             console.error('댓글 저장 실패:', e);
+            fbNotifySaveFail('댓글', e);
         }
     }
 
@@ -4154,7 +4173,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
                 target.jjim = itemForSave.jjim;
                 target.jjimUsers = itemForSave.jjimUsers;
                 localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-                if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('찜', err); });
             }
 
             /* [수정] 연타 끝에 최종적으로 "찜한" 상태로 끝났을 때만 알림 전송 (찜 취소로 끝났으면 알림 안 보냄) */
@@ -4891,6 +4910,11 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 
     function doUpload() {
         const f = document.getElementById('up-file').files[0]; if(!f) return;
+        /* [신규] 영상이 온라인 업로드 한도(약 100MB)를 넘으면 미리 알려주고, 계속할지 선택하게 함 (계속하면 이 기기에만 저장되고 온라인 업로드는 실패할 수 있음) */
+        if(typeof CLD_MAX_VIDEO_BYTES !== 'undefined' && f.size > CLD_MAX_VIDEO_BYTES) {
+            const sizeMb = (f.size / (1024 * 1024)).toFixed(1);
+            if(!confirm('영상 크기가 ' + sizeMb + 'MB로 온라인 업로드 한도(약 100MB)를 넘습니다.\n\n계속하면 이 기기에서만 재생되고, 다른 기기에는 올라가지 않을 수 있습니다.\n그래도 업로드할까요?\n(영상 용량을 줄여서 올리는 것을 권장합니다)')) return;
+        }
         const thumbFile = document.getElementById('up-thumb').files[0];
 
         /* [신규] 업로드 진행률 바 - 중복 클릭 방지 */
@@ -5389,7 +5413,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
                 if(target !== item) item.views = target.views;
                 localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db)); 
                 /* [수정] 조회수가 이 기기에만 저장되고 서버에 저장되지 않아 카운트가 안 되던 문제 - 서버에도 저장 */
-                if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(() => {});
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('조회수', err); });
             }
             updateDetail();
 
@@ -6071,7 +6095,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             if(thumbDataUrl !== undefined) target.thumb = thumbDataUrl;
 
             localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('영상 정보 수정', err); });
             document.getElementById('edit-up-file').value = "";
             document.getElementById('edit-up-thumb').value = "";
 
@@ -7215,7 +7239,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         if(target) {
             target.savedClouds = currentPlayingItem.savedClouds;
             localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('구름자막', err); });
         }
         updateDetail();
 
@@ -7335,7 +7359,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         if(target) {
             target.savedClouds = currentPlayingItem.savedClouds;
             localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-            if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+            if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('구름자막', err); });
         }
         updateDetail();
 
@@ -7379,7 +7403,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             if(target) {
                 target.savedClouds = currentPlayingItem.savedClouds;
                 localStorage.setItem('tvple_vfinal_db_2', JSON.stringify(db));
-                if(typeof fbSaveVideo === 'function') fbSaveVideo(target);
+                if(typeof fbSaveVideo === 'function') fbSaveVideo(target).catch(function(err) { fbNotifySaveFail('구름자막', err); });
             }
             updateDetail();
 
