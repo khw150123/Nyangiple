@@ -9423,7 +9423,7 @@ function openBoardDetail(id) {
     closeBoardWrite();
     const box = document.getElementById('bd-detail');
     const canEdit = isBoardMine(n);
-    const canDel = isBoardMine(n) || isBoardAdmin();
+    const canDel = isBoardMine(n); /* [수정] 본인이 쓴 글만 삭제 가능 (다른 채널이 남의 글을 삭제할 수 없음) */
     nbCountView('board', n);
     box.innerHTML = nbBuildDetail('board', n,
         '<div class="nb-btn-row"><button type="button" class="nb-btn" onclick="closeBoardDetail()">목록</button>' +
@@ -9450,7 +9450,7 @@ function closeBoardDetail() {
 
 async function deleteBoardPost(id) {
     const n = boardList.find(x => x.id === id);
-    if(!n || !(isBoardMine(n) || isBoardAdmin())) return;
+    if(!n || !isBoardMine(n)) { alert('본인이 쓴 글만 삭제할 수 있습니다.'); return; } /* [수정] 본인이 쓴 글만 삭제 가능 */
     if(!confirm('이 글을 삭제할까요?')) return;
     try {
         await fbHttp(FB_DOC_BASE + '/rows/' + fbDocId(BOARD_TABLE, id) + '?key=' + FB_API_KEY, { method: 'DELETE' });
@@ -9508,9 +9508,9 @@ function bdcRender() {
         : order.map(function(i) {
             const c = comments[i];
             const replies = c.replies || [];
-            const canDelC = !!(user && (me === c.author || isBoardAdmin()));
+            const canDelC = !!(user && me === c.author);
             const repliesHtml = replies.length > 0 ? '<div class="reply-list">' + replies.map(function(r) {
-                const canDelR = !!(user && (me === r.author || isBoardAdmin()));
+                const canDelR = !!(user && me === r.author);
                 return cmtCardHtml({
                     small: true, author: r.author, date: r.date, text: r.text, edited: r.edited,
                     canEdit: !!(user && me === r.author), canDel: canDelR,
@@ -9597,7 +9597,7 @@ function bdcEdit(cid, rid) {
 function bdcDeleteComment(cid) {
     const n = bdcPost();
     const c = n && (n.comments || []).find(function(x) { return x.id === cid; });
-    if(!user || !c || !(user.nick === c.author || isBoardAdmin())) return;
+    if(!user || !c || user.nick !== c.author) return; /* [수정] 본인이 쓴 댓글만 삭제 가능 */
     if(!confirm('댓글을 삭제하시겠습니까?')) return;
     bdcMutate(function(list) { const i = list.findIndex(function(x) { return x.id === cid; }); if(i >= 0) list.splice(i, 1); });
 }
@@ -9609,7 +9609,7 @@ function bdcDeleteReply(cid, rid) {
         const c = list.find(function(x) { return x.id === cid; });
         if(!c || !c.replies) return;
         const i = c.replies.findIndex(function(x) { return x.id === rid; });
-        if(i >= 0 && (user.nick === c.replies[i].author || isBoardAdmin())) c.replies.splice(i, 1);
+        if(i >= 0 && user.nick === c.replies[i].author) c.replies.splice(i, 1); /* [수정] 본인이 쓴 답글만 삭제 가능 */
     });
 }
 
