@@ -1160,6 +1160,8 @@
         /* 동영상 섹션 목록: 3개씩 한 줄(가로 넘기기), 3개 차면 아래에 새 줄 */
         #video-section #side-video-list.vs-rows { display:block; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; box-sizing:border-box; }
         #video-section #side-video-list.vs-rows .pf-empty { grid-column:auto; }
+        #search-result-section #search-result-list.vs-rows { display:block; background:#fff; padding:12px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); text-align:left; box-sizing:border-box; overflow:visible; scroll-snap-type:none; }
+        #search-result-section #search-result-list.vs-rows .pf-empty, #search-result-section #search-result-list.vs-rows .my-clouds-empty { grid-column:auto; }
         .vs-row-box { position:relative; margin-bottom:10px; }
         .vs-row-box:last-child { margin-bottom:0; }
         .vs-row-box .vs-tag-scroll { padding:0 0 4px; }
@@ -1762,6 +1764,13 @@
         #video-section #side-video-list.vs-listmode .vs-listrow .vc-info { grid-column:2; grid-row:2; display:flex; flex-wrap:wrap; align-items:center; align-self:end; }
         #video-section #side-video-list.vs-listmode .vs-listrow .vc-dur { position:static; margin:0 6px 0 0; transform:none; display:inline-block; }
         #video-section #side-video-list.vs-listmode .vs-listrow .vc-author { flex:1 1 100%; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow { display:grid; grid-template-columns:42% minmax(0,1fr); column-gap:10px; align-items:start; width:auto; margin:0 0 12px; padding:0 0 12px; border-bottom:1px solid #eee; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow:last-child { margin-bottom:0; border-bottom:0; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-thumbwrap { grid-column:1; grid-row:1 / span 2; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-title { grid-column:2; grid-row:1; padding-top:0; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-info { grid-column:2; grid-row:2; display:flex; flex-wrap:wrap; align-items:center; align-self:end; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-dur { position:static; margin:0 6px 0 0; transform:none; display:inline-block; }
+        #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-author { flex:1 1 100%; }
 
 
         /* [신규] 구름 아트 갤러리 */
@@ -5695,9 +5704,9 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 
     /* [신규] 동영상 섹션 - 자작만 보기 / 타임워프존 필터 칩 */
     function vsChipRowHtml() {
-        let h = `<span class="vs-chip${vsOnlyOriginal ? ' on' : ''}" onclick="vsToggleOriginal()">${vsOnlyOriginal ? '✓ ' : ''}자작만 보기</span>`;
+        let h = '';
         if(vsOnlyShort) h += `<span class="vs-chip on" onclick="vsToggleShort()">타임워프존 (50초 이하) ✕</span>`;
-        return `<div class="vs-chip-row">${h}</div>`;
+        return h ? `<div class="vs-chip-row">${h}</div>` : '';
     }
     function vsToggleOriginal() { vsOnlyOriginal = !vsOnlyOriginal; renderList(); }
     function vsToggleShort() { vsOnlyShort = !vsOnlyShort; renderList(); }
@@ -7964,6 +7973,71 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
     let srLastSig = '';
 
     function srSetGenre(g) { searchGenre = g; renderSearchResults(); }
+    /* [변경] 검색 결과 분류 막대 - 동영상 섹션과 같은 카테고리(여러 개 선택) / 정렬 / 보기 방식 / 표시 개수 */
+    let srGenreSel = null;
+    let srTmpCats = null;
+    let srView = (localStorage.getItem('tvple_vs_view') === 'list') ? 'list' : 'album';
+    let srOnlyOriginal = false;
+    function srSelectedGenres() { return (srGenreSel && srGenreSel.length) ? srGenreSel.slice() : vsGenreChoices(); }
+    function srCatLabel() {
+        const sel = srSelectedGenres();
+        if(sel.length >= vsGenreChoices().length) return '모든 카테고리 선택됨';
+        if(sel.length === 1) return sel[0];
+        return sel.length + '개 카테고리 선택됨';
+    }
+    function srBarHtml() {
+        const caret = '<i class="nyf-caret"></i>';
+        const sel = srSelectedGenres();
+        const catItems = vsGenreChoices().map((g, i) => `<div class="nyf-opt${sel.includes(g) ? ' sel' : ''}" data-i="${i}" onclick="srCatItem(${i})"><span>${escapeHtml(g)}</span>${NYF_ICON.chk}</div>`).join('');
+        const sortKey = srOnlyOriginal ? 'original' : searchSort;
+        const curSort = NYF_SORTS.find(x => x[0] === sortKey) || (searchSort === 'comments' ? ['comments', '댓글'] : NYF_SORTS[0]);
+        const sortOpts = NYF_SORTS.map(x => `<div class="nyf-opt${x[0] === curSort[0] ? ' on' : ''}" onclick="srPickSort('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
+        const curView = NYF_VIEWS.find(x => x[0] === srView) || NYF_VIEWS[1];
+        const viewOpts = NYF_VIEWS.map(x => `<div class="nyf-opt${x[0] === curView[0] ? ' on' : ''}" onclick="srPickView('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
+        const sizeOpts = NYF_SIZES.map(n => `<div class="nyf-opt${srPageSize === n ? ' on' : ''}" onclick="srPickSize(${n})"><span>${n}</span></div>`).join('');
+        return `<div class="nyf">
+            <div class="nyf-cell nyf-cat" id="sr-c-cat"><div class="nyf-btn" onclick="srToggle('cat')"><span class="nyf-lb">${srCatLabel()}</span>${caret}</div>
+                <div class="nyf-panel">${catItems}<div class="nyf-apply-wrap"><div class="nyf-apply" onclick="srCatApply()">${NYF_ICON.chk.replace(' class="nyf-chk"', '')}<span>선택 반영</span></div></div></div></div>
+            <div class="nyf-row">
+                <div class="nyf-cell" id="sr-c-sort"><div class="nyf-btn" onclick="srToggle('sort')">${NYF_ICON[curSort[0]]}<span class="nyf-lb">${curSort[1]}</span>${caret}</div><div class="nyf-panel">${sortOpts}</div></div>
+                <div class="nyf-cell" id="sr-c-view"><div class="nyf-btn" onclick="srToggle('view')">${NYF_ICON[curView[0]]}<span class="nyf-lb">${curView[1]}</span>${caret}</div><div class="nyf-panel">${viewOpts}</div></div>
+                <div class="nyf-cell nyf-size" id="sr-c-size"><div class="nyf-btn" onclick="srToggle('size')"><span class="nyf-lb">${srPageSize}</span>${caret}</div><div class="nyf-panel">${sizeOpts}</div></div>
+            </div>
+        </div>`;
+    }
+    function srToggle(k) {
+        const id = 'sr-c-' + k;
+        const el = document.getElementById(id);
+        if(!el) return;
+        const willOpen = !el.classList.contains('open');
+        nyfCloseAll(id);
+        if(willOpen && k === 'cat') {
+            srTmpCats = new Set(srSelectedGenres());
+            el.querySelectorAll('.nyf-opt[data-i]').forEach(o => o.classList.toggle('sel', srTmpCats.has(vsGenreChoices()[Number(o.dataset.i)])));
+        }
+        el.classList.toggle('open', willOpen);
+    }
+    function srCatItem(i) {
+        const g = vsGenreChoices()[i];
+        if(!srTmpCats) srTmpCats = new Set(srSelectedGenres());
+        if(srTmpCats.has(g)) srTmpCats.delete(g); else srTmpCats.add(g);
+        const o = document.querySelector('#sr-c-cat .nyf-opt[data-i="' + i + '"]');
+        if(o) o.classList.toggle('sel', srTmpCats.has(g));
+    }
+    function srCatApply() {
+        const all = vsGenreChoices();
+        const arr = all.filter(g => srTmpCats && srTmpCats.has(g));
+        if(arr.length === 0 || arr.length === all.length) { srGenreSel = null; searchGenre = 'all'; }
+        else { srGenreSel = arr; searchGenre = arr.length === 1 ? arr[0] : 'multi'; }
+        renderSearchResults();
+    }
+    function srPickSort(k) {
+        if(k === 'original') { srOnlyOriginal = true; searchSort = 'date'; }
+        else { srOnlyOriginal = false; searchSort = k; }
+        renderSearchResults();
+    }
+    function srPickView(m) { srView = (m === 'list') ? 'list' : 'album'; renderSearchResults(); }
+    function srPickSize(n) { srPageSize = Number(n) || 20; renderSearchResults(); }
     function srSetSort(v) { searchSort = v; renderSearchResults(); }
     function srSetSize(n) { srPageSize = Number(n) || 20; renderSearchResults(); }
     function srGoPage(n) {
@@ -7974,21 +8048,9 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
     }
     function srRenderChrome() {
         const titleEl = document.getElementById('sr-head-text');
-        if(titleEl) titleEl.textContent = (searchGenre === 'all' ? '전체' : searchGenre);
+        if(titleEl) titleEl.textContent = (!srGenreSel ? '전체' : (srGenreSel.length === 1 ? srGenreSel[0] : (srGenreSel.length + '개 장르')));
         const fr = document.getElementById('sr-filter-row');
-        if(fr) {
-            const calIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 8h14v10H5V10zm2 2v2h2v-2H7zm4 0v2h2v-2h-2z"/></svg>';
-            const chkIcon = '<svg class="ic" viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-2 8h14v10H5V10zm4.2 7.6L6.6 15l1.2-1.2 1.4 1.4 4-4 1.2 1.2-5.2 5.2z"/></svg>';
-            const genreOpts = ['<option value="all"' + (searchGenre === 'all' ? ' selected' : '') + '>전체</option>']
-                .concat(genres.map(g => `<option value="${escapeHtml(g)}"${searchGenre === g ? ' selected' : ''}>${escapeHtml(g)}</option>`)).join('');
-            const sortList = [['date', '최신'], ['views', '재생'], ['clouds', '자막'], ['comments', '댓글']];
-            const sortOpts = sortList.map(x => `<option value="${x[0]}"${searchSort === x[0] ? ' selected' : ''}>${x[1]}</option>`).join('');
-            const sizeOpts = [20, 40, 60].map(n => `<option value="${n}"${srPageSize === n ? ' selected' : ''}>${n}개씩</option>`).join('');
-            fr.innerHTML = `
-                <div class="vs-sel">${calIcon}<select onchange="srSetGenre(this.value)">${genreOpts}</select></div>
-                <div class="vs-sel">${chkIcon}<select onchange="srSetSort(this.value)">${sortOpts}</select></div>
-                <div class="vs-sel" style="flex:1.1;"><select style="padding-left:12px;" onchange="srSetSize(this.value)">${sizeOpts}</select></div>`;
-        }
+        if(fr) fr.innerHTML = srBarHtml();
     }
     function srRenderPager(totalPages) {
         const pagerEl = document.getElementById('sr-pager');
@@ -8006,11 +8068,13 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         const listEl = document.getElementById('search-result-list');
         if(!listEl) return;
         const srRow = document.getElementById('search-result-row');
-        if(srRow) srRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
+        if(srRow) { srRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove()); srRow.classList.remove('vs-row-box'); }
+        listEl.className = 'vs-rows' + (srView === 'list' ? ' vs-listmode' : '');
 
         let l = db.filter(v => v.title.toLowerCase().includes(searchQuery) || (v.author && v.author.toLowerCase().includes(searchQuery)) || (v.tags && Array.isArray(v.tags) && v.tags.some(t => t.toLowerCase().includes(searchQuery.replace(/^#/, '')))));
 
-        if(searchGenre !== 'all') l = l.filter(v => v.genre === searchGenre);
+        if(srGenreSel) l = l.filter(v => vsGenreMatch(v, srGenreSel));
+        if(srOnlyOriginal) l = l.filter(v => v.original === true);
 
         if(headerEl) headerEl.innerHTML = `<span>"${escapeHtml(document.getElementById('main-search-input').value)}"</span> 검색 결과 (${l.length}건)`;
 
@@ -8023,10 +8087,13 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             });
         } else if(searchSort === 'comments') {
             l = [...l].sort((a,b) => ((b.comments ? b.comments.length : 0)) - ((a.comments ? a.comments.length : 0)));
-        } else l = [...l].sort((a,b) => new Date(b.regDate) - new Date(a.regDate));
+        } else if(searchSort === 'popularity') l = [...l].sort((a,b) => vsPopScore(b) - vsPopScore(a));
+        else if(searchSort === 'duration') l = [...l].sort((a,b) => (playTimeToSeconds(b.playTime) || 0) - (playTimeToSeconds(a.playTime) || 0));
+        else if(searchSort === 'jjim') l = [...l].sort((a,b) => (b.jjim || 0) - (a.jjim || 0));
+        else l = [...l].sort((a,b) => new Date(b.regDate) - new Date(a.regDate));
 
         srRenderChrome();
-        const srSig = [searchQuery, searchGenre, searchSort, srPageSize].join('|');
+        const srSig = [searchQuery, (srGenreSel || []).join(','), searchSort, srOnlyOriginal, srPageSize].join('|');
         if(srSig !== srLastSig) { srLastSig = srSig; srPage = 1; }
         const srTotalPages = Math.max(1, Math.ceil(l.length / srPageSize));
         if(srPage > srTotalPages) srPage = srTotalPages;
@@ -8039,21 +8106,17 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             return;
         }
 
-        listEl.innerHTML = l.map(v => {
-            const savedCount = v.savedClouds ? v.savedClouds.length : 0;
-            const sizeText = v.vWidth && v.vHeight ? ` (${v.vWidth}x${v.vHeight})` : '';
-            const listPlayLength = v.playTime || "03:45";
-            return `
-            <div class="list-item vc-li${chIsVerified(v.author) ? ' ch-verified' : ''}" onclick="preparePlay(${v.id})">
-                <div class="vc-title${vcCmtClass(v)}">${vcTitleHtml(v, escapeHtml(v.title))}</div>
-                <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${v.thumb ? `background-image:url('${v.thumb}');` : ''}"></div></div>
-                ${vcInfoHtml(v)}
-                <div class="desc-tooltip">${escapeHtml(v.desc) || '설명이 없습니다.'}</div>
-            </div>`;
-        }).join('');
+        if(srView === 'list') {
+            listEl.innerHTML = l.map(v => vsCardHtml(v, true, { listrow: true })).join('');
+        } else {
+            let rowsHtml = '';
+            for(let i = 0; i < l.length; i += 3) {
+                const rowVids = l.slice(i, i + 3);
+                rowsHtml += `<div class="vs-row-box"><div class="vs-tag-scroll vs-row-scroll">${rowVids.map(v => vsCardHtml(v, true)).join('')}</div>${rowVids.length > 2 ? '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">' : ''}</div>`;
+            }
+            listEl.innerHTML = rowsHtml;
+        }
         listEl.scrollLeft = 0;
-        /* [신규] 검색 결과: 2개보다 많으면 파란색 이동(<, >) 버튼 표시 */
-        if(srRow && l.length > 2) srRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
     }
 
     function setSearchSort(s, el) {
