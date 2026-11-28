@@ -1132,6 +1132,12 @@
         .ch-card-views i { display:inline-block; width:20px; height:16px; background:#ccc; border-radius:2px; flex-shrink:0; position:relative; }
         .ch-card-views i::after { content:""; position:absolute; left:5px; bottom:3px; width:2px; height:6px; background:#fff; box-shadow:4px -3px 0 #fff, 8px -1px 0 #fff; }
         .ch-card-btns { margin-top:5px; display:flex; gap:4px; }
+        /* [신규] 냥이플 채널 - 채널 관련 링크 카드 (유튜브) */
+        .ch-links-card { background:#fff; border:1px solid #ddd; border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.12); margin-bottom:14px; overflow:hidden; box-sizing:border-box; text-align:left; }
+        .ch-links-head { padding:14px 16px; font-size:17px; font-weight:bold; color:#333; background:linear-gradient(#f6f6f6,#e8e8e8); border-bottom:1px solid #d8d8d8; }
+        .ch-links-row { display:flex; align-items:center; gap:12px; padding:14px 16px; font-size:16px; color:#444; text-decoration:none; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+        .ch-links-row:active { background:#f3f3f3; }
+        .ch-links-row svg { width:26px; height:19px; flex:0 0 26px; display:block; }
         .ch-pager { display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:14px 0 4px; }
         .ch-pager span { min-width:30px; height:30px; line-height:30px; text-align:center; border:1px solid #d5d5d5; border-radius:50%; background:#fff; font-size:13px; color:#333; cursor:pointer; padding:0; width:30px; box-sizing:border-box; }
         .ch-pager span.active { background:#2f6aa5; color:#fff; border-color:#2f6aa5; cursor:default; }
@@ -1771,6 +1777,15 @@
         #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-info { grid-column:2; grid-row:2; display:flex; flex-wrap:wrap; align-items:center; align-self:end; }
         #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-dur { position:static; margin:0 6px 0 0; transform:none; display:inline-block; }
         #search-result-section #search-result-list.vs-listmode .vs-listrow .vc-author { flex:1 1 100%; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode { display:block; overflow:visible; scroll-snap-type:none; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode > .vs-listrow { display:grid; grid-template-columns:42% minmax(0,1fr); column-gap:10px; align-items:start; width:auto; margin:0 0 12px; padding:0 0 12px; border-bottom:1px solid #eee; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode > .vs-listrow:last-of-type { margin-bottom:0; border-bottom:0; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .vc-thumbwrap { grid-column:1; grid-row:1 / span 3; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .vc-title { grid-column:2; grid-row:1; padding-top:0; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .vc-info { grid-column:2; grid-row:2; display:flex; flex-wrap:wrap; align-items:center; align-self:start; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .vc-dur { position:static; margin:0 6px 0 0; transform:none; display:inline-block; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .vc-author { flex:1 1 100%; }
+        :is(#mypage-section #channel-internal-video-list, #home-section #home-channel-internal-video-list).vs-listmode .vs-listrow .ch-card-btns { grid-column:2; grid-row:3; padding:4px 0 0; }
 
 
         /* [신규] 구름 아트 갤러리 */
@@ -1890,6 +1905,10 @@
         @media (max-width: 768px) and (orientation: portrait) {
             .sm-plaza-sub > .nc-row { display: none !important; }
             .nc-foot { display: flex; align-items: center; gap: 4px; margin-top: 10px; }
+        }
+        /* [변경] PC(가로) - 홈(랭킹 탭 맨 위에 방문하기 버튼이 있음) 외의 다른 탭에서는 모바일처럼 창 맨 밑에 카페 방문하기 표시 */
+        @media (orientation: landscape) {
+            body:not(:has(#home-section.active)) .nc-foot { display: flex; align-items: center; gap: 4px; margin-top: 10px; }
         }
         /* [변경] 핸드폰 세로모드 - 삼선(≡) 메뉴의 랭킹/동영상/채널/광장 글자 크기 키움 (보통 굵기) */
         @media (max-width: 768px) and (orientation: portrait) {
@@ -2259,6 +2278,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
                         <div id="home-subscribe-area"></div>
 
                         <div id="home-my-info-detail" class="ch-profile-card"></div>
+                        <div id="home-my-ch-links" class="ch-links-card" style="display:none;"></div>
 
                         <div id="home-profile-settings" class="pf-edit-box" style="display:none;">
                             <div class="pf-edit-title">내 프로필 수정</div>
@@ -2500,6 +2520,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
                 <div id="mypage-subscribe-area"></div>
 
                 <div id="my-info-detail" class="ch-profile-card"></div>
+                <div id="my-ch-links" class="ch-links-card" style="display:none;"></div>
 
                 <div id="mypage-profile-settings" class="pf-edit-box" style="display:none;">
                     <div class="pf-edit-title">내 프로필 수정</div>
@@ -5785,11 +5806,12 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         jjim: '<svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>',
         original: '<svg viewBox="0 0 24 24"><path d="M3 17.2V21h3.8L18 9.8 14.2 6 3 17.2zM20.7 7a1 1 0 0 0 0-1.4l-2.3-2.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.7L20.7 7z"/></svg>',
         comments: '<svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-5 4V5a1 1 0 0 1 1-1z"/></svg>',
+        short: '<svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm-1 2v5l4 2 .8-1.6-3-1.5V8z"/></svg>',
         list: '<svg viewBox="0 0 24 24"><path d="M3 6h18v2.6H3zm0 5.2h18v2.6H3zm0 5.2h18V19H3z"/></svg>',
         album: '<svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>',
         chk: '<svg class="nyf-chk" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.8 1.8L9 19.8 21 7.8 19.2 6z"/></svg>'
     };
-    const NYF_SORTS = [['date', '최신'], ['popularity', '인기도'], ['duration', '재생시간'], ['views', '재생 수'], ['clouds', '구름 수'], ['jjim', '찜 수'], ['original', '자작영상']];
+    const NYF_SORTS = [['date', '최신'], ['popularity', '인기도'], ['duration', '재생시간'], ['views', '재생 수'], ['clouds', '구름 수'], ['comments', '댓글 수'], ['jjim', '찜 수'], ['original', '자작영상'], ['short', '타임워프존 (50초 이하)']];
     const NYF_VIEWS = [['list', '리스트'], ['album', '앨범']];
     const NYF_SIZES = [12, 20, 40, 60, 80];
     let nyfTmpCats = null;
@@ -5815,7 +5837,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         const caret = '<i class="nyf-caret"></i>';
         const sel = vsSelectedGenres();
         const catItems = vsGenreChoices().map((g, i) => `<div class="nyf-opt${sel.includes(g) ? ' sel' : ''}" data-i="${i}" onclick="nyfCatItem(${i})"><span>${escapeHtml(g)}</span>${NYF_ICON.chk}</div>`).join('');
-        const sortKey = vsOnlyOriginal ? 'original' : currentSort;
+        const sortKey = vsOnlyOriginal ? 'original' : (vsOnlyShort ? 'short' : currentSort);
         const curSort = NYF_SORTS.find(x => x[0] === sortKey) || (currentSort === 'comments' ? ['comments', '댓글'] : NYF_SORTS[0]);
         const sortOpts = NYF_SORTS.map(x => `<div class="nyf-opt${x[0] === curSort[0] ? ' on' : ''}" onclick="nyfPickSort('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
         const curView = NYF_VIEWS.find(x => x[0] === vsView) || NYF_VIEWS[1];
@@ -5866,8 +5888,9 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         initUI();
     }
     function nyfPickSort(k) {
-        if(k === 'original') { vsOnlyOriginal = true; currentSort = 'date'; }
-        else { vsOnlyOriginal = false; currentSort = k; }
+        vsOnlyOriginal = (k === 'original');
+        vsOnlyShort = (k === 'short');
+        currentSort = (k === 'original' || k === 'short') ? 'date' : k;
         localStorage.setItem('tvple_current_sort', currentSort);
         renderList();
     }
@@ -6566,7 +6589,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 
     function renderChannelHead(p, name, isMe, profileImg) {
         const st = chState[p];
-        if(st.target !== name) { st.target = name; st.genre = 'all'; st.page = 1; }
+        if(st.target !== name) { st.target = name; st.genre = 'all'; st.genres = null; st.onlyOriginal = false; st.onlyShort = false; st.page = 1; }
 
         const headId = (p === 'home') ? 'home-my-info' : 'my-info';
         const headEl = document.getElementById(headId);
@@ -6578,6 +6601,18 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         if(subEl) {
             const subscribed = subscriptions.indexOf(name) > -1;
             subEl.innerHTML = `${chSubImgBtnHtml(subscribed, `chToggleSubscribe('${p}')`, subscriberCounts[name] || 0, 'width:128px; max-width:128px;')}`;
+        }
+
+        /* [신규] 냥이플 유저 채널에만 "채널 관련 링크 - 유튜브" 표시 */
+        const linksEl = document.getElementById(p === 'home' ? 'home-my-ch-links' : 'my-ch-links');
+        if(linksEl) {
+            if(name === '냥이플') {
+                linksEl.innerHTML = '<div class="ch-links-head">채널 관련 링크</div><a class="ch-links-row" href="https://www.youtube.com/@Mr.Hyun-p2n7h" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 26 19" aria-hidden="true"><rect width="26" height="19" rx="4.5" fill="#d9232d"/><path d="M10 5.2v8.6L17.5 9.5z" fill="#fff"/></svg><span>유튜브</span></a>';
+                linksEl.style.display = '';
+            } else {
+                linksEl.innerHTML = '';
+                linksEl.style.display = 'none';
+            }
         }
 
         const detailEl = document.getElementById(p === 'home' ? 'home-my-info-detail' : 'my-info-detail');
@@ -6603,6 +6638,73 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         else renderChannelInternalVideos(st.target);
     }
 
+    /* [변경] 마이페이지 영상 목록 - 동영상 섹션과 같은 카테고리(여러 개 선택) / 정렬 / 보기 방식 / 표시 개수 막대 */
+    let mpTmpCats = null;
+    function mpSelectedGenres(p) { const st = chState[p || 'mypage']; return (st.genres && st.genres.length) ? st.genres.slice() : vsGenreChoices(); }
+    function mpCatLabel(p) {
+        const sel = mpSelectedGenres(p);
+        if(sel.length >= vsGenreChoices().length) return '모든 카테고리 선택됨';
+        if(sel.length === 1) return sel[0];
+        return sel.length + '개 카테고리 선택됨';
+    }
+    function mpBarHtml(p) {
+        const st = chState[p];
+        const caret = '<i class="nyf-caret"></i>';
+        const sel = mpSelectedGenres(p);
+        const catItems = vsGenreChoices().map((g, i) => `<div class="nyf-opt${sel.includes(g) ? ' sel' : ''}" data-i="${i}" onclick="mpCatItem('${p}', ${i})"><span>${escapeHtml(g)}</span>${NYF_ICON.chk}</div>`).join('');
+        const sortKey = st.onlyOriginal ? 'original' : (st.onlyShort ? 'short' : st.sort);
+        const curSort = nyfSortsWithComments().find(x => x[0] === sortKey) || NYF_SORTS[0];
+        const sortOpts = nyfSortsWithComments().map(x => `<div class="nyf-opt${x[0] === curSort[0] ? ' on' : ''}" onclick="mpPickSort('${p}', '${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
+        const view = st.view === 'list' ? 'list' : 'album';
+        const curView = NYF_VIEWS.find(x => x[0] === view) || NYF_VIEWS[1];
+        const viewOpts = NYF_VIEWS.map(x => `<div class="nyf-opt${x[0] === curView[0] ? ' on' : ''}" onclick="mpPickView('${p}', '${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
+        const sizeOpts = NYF_SIZES.map(n => `<div class="nyf-opt${st.size === n ? ' on' : ''}" onclick="mpPickSize('${p}', ${n})"><span>${n}</span></div>`).join('');
+        return `<div class="nyf">
+            <div class="nyf-cell nyf-cat" id="mp-${p}-c-cat"><div class="nyf-btn" onclick="mpToggle('${p}', 'cat')"><span class="nyf-lb">${mpCatLabel(p)}</span>${caret}</div>
+                <div class="nyf-panel">${catItems}<div class="nyf-apply-wrap"><div class="nyf-apply" onclick="mpCatApply('${p}')">${NYF_ICON.chk.replace(' class="nyf-chk"', '')}<span>선택 반영</span></div></div></div></div>
+            <div class="nyf-row">
+                <div class="nyf-cell" id="mp-${p}-c-sort"><div class="nyf-btn" onclick="mpToggle('${p}', 'sort')">${NYF_ICON[curSort[0]]}<span class="nyf-lb">${curSort[1]}</span>${caret}</div><div class="nyf-panel">${sortOpts}</div></div>
+                <div class="nyf-cell" id="mp-${p}-c-view"><div class="nyf-btn" onclick="mpToggle('${p}', 'view')">${NYF_ICON[curView[0]]}<span class="nyf-lb">${curView[1]}</span>${caret}</div><div class="nyf-panel">${viewOpts}</div></div>
+                <div class="nyf-cell nyf-size" id="mp-${p}-c-size"><div class="nyf-btn" onclick="mpToggle('${p}', 'size')"><span class="nyf-lb">${st.size}</span>${caret}</div><div class="nyf-panel">${sizeOpts}</div></div>
+            </div>
+        </div>`;
+    }
+    function mpRerender(p) { if(p === 'home') renderHomeChannelInternalVideos(); else renderChannelInternalVideos(chState.mypage.target); }
+    function mpToggle(p, k) {
+        const id = 'mp-' + p + '-c-' + k;
+        const el = document.getElementById(id);
+        if(!el) return;
+        const willOpen = !el.classList.contains('open');
+        nyfCloseAll(id);
+        if(willOpen && k === 'cat') {
+            mpTmpCats = new Set(mpSelectedGenres(p));
+            el.querySelectorAll('.nyf-opt[data-i]').forEach(o => o.classList.toggle('sel', mpTmpCats.has(vsGenreChoices()[Number(o.dataset.i)])));
+        }
+        el.classList.toggle('open', willOpen);
+    }
+    function mpCatItem(p, i) {
+        const g = vsGenreChoices()[i];
+        if(!mpTmpCats) mpTmpCats = new Set(mpSelectedGenres(p));
+        if(mpTmpCats.has(g)) mpTmpCats.delete(g); else mpTmpCats.add(g);
+        const o = document.querySelector('#mp-' + p + '-c-cat .nyf-opt[data-i="' + i + '"]');
+        if(o) o.classList.toggle('sel', mpTmpCats.has(g));
+    }
+    function mpCatApply(p) {
+        const st = chState[p], all = vsGenreChoices();
+        const arr = all.filter(g => mpTmpCats && mpTmpCats.has(g));
+        st.genres = (arr.length === 0 || arr.length === all.length) ? null : arr;
+        st.page = 1; mpRerender(p);
+    }
+    function mpPickSort(p, k) {
+        const st = chState[p];
+        st.onlyOriginal = (k === 'original');
+        st.onlyShort = (k === 'short');
+        st.sort = (k === 'original' || k === 'short') ? 'date' : k;
+        st.page = 1; mpRerender(p);
+    }
+    function mpPickView(p, m) { chState[p].view = (m === 'list') ? 'list' : 'album'; chState[p].page = 1; mpRerender(p); }
+    function mpPickSize(p, n) { chState[p].size = Number(n) || 20; chState[p].page = 1; mpRerender(p); }
+
     function chGoPage(p, n) {
         chState[p].page = n;
         if(p === 'home') renderHomeChannelInternalVideos();
@@ -6618,7 +6720,10 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         const videoRow = container.parentNode && container.parentNode.classList && container.parentNode.classList.contains('vs-row-box') ? container.parentNode : null;
         if(videoRow) videoRow.querySelectorAll(':scope > .unlucky-prev-btn, :scope > .unlucky-next-btn').forEach(b => b.remove());
 
-        if(filterEl) {
+        const mpNew = (p === 'mypage' || p === 'home');
+        if(mpNew && filterEl) { filterEl.className = 'vs-filter-row'; filterEl.innerHTML = mpBarHtml(p); }
+        if(mpNew && container) container.classList.toggle('vs-listmode', st.view === 'list');
+        if(filterEl && !mpNew) {
             const genreOpts = ['<option value="all"' + (st.genre === 'all' ? ' selected' : '') + '>전체</option>']
                 .concat(genres.map(g => `<option value="${escapeHtml(g)}"${st.genre === g ? ' selected' : ''}>${escapeHtml(g)}</option>`)).join('');
             const sortList = [['date', '최신'], ['views', '재생'], ['clouds', '자막'], ['comments', '댓글']];
@@ -6631,8 +6736,15 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         }
 
         let list = db.filter(v => v.author === targetAuthor);
-        if(st.genre !== 'all') list = list.filter(v => v.genre === st.genre);
-        if(st.sort === 'views') list.sort((a, b) => (b.views || 0) - (a.views || 0));
+        if(mpNew) {
+            if(st.genres) list = list.filter(v => vsGenreMatch(v, st.genres));
+            if(st.onlyOriginal) list = list.filter(v => v.original === true);
+            if(st.onlyShort) list = list.filter(v => { const sec = playTimeToSeconds(v.playTime); return !isNaN(sec) && sec <= 50; });
+        } else if(st.genre !== 'all') list = list.filter(v => v.genre === st.genre);
+        if(mpNew && st.sort === 'popularity') list.sort((a, b) => vsPopScore(b) - vsPopScore(a));
+        else if(mpNew && st.sort === 'duration') list.sort((a, b) => (playTimeToSeconds(b.playTime) || 0) - (playTimeToSeconds(a.playTime) || 0));
+        else if(mpNew && st.sort === 'jjim') list.sort((a, b) => (b.jjim || 0) - (a.jjim || 0));
+        else if(st.sort === 'views') list.sort((a, b) => (b.views || 0) - (a.views || 0));
         else if(st.sort === 'clouds') list.sort((a, b) => (b.savedClouds ? b.savedClouds.length : 0) - (a.savedClouds ? a.savedClouds.length : 0));
         else if(st.sort === 'comments') list.sort((a, b) => (b.comments ? b.comments.length : 0) - (a.comments ? a.comments.length : 0));
         else list.sort((a, b) => new Date(b.regDate || 0) - new Date(a.regDate || 0));
@@ -6653,7 +6765,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             const thumbStyle = v.thumb ? `background-image:url('${v.thumb}');` : '';
             const btns = isMe ? `<div class="ch-card-btns"><button class="channel-video-edit-btn" onclick="editMyVideo(event, ${v.id})">수정</button><button class="channel-video-delete-btn" onclick="deleteMyVideo(event, ${v.id})">삭제</button></div>` : '';
             return `
-            <div class="ch-card vc-card${verified ? ' ch-verified' : ''}" onclick="${goBack}preparePlay(${v.id})">
+            <div class="ch-card vc-card${verified ? ' ch-verified' : ''}${(mpNew && st.view === 'list') ? ' vs-listrow' : ''}" onclick="${goBack}preparePlay(${v.id})">
                 <div class="vc-title${vcCmtClass(v)}">${vcTitleHtml(v, escapeHtml(v.title))}</div>
                 <div class="vc-thumbwrap"><div class="ch-card-thumb" style="${thumbStyle}"></div></div>
                 ${vcInfoHtml(v)}
@@ -6662,7 +6774,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
             </div>`;
         }).join('');
         /* [신규] 2개보다 많으면 초록색 이동(<, >) 버튼 표시 */
-        if(videoRow && pageList.length > 2) videoRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
+        if(videoRow && pageList.length > 2 && !(mpNew && st.view === 'list')) videoRow.insertAdjacentHTML('beforeend', '<img src="https://i.ibb.co/XZCJr3hL/20260617-140407.png" alt="prev_btn" class="unlucky-prev-btn" onclick="vsRowScroll(this, -1)"><img src="https://i.ibb.co/gZg5xqKH/20260617-140407.png" alt="next_btn" class="unlucky-next-btn" onclick="vsRowScroll(this, 1)">');
 
         if(pagerEl) {
             if(totalPages <= 1) pagerEl.innerHTML = '';
@@ -7974,10 +8086,12 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 
     function srSetGenre(g) { searchGenre = g; renderSearchResults(); }
     /* [변경] 검색 결과 분류 막대 - 동영상 섹션과 같은 카테고리(여러 개 선택) / 정렬 / 보기 방식 / 표시 개수 */
+    function nyfSortsWithComments() { return NYF_SORTS; }
     let srGenreSel = null;
     let srTmpCats = null;
     let srView = (localStorage.getItem('tvple_vs_view') === 'list') ? 'list' : 'album';
     let srOnlyOriginal = false;
+    let srOnlyShort = false;
     function srSelectedGenres() { return (srGenreSel && srGenreSel.length) ? srGenreSel.slice() : vsGenreChoices(); }
     function srCatLabel() {
         const sel = srSelectedGenres();
@@ -7989,9 +8103,9 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         const caret = '<i class="nyf-caret"></i>';
         const sel = srSelectedGenres();
         const catItems = vsGenreChoices().map((g, i) => `<div class="nyf-opt${sel.includes(g) ? ' sel' : ''}" data-i="${i}" onclick="srCatItem(${i})"><span>${escapeHtml(g)}</span>${NYF_ICON.chk}</div>`).join('');
-        const sortKey = srOnlyOriginal ? 'original' : searchSort;
-        const curSort = NYF_SORTS.find(x => x[0] === sortKey) || (searchSort === 'comments' ? ['comments', '댓글'] : NYF_SORTS[0]);
-        const sortOpts = NYF_SORTS.map(x => `<div class="nyf-opt${x[0] === curSort[0] ? ' on' : ''}" onclick="srPickSort('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
+        const sortKey = srOnlyOriginal ? 'original' : (srOnlyShort ? 'short' : searchSort);
+        const curSort = nyfSortsWithComments().find(x => x[0] === sortKey) || NYF_SORTS[0];
+        const sortOpts = nyfSortsWithComments().map(x => `<div class="nyf-opt${x[0] === curSort[0] ? ' on' : ''}" onclick="srPickSort('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
         const curView = NYF_VIEWS.find(x => x[0] === srView) || NYF_VIEWS[1];
         const viewOpts = NYF_VIEWS.map(x => `<div class="nyf-opt${x[0] === curView[0] ? ' on' : ''}" onclick="srPickView('${x[0]}')">${NYF_ICON[x[0]]}<span>${x[1]}</span></div>`).join('');
         const sizeOpts = NYF_SIZES.map(n => `<div class="nyf-opt${srPageSize === n ? ' on' : ''}" onclick="srPickSize(${n})"><span>${n}</span></div>`).join('');
@@ -8032,8 +8146,9 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         renderSearchResults();
     }
     function srPickSort(k) {
-        if(k === 'original') { srOnlyOriginal = true; searchSort = 'date'; }
-        else { srOnlyOriginal = false; searchSort = k; }
+        srOnlyOriginal = (k === 'original');
+        srOnlyShort = (k === 'short');
+        searchSort = (k === 'original' || k === 'short') ? 'date' : k;
         renderSearchResults();
     }
     function srPickView(m) { srView = (m === 'list') ? 'list' : 'album'; renderSearchResults(); }
@@ -8075,6 +8190,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
 
         if(srGenreSel) l = l.filter(v => vsGenreMatch(v, srGenreSel));
         if(srOnlyOriginal) l = l.filter(v => v.original === true);
+        if(srOnlyShort) l = l.filter(v => { const sec = playTimeToSeconds(v.playTime); return !isNaN(sec) && sec <= 50; });
 
         if(headerEl) headerEl.innerHTML = `<span>"${escapeHtml(document.getElementById('main-search-input').value)}"</span> 검색 결과 (${l.length}건)`;
 
@@ -8093,7 +8209,7 @@ header .search-btn-css { border-radius: 0 4px 4px 0 !important; }
         else l = [...l].sort((a,b) => new Date(b.regDate) - new Date(a.regDate));
 
         srRenderChrome();
-        const srSig = [searchQuery, (srGenreSel || []).join(','), searchSort, srOnlyOriginal, srPageSize].join('|');
+        const srSig = [searchQuery, (srGenreSel || []).join(','), searchSort, srOnlyOriginal, srOnlyShort, srPageSize].join('|');
         if(srSig !== srLastSig) { srLastSig = srSig; srPage = 1; }
         const srTotalPages = Math.max(1, Math.ceil(l.length / srPageSize));
         if(srPage > srTotalPages) srPage = srTotalPages;
